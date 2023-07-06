@@ -2,39 +2,36 @@
   <v-app>
 
     <v-app-bar
-      :style="{ background: navColor}"
-      :elevation="scroll > 40 ? 5 : 0"
-      class="px-6 pt-2"
+      style="background: black"
+      elevation="3"
     >
-    {{ $refs['candles'] }}
-      <Link
-        href="/" 
-        class="title me-auto"
-        :style="{ color: $page.url === '/' ? logoColor : 'white' }"
-        :disabled="scroll < 40"
+      <span class="dafi-en me-auto ps-2"
+        style="color:white; cursor: pointer; font-size: 50px; min-width:234px" 
+        @click="$router.get('/')"
       >
         Dafi Candle
-      </Link>
-      <v-btn
-        variant="plain"
-        style="opacity: 1 !important; color: white;"
-        @click="scrollTo('candles')"
-      >
-        свечи
-      </v-btn>
-      <v-btn
-        variant="plain"
-        style="opacity: 1 !important; color: white;"
-      >
-        ароматы
-      </v-btn>
-      <v-btn
-        variant="plain"
-        style="opacity: 1 !important; color: white;"
-      >
-        саше
-      </v-btn>
-      <NavItem to="/catalog">Каталог</NavItem>
+      </span> 
+
+      <NavItem>
+        каталог
+      </NavItem>
+
+      <NavItem>
+        корзина
+      </NavItem>
+      
+      <NavItem>
+        о нас
+      </NavItem>
+
+      <NavItem v-if="$page.props.user">
+        профиль
+      </NavItem>
+
+      <NavItem v-else>
+        войти
+      </NavItem>
+
     </v-app-bar>
     
     <slot />
@@ -54,37 +51,36 @@ export default {
   },
   data() {
     return {
-      scroll: 0,
-      navColor: 'none',
-      logoColor: 'black',
+
     }
   },
   methods: {
-    scrollHandler() {
-      this.scroll = window.scrollY
-      this.navColor = `rgba(0, 0, 0, ${this.scroll / 64})`
-      this.logoColor = `rgba(255, 255, 255, ${this.scroll / 200})`
-    },
+    
   },
   watch: {
-    '$page.url'(newValue) {
-      if (newValue === '/')
-      window.addEventListener('scroll', this.scrollHandler())
-      else window.removeEventListener('scroll', this.scrollHandler())
-    }
+    
   },
   mounted() {
-    if (this.$page.url === '/')
-    window.addEventListener('scroll', this.scrollHandler)
+
   }
 }
 
 </script>
 
-<style scoped>
+<style>
 @font-face {
   font-family: "qirania";
   src: url(../../../public/storage/assets/font/qirania.ttf);
+}
+@font-face {
+  font-family: "pehlevi";
+  src: url(../../../public/storage/assets/font/pehlevi.ttf);
+}
+.dafi-en {
+  font-family: "qirania" !important;
+}
+.dafi-ru{
+  font-family: "pehlevi" !important;
 }
 .title {
   font-size: 50px;

@@ -1,4 +1,5 @@
 <template>
+  <Head title=""/>
   <v-app>
     <v-app-bar :color="`rgba(0, 0, 0, ${scroll / 150 - 0.5})`" :elevation="scroll > 150 ? 3 : 0">
       <span
@@ -10,29 +11,29 @@
         Dafi Candle
       </span>
       
-      <HomeNavItem @click="scrollTo('about')">
+      <NavItem @click="scrollTo('about')">
         О нас
-      </HomeNavItem>
+      </NavItem>
 
-      <HomeNavItem @click="scrollTo('candles')">
+      <NavItem @click="scrollTo('candles')">
         Свечи
-      </HomeNavItem>
+      </NavItem>
 
-      <HomeNavItem @click="scrollTo('flavors')">
+      <NavItem @click="scrollTo('flavors')">
         Ароматы
-      </HomeNavItem>
+      </NavItem>
 
-      <HomeNavItem @click="scrollTo('sachet')">
+      <NavItem @click="scrollTo('sachet')">
         Саше&#x301;
-      </HomeNavItem>
+      </NavItem>
 
-      <HomeNavItem @click="scrollTo('pricing')">
+      <NavItem @click="scrollTo('pricing')">
         Прайс-лист
-      </HomeNavItem>
+      </NavItem>
 
-      <div class="nav-divider"></div> <!--в мобилке ломает вёрстку, сделать бургер-->
+      <div class="nav-divider"></div> <!--в мобилке ломает вёрстку, сделать бургер меню-->
 
-      <HomeNavItem icon>
+      <NavItem icon>
         <v-icon icon="mdi-shopping"/>
         <v-tooltip
           activator="parent"
@@ -41,9 +42,9 @@
         >
           Каталог
         </v-tooltip>
-      </HomeNavItem>
+      </NavItem>
 
-      <HomeNavItem icon>
+      <NavItem icon>
         <v-icon icon="mdi-cart"/>
         <v-tooltip
           activator="parent"
@@ -52,9 +53,9 @@
         >
           Корзина
         </v-tooltip>
-      </HomeNavItem>
+      </NavItem>
 
-      <HomeNavItem icon>
+      <NavItem @click="$router.get('/login')" icon>
         <v-icon icon="mdi-account"/>
         <v-tooltip
           activator="parent"
@@ -63,17 +64,17 @@
         >
           Профиль
         </v-tooltip>
-      </HomeNavItem>
+      </NavItem>
 
     </v-app-bar>
 
-    <v-sheet class="block welcome text-white pt-24 px-8 position-relative" ref="welcome">
-      <v-container class="d-flex justify-space-between" style="max-height:calc(100vh - 96px) !important">
-        <div class="w-50 d-flex flex-column" style="height: 100vw;">
+    <v-sheet class="block text-white pt-24 px-8 position-relative" ref="welcome">
+      <v-container class="d-flex justify-space-between">
+        <div class="w-50 d-flex flex-column" style="height: 100vw; min-width:422px">
           <h1 class="text-h1 dafi-en" v-ripple="{ class: 'text-yellow'}">
             Dafi Candle
           </h1>
-          <p class="text-h5">
+          <p class="text-button" style="font-size: 20px !important;">
             ОСОБЕННЫЕ СВЕЧИ ДЛЯ ТЕХ, <br>
             КТО ЦЕНИТ КАЧЕСТВО
           </p>
@@ -98,16 +99,15 @@
         </div>
 
         <div style="height: 100vw; width:27vh">
-          <div class="welcome-img mb-3"></div>
-          <div class="welcome-img mb-3"></div>
-          <div class="welcome-img"></div>
+          <div class="welcome-img mb-3" v-for="i in 3"></div>
         </div>
         
 
       </v-container>
   
       <div class="position-absolute text-center text-h5 w-100" style="bottom: 50px;">
-        <span @click="scrollTo('about')" class="interested" ref="about"> <!--stupid but works :)-->
+        <b ref="about"></b>
+        <span @click="scrollTo('about')" class="text-button interested">
           Интересно? Листай ниже <v-icon icon="mdi-arrow-down"/>
         </span>
       </div>
@@ -128,9 +128,19 @@
       </v-col>
     </v-row>
   
-    <v-sheet class="block" ref="candles">
+    <v-sheet class="block my-3">
+      <b ref="candles"></b>
       <v-row>
-        <v-col cols="4" class="candle pa-0">
+        
+        <v-col cols="4" class="candle px-0">
+          <v-img src="img">
+            <template #sources>
+              <source srcset="../../../public/storage/assets/images/eco/eco-5.jpg">
+            </template>
+          </v-img>
+        </v-col>
+
+        <v-col cols="4" class="candle px-0">
           <v-img src="eco-5.jpg">
             <template #sources>
               <source srcset="../../../public/storage/assets/images/eco/eco-5.jpg">
@@ -138,15 +148,7 @@
           </v-img>
         </v-col>
 
-        <v-col cols="4" class="candle pa-0">
-          <v-img src="eco-5.jpg">
-            <template #sources>
-              <source srcset="../../../public/storage/assets/images/eco/eco-5.jpg">
-            </template>
-          </v-img>
-        </v-col>
-
-        <v-col cols="4" class="candle pa-0">
+        <v-col cols="4" class="candle px-0">
           <v-img src="eco-5.jpg">
             <template #sources>
               <source srcset="../../../public/storage/assets/images/eco/eco-5.jpg">
@@ -157,7 +159,8 @@
       </v-row>
     </v-sheet>
   
-    <v-sheet class="block" ref="flavors"> 
+    <v-sheet class="block"> 
+      <b ref="flavors"></b>
       <v-row>
   
         <v-col cols="4" class="">
@@ -187,13 +190,14 @@
 </template>
 
 <script>
-import { Link } from '@inertiajs/vue3'
-import HomeNavItem from '../Components/HomeNavItem.vue'
+import { Link, Head, router } from '@inertiajs/vue3'
+import NavItem from '../Components/NavItem.vue'
 
 export default {
   components: {
     Link,
-    HomeNavItem,
+    Head,
+    NavItem,
   },
 
   data() {
@@ -208,7 +212,7 @@ export default {
     },
     scrollHandler() {
       this.scroll = window.scrollY
-    }
+    },
   },
 
   mounted() {
@@ -251,6 +255,8 @@ export default {
   background-repeat: no-repeat;
   border-radius: 50%;
   aspect-ratio: 1/1;
+  cursor: pointer;
+  
 }
 .welcome-img:nth-of-type(1){
   background-image: url('../../../public/storage/assets/images/eco/eco-5.jpg');
@@ -264,6 +270,7 @@ export default {
 .interested{
   cursor: pointer;
   transition: all .15s ease-in-out;
+  font-size: 20px !important;
 }
 .interested:hover{
   color: #FFFF33 !important;

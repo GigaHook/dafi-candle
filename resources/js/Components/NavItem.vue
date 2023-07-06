@@ -1,31 +1,21 @@
 <template>
-  <Link :href="to">
-    <v-btn
-      variant="plain"
-      style="opacity: 1 !important; color: white;"
-      :color="$page.url === to ? 'secondary' : 'white'"
-      size="large"
-      v-ripple="{ class: 'text-yellow'}"
-    >
-      <slot/>
-    </v-btn>
-  </Link>
+  <v-btn
+    variant="plain"
+    size="large"
+    color="white"
+    class="button"
+    v-ripple="{ class: 'text-yellow'}"
+  >
+    <slot/>
+  </v-btn>
 </template>
 
-<script>
-import { Link } from '@inertiajs/vue3'
-
-export default {
-  components: {
-    Link
-  },
-  props: {
-    to: String
-  },
-}
-
-</script>
-
 <style scoped>
-
+.button{
+  opacity: 0.85;
+}
+.button:hover{
+  opacity: 1;
+  color: #FFFF33 !important;
+}
 </style>
