@@ -33,11 +33,8 @@ class RegisteredUserController extends Controller
     public function store(UserRegisterRequest $request): RedirectResponse
     {
         $user = User::create($request->validated());
-
         event(new Registered($user));
-
         Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
+        return redirect()->route('home');
     }
 }

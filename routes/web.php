@@ -25,13 +25,18 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function() {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('user.auth');
-    Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::get('register', [RegisteredUserController::class, 'create'])->name('user.create');
     Route::post('register', [RegisteredUserController::class, 'store'])->name('user.store');
 });
 
-Route::get('/login', function () {
-    return Inertia::render('Login');
-})->name('login');
+Route::middleware('auth')->group(function() {
+    Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::get('profile', function() {
+        return Inertia::render('Profile');
+    })->name('profile');
+
+});
+
 
 //Route::middleware('auth')->group(function () {
 //    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

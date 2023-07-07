@@ -1,27 +1,13 @@
 <template>
   <v-btn
     variant="plain"
-    size="large"
     color="white"
     class="button"
-    :class="{ 'active': active }"
     v-ripple="{ class: 'text-yellow'}"
   >
     <slot/>
   </v-btn>
 </template>
-
-<script>
-export default {
-  props: {
-    active: {
-      type: Boolean,
-      required: false,
-    }
-
-  }
-}
-</script>
 
 <style scoped>
 .button{
@@ -31,7 +17,5 @@ export default {
   opacity: 1;
   color: #FFFF33 !important;
 }
-.active{
-  color: #FFFF33 !important;
-}
+
 </style>

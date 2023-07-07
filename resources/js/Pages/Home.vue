@@ -1,12 +1,16 @@
 <template>
   <Head title=""/>
   <v-app>
-    <v-app-bar :color="`rgba(0, 0, 0, ${scroll / 150 - 0.5})`" :elevation="scroll > 150 ? 3 : 0">
+    <v-app-bar
+      :color="`rgba(0, 0, 0, ${scroll / 150 - 0.5})`"
+      :elevation="scroll > 150 ? 3 : 0"
+    >
       <span
         class="dafi-en me-auto ps-2" 
-        style="color:white; cursor: pointer; font-size: 50px;" 
-        :style="`opacity:${scroll / 150 - 0.3};min-width:234px`"
+        style="color:white; cursor: pointer; font-size: 50px; min-width: 234px;" 
+        :style="`opacity:${scroll / 150 - 0.3};`"
         @click="scrollTo('welcome')"
+        v-ripple="false"
       >
         Dafi Candle
       </span>
@@ -55,7 +59,11 @@
         </v-tooltip>
       </NavItem>
 
-      <NavItem @click="$router.get('/login')" icon>
+      <NavItem
+        v-if="!!$page.props.user"
+        @click="$router.get('/profile')"
+        icon
+      >
         <v-icon icon="mdi-account"/>
         <v-tooltip
           activator="parent"
@@ -66,50 +74,184 @@
         </v-tooltip>
       </NavItem>
 
+      <NavItem
+        v-else
+        @click="$router.get('/login')"
+        icon
+      >
+      <v-icon icon="mdi-account"/>
+        <v-tooltip
+          activator="parent"
+          location="bottom"
+          open-delay="500"
+        >
+          Войти
+        </v-tooltip>
+      </NavItem>
+
     </v-app-bar>
 
-    <v-sheet class="block text-white pt-24 px-8 position-relative" ref="welcome">
-      <v-container class="d-flex justify-space-between">
-        <div class="w-50 d-flex flex-column" style="height: 100vw; min-width:422px">
-          <h1 class="text-h1 dafi-en" v-ripple="{ class: 'text-yellow'}">
-            Dafi Candle
-          </h1>
-          <p class="text-button" style="font-size: 20px !important;">
-            ОСОБЕННЫЕ СВЕЧИ ДЛЯ ТЕХ, <br>
-            КТО ЦЕНИТ КАЧЕСТВО
-          </p>
+    
 
-          <v-btn class="w-50 mt-4" size="large" color="primary">
-            смотреть свечи
-          </v-btn>
-          <v-btn class="w-50 mt-4" size="large" color="primary" variant="outlined">
-            весь каталог
-          </v-btn>
+    <v-sheet class="block text-white pt-24 px-8 position-relative">
+      <div class="position-absolute" ref="welcome"></div>
+        <v-row class="justify-space-between">
 
-          <div class="px-2 py-1 mb-4 w-75" style="margin-top: 10vh;">
-            <template v-for="text in ['Ручная работа', 'Натуральные ингридиенты', 'Широкий выбор ароматов', 'Дизайн под заказ']">
-              <v-icon
-                icon="mdi-star-four-points"
-                size="27"
-                class="me-1 pb-2"
-              />
-              <span class="text-h5">{{ text }}</span><br>
-            </template>
-          </div>
-        </div>
+          <v-col xs="11" md="8" lg="7" xl="6">
+            <div class="d-flex flex-column" style="height: 100vw;">
+              <h1 class="text-h1 dafi-en">
+                Dafi Candle
+              </h1>
+              <p class="text-button" style="font-size: 20px !important;">
+                ОСОБЕННЫЕ СВЕЧИ ДЛЯ ТЕХ, <br>
+                КТО ЦЕНИТ КАЧЕСТВО
+              </p>
+            
+              <!--кнопки-->
+              <v-btn class="w-50 mt-4" size="large" color="primary">
+                смотреть свечи
+              </v-btn>
+              <v-btn class="w-50 mt-4" size="large" color="primary" variant="outlined">
+                весь каталог
+              </v-btn>
+            
+              <!--список-->
+              <div class="px-2 py-1 my-4 w-75">
+                <template v-for="text in [
+                  'Ручная работа',
+                  'Натуральные воск', 
+                  'Дизайн под заказ',
+                  'Премиальные ароматы',
+                  'Идеальный подарок',
+                  'Доставка по всей России',
+                ]">
+                  <v-icon
+                    icon="mdi-star-four-points"
+                    size="27"
+                    class="me-1 pb-2"
+                  />
+                  <span class="text-h5">{{ text }}</span><br>
+                </template>
+              </div>
+            </div>
+          </v-col>
+          
+          <v-col xs="11" md="4" xl="3">
 
-        <div style="height: 100vw; width:27vh">
-          <div class="welcome-img mb-3" v-for="i in 3"></div>
-        </div>
+            <v-hover v-slot="{ isHovering, props }">
+              <v-img
+                class="welcome-img mb-7 ms-24"
+                height="260px"
+                width="260px"
+                v-bind="props"
+                src="img"
+                cover
+                aspect-ratio="1/1"
+              >
+                <template #sources>
+                  <source srcset="../../../public/storage/assets/images/eco/eco-8.jpg">
+                </template>
+                <v-overlay
+                  :model-value="isHovering"
+                  contained
+                  class="d-flex justify-center align-center"
+                >
+                  <div class="text-h4 text-center">
+                    Ботанические
+                  </div>
+                </v-overlay>
+              </v-img>
+            </v-hover>
+
+          </v-col>
+
+
+          <!--<v-col cols="3" class="mt-n8">
+            <v-hover v-slot="{ isHovering, props }">
+              <v-img
+                class="welcome-img mb-7 ms-24"
+                v-bind="props"
+                src="img"
+                cover 
+                style="max-height:28vh;"
+              >
+                <template #sources>
+                  <source srcset="../../../public/storage/assets/images/eco/eco-8.jpg">
+                </template>
+                <v-overlay
+                  :model-value="isHovering"
+                  contained
+                  class="d-flex justify-center align-center"
+                >
+                  <div class="text-h4 text-center">
+                    Ботанические
+                  </div>
+                </v-overlay>
+              </v-img>
+            </v-hover>
+          
+            <v-hover v-slot="{ isHovering, props }">
+              <v-img
+                class="welcome-img mb-7 ms-24"
+                v-bind="props"
+                src="img"
+                cover 
+                style="max-height:28vh;"
+              >
+                <template #sources>
+                  <source srcset="../../../public/storage/assets/images/jar/jar-10.jpg">
+                </template>
+                <v-overlay
+                  :model-value="isHovering"
+                  contained
+                  class="d-flex justify-center align-center"
+                >
+                  <div class="text-h4 text-center">
+                    В контейнере
+                  </div>
+                </v-overlay>
+              </v-img>
+            </v-hover>
+          
+            <v-hover v-slot="{ isHovering, props }">
+              <v-img
+                class="welcome-img mb-7 ms-24"
+                v-bind="props"
+                src="img"
+                cover 
+                style="max-height:27vh"
+              >
+                <template #sources>
+                  <source srcset="../../../public/storage/assets/images/form/form-9.jpg">
+                </template>
+                <v-overlay
+                  :model-value="isHovering"
+                  contained
+                  class="d-flex justify-center align-center"
+                >
+                  <div class="text-h4 text-center">
+                    Формовые
+                  </div>
+                </v-overlay>
+              </v-img>
+            </v-hover>
+
+          </v-col>-->
+        </v-row>
         
+        
+        <!--круглежки-->
+        <div style="height: 100vw; width:27vh" class="mt-n8">
 
-      </v-container>
+          
+
+        </div>
   
       <div class="position-absolute text-center text-h5 w-100" style="bottom: 50px;">
         <b ref="about"></b>
-        <span @click="scrollTo('about')" class="text-button interested">
+        <BtnSecondary @click="scrollTo('about')" size="large">
           Интересно? Листай ниже <v-icon icon="mdi-arrow-down"/>
-        </span>
+        </BtnSecondary>
       </div>
 
     </v-sheet>
@@ -132,26 +274,26 @@
       <b ref="candles"></b>
       <v-row>
         
-        <v-col cols="4" class="candle px-0">
-          <v-img src="img">
+        <v-col cols="4" class="candle px-0 mt-n1" style="max-height:77vh;">
+          <v-img src="img" cover>
             <template #sources>
-              <source srcset="../../../public/storage/assets/images/eco/eco-5.jpg">
+              <source srcset="../../../public/storage/assets/images/eco/eco-6.jpg">
             </template>
           </v-img>
         </v-col>
 
-        <v-col cols="4" class="candle px-0">
-          <v-img src="eco-5.jpg">
+        <v-col cols="4" class="candle px-0 mt-n1" style="max-height:77vh;">
+          <v-img src="eco-5.jpg" cover>
             <template #sources>
-              <source srcset="../../../public/storage/assets/images/eco/eco-5.jpg">
+              <source srcset="../../../public/storage/assets/images/form/form-10.jpg">
             </template>
           </v-img>
         </v-col>
 
-        <v-col cols="4" class="candle px-0">
-          <v-img src="eco-5.jpg">
+        <v-col cols="4" class="candle px-0 mt-n1" style="max-height:77vh;">
+          <v-img src="eco-5.jpg" cover>
             <template #sources>
-              <source srcset="../../../public/storage/assets/images/eco/eco-5.jpg">
+              <source srcset="../../../public/storage/assets/images/jar/jar-7.jpg">
             </template>
           </v-img>
         </v-col>
@@ -190,7 +332,7 @@
 </template>
 
 <script>
-import { Link, Head, router } from '@inertiajs/vue3'
+import { Link, Head } from '@inertiajs/vue3'
 import NavItem from '../Components/NavItem.vue'
 
 export default {
@@ -250,28 +392,19 @@ export default {
   opacity: 0.85;
 }
 .welcome-img{
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
   border-radius: 50%;
-  aspect-ratio: 1/1;
   cursor: pointer;
-  
+  overflow: hidden;
 }
-.welcome-img:nth-of-type(1){
-  background-image: url('../../../public/storage/assets/images/eco/eco-5.jpg');
+/*.welcome-img:nth-of-type(1){
+  background-image: url('../../../public/storage/assets/images/eco/eco-8.jpg');
 }
 .welcome-img:nth-of-type(2){
-  background-image: url('../../../public/storage/assets/images/jar/jar-6.jpg');
+  background-image: url('../../../public/storage/assets/images/jar/jar-10.jpg');
 }
 .welcome-img:nth-of-type(3){
-  background-image: url('../../../public/storage/assets/images/form/form-8.jpg');
-}
-.interested{
-  cursor: pointer;
-  transition: all .15s ease-in-out;
-  font-size: 20px !important;
-}
+  background-image: url('../../../public/storage/assets/images/form/form-9.jpg');
+}*/
 .interested:hover{
   color: #FFFF33 !important;
 }

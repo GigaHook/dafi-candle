@@ -2,7 +2,7 @@
   <v-app>
 
     <v-app-bar
-      style="background: black"
+      style="background: black;"
       elevation="3"
     >
       <span class="dafi-en me-auto ps-2"
@@ -12,28 +12,43 @@
         Dafi Candle
       </span> 
 
-      <NavItem>
+      <NavItem
+        :active="$page.url === '/catalog'"
+      >
         каталог
       </NavItem>
 
-      <NavItem>
+      <NavItem
+        :active="$page.url === '/cart'"
+      >
         корзина
       </NavItem>
       
-      <NavItem>
+      <NavItem
+        :active="$page.url === '/about'"
+      >
         о нас
       </NavItem>
 
-      <NavItem v-if="$page.props.user">
+      <NavItem
+        :active="$page.url === '/profile'"
+        v-if="$page.props.user"
+        @click="$router.get(route('profile'))"
+      >
         профиль
       </NavItem>
 
-      <NavItem v-else>
+      <NavItem
+        :active="$page.url === '/login'"
+        v-else
+        @click="$router.get(route('login'))"
+      >
         войти
       </NavItem>
 
     </v-app-bar>
     
+    <div style="height: 64px"></div>
     <slot />
 
   </v-app>

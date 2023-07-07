@@ -29,8 +29,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
-        Inertia::share('user', Auth::user());
-        return redirect()->back();
+        return redirect('home');
     }
 
     /**

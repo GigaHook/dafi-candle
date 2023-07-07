@@ -22,9 +22,10 @@ class UserRegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tel' => ['required', 'max:12', 'min:11', 'numeric'],
+            'name' => ['required', 'string', 'max:50'],
+            'tel' => ['required', 'string', 'max:12', 'min:11', 'regex:/[0-9]{11,12}/', 'unique:App\Models\User,tel'],
             'password' => ['required', 'string', 'max:20', 'min:6'],
-            'email' => ['string', 'email', 'unique:App\Models\User,email', 'max:50'],
+            'email' => ['required', 'string', 'email', 'unique:App\Models\User,email', 'max:50'],
         ];
     }
 }

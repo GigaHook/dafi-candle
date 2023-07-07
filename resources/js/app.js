@@ -16,6 +16,10 @@ import * as directives from 'vuetify/directives';
 //mixins
 import { router } from '@inertiajs/vue3';
 
+//components
+import BtnPrimary from './Components/BtnPrimary.vue'
+import BtnSecondary from './Components/BtnSecondary.vue'
+
 const mainTheme = {
     dark: false,
     colors: {
@@ -47,8 +51,14 @@ createInertiaApp({
         .use(plugin)
         .use(ZiggyVue, Ziggy)
         .use(vuetify)
+        
+        .component('BtnPrimary', BtnPrimary)
+        .component('BtnSecondary', BtnSecondary)
+
         app.config.globalProperties.$router = router
+
         app.mount(el)
+
         return app
         
     },
