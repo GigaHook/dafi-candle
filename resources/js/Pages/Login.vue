@@ -37,7 +37,6 @@
                 />
               </v-window-item>
             </v-window>
-
             <FormInput
               v-model="password"
               label="Пароль"
@@ -64,13 +63,9 @@
 
 <script>
 import AppLayout from '../Layouts/AppLayout.vue'
-import FormInput from '../Components/FormInput.vue'
 
 export default {
   layout: AppLayout,
-  components: {
-    FormInput,
-  },
   data() {
     return {
       tab: null,

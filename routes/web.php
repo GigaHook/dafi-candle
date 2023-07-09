@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -34,8 +35,9 @@ Route::middleware('auth')->group(function() {
     Route::get('profile', function() {
         return Inertia::render('Profile');
     })->name('profile');
-
 });
+
+Route::resource('product', ProductController::class);
 
 
 //Route::middleware('auth')->group(function () {

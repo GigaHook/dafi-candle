@@ -7,14 +7,10 @@ use Illuminate\Http\Request;
 
 class TypeController extends Controller
 {
-    
-    protected static $typeService = new TypeService();
 
     public function __construct() {
-        //$this->middleware('admin')->only('create', 'delete'); TODO: middleware
+        //$this->middleware('admin')->only('create', 'delete'); TODO
     }
 
-    public function index(): JsonResponse {
-        
-    }
+    
 }
