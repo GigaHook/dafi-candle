@@ -30,7 +30,7 @@ class ProductController extends Controller
 
     public function store(ProductStoreRequest $request): RedirectResponse {
         $data = $request->validated();
-        $this->productService->createProduct(collect($data));
+        $this->productService->createProduct($data);
         return back();
     }
 

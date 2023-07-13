@@ -60,7 +60,7 @@
               <div v-for="tag in tags" :key="tag.key" class="d-flex">
                 <FormInput v-model="tag.name" label="Название" class="w-50 me-4"/>
                 <FormInput v-model="tag.value" label="Значение" class="w-50 me-4"/>
-                <FormIconBtn @click="removeTag(tag.key)" color=red>
+                <FormIconBtn @click="removeTag(tag.key)" color=grey>
                   <v-icon icon="mdi-close"/>
                 </FormIconBtn>
               </div>

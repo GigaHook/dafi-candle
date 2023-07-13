@@ -19,10 +19,11 @@ class ProductService
         $this->fileService = new FileService();
     }
 
-    public function createProduct(Collection $data): void {
+    public function createProduct(array $data): void {
         DB::transaction(function() use ($data) {
-            $data = $data->merge(['image' => $this->fileService->uploadImage($data->get('image')[0])]);
-            $product = Product::create($data->except(['tags'])->all());
+            //$data = $data->merge(['image' => $this->fileService->uploadImage($data->get('image')[0])]);
+            $data['image'] = $this->fileService->uploadImage($data['image'][0]);
+            $product = Product::create(collect($data)->except(['tags'])->all());
             foreach ($data['tags'] as $tagData) 
             $this->tagService->createTag($tagData, $product);
         });
