@@ -1,0 +1,12 @@
+<template>
+  <v-btn
+    icon
+    class="rounded"
+    height="44"
+    width="44"
+    variant="text"
+    color="yellow"
+  >
+    <slot/>
+  </v-btn>
+</template>

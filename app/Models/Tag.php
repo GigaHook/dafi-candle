@@ -12,8 +12,10 @@ class Tag extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'name',
+        'value',
     ];
+    public $timestamps = false;
 
     public function products(): BelongsToMany {
         return $this->belongsToMany(Product::class, 'product_tags');

@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function() {
     })->name('profile');
 });
 
-Route::resource('product', ProductController::class);
+Route::resource('products', ProductController::class);
 
 
 //Route::middleware('auth')->group(function () {

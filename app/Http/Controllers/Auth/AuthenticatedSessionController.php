@@ -29,7 +29,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
-        return redirect('home');
+        return redirect()->route('home');
     }
 
     /**
