@@ -21,7 +21,6 @@ class ProductService
 
     public function createProduct(array $data): void {
         DB::transaction(function() use ($data) {
-            //$data = $data->merge(['image' => $this->fileService->uploadImage($data->get('image')[0])]);
             $data['image'] = $this->fileService->uploadImage($data['image'][0]);
             $product = Product::create(collect($data)->except(['tags'])->all());
             foreach ($data['tags'] as $tagData) 
