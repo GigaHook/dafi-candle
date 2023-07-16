@@ -21,25 +21,26 @@ class ProductController extends Controller
     }
 
     public function index(): InertiaResponse {
-        return Inertia::render('ProductIndex');
+        return Inertia::render('Products/ProductsIndex', [
+            'products' => Product::paginate(12),
+        ]);
     }
 
     public function create(): InertiaResponse {
-        return Inertia::render('ProductCreate');
+        return Inertia::render('Products/ProductsCreate');
     }
 
     public function store(ProductStoreRequest $request): RedirectResponse {
-        $data = $request->validated();
-        $this->productService->createProduct($data);
+        $this->productService->createProduct($request->validated());
         return back();
     }
 
     public function show(string $id) {
-        return Inertia::render('ProductShow', ['product' => Product::find($id)]);
+        return Inertia::render('Products/ProductsShow', ['product' => Product::find($id)]);
     }
 
     public function edit(string $id) {
-        return Inertia::render('ProductEdit', ['product' => Product::find($id)]);
+        return Inertia::render('Products/ProductsEdit', ['product' => Product::find($id)]);
     }
 
     public function update(Request $request, string $id) {

@@ -10,10 +10,9 @@ use Illuminate\Support\Collection;
 class TagService 
 {
     public function createTag(array $data, Product $product): void {
-        $tag = Tag::create([
+        $product->tags()->attach(Tag::create([
             'name' => $data['name'],
             'value' => $data['value'],
-        ]);
-        $product->tags()->attach($tag->id);
+        ])->id);
     }
 }

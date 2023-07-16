@@ -13,6 +13,9 @@ import 'vuetify/styles';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 
+//vue mask
+import VueTheMask from 'vue-the-mask'
+
 //mixins
 import { router } from '@inertiajs/vue3';
 
@@ -55,7 +58,8 @@ createInertiaApp({
         .use(plugin)
         .use(ZiggyVue, Ziggy)
         .use(vuetify)
-        
+        .use(VueTheMask)
+
         .component('BtnPrimary', BtnPrimary)
         .component('BtnSecondary', BtnSecondary)
         .component('FormInput', FormInput)

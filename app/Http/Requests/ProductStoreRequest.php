@@ -23,11 +23,17 @@ class ProductStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:50',
-            'description' => 'required|string|max:255',
-            'image' => 'required',
+            'description' => 'required|string|max:700',
+            'image' => 'required|mimes:png,jpg,jpeg,svg',
             'type_id' => 'required|numeric',
             'price' => 'required|numeric',
-            'tags' => 'required|array',
+            'tags' => 'array',
+        ];
+    }
+
+    public function messages(): array {
+        return [
+            'image.mimes' => 'Неверный формат изображения. Допустимые форматы: .png, .jpg, .jpeg, .svg'
         ];
     }
 }

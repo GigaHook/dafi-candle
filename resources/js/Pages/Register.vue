@@ -1,32 +1,45 @@
 <template>
+  <Head title="Регистрация"/>
+
   <v-img src="img" class="position-absolute" cover eager>
     <template #sources>
       <source srcset="../../../public/storage/assets/images/main2.jpg">
     </template>
   </v-img>
+  
   <v-container>
     <v-row class="justify-center align-center" style="min-height: 90vh;">
       <v-col sm="9" md="7" lg="5" xl="4" xs="10">
         <v-card class="px-5 pb-4 pt-3" color="black">
-          <v-form @submit.prevent="submit">
+          <v-form
+            @submit.prevent="submit"
+            ref="form"
+            validate-on="blur"
+            :disabled="loading"
+          >
             <h1 class="text-h4 mb-3">Регистрация</h1>
             <FormInput
               v-model="name"
               label="Имя"
               name="name"
               type="text"
+              :rules="[rules.required]"
             />
             <FormInput
               v-model="email"
               label="E-mail"
               type="email"
               name="email"
+              :rules="[rules.required]"
             />
             <FormInput
               v-model="tel"
               label="Телефон"
               name="tel"
               type="tel"
+              v-mask="'+7 (###) ###-##-##'"
+              :rules="[rules.required]"
+              ref="tel"
             />
             <FormInput
               v-model="password"
@@ -36,9 +49,10 @@
               hint="От 6 до 20 символов"
               min="6"
               max="20"
+              :rules="[rules.required, rules.length]"
             />
             <div class="d-flex justify-space-between">
-              <BtnPrimary type="submit">
+              <BtnPrimary type="submit" :loading="loading">
                 Зарегистрироваться
               </BtnPrimary>
               <BtnSecondary @click="$router.get(route('login'))">
@@ -55,7 +69,7 @@
 <script>
 import AppLayout from '../Layouts/AppLayout.vue'
 import FormInput from '../Components/FormInput.vue'
-
+import { Head } from '@inertiajs/vue3'
 export default {
   layout: AppLayout,
   components: {
@@ -67,17 +81,34 @@ export default {
       email: null,
       tel: null,
       password: null,
+      rules: {
+        required: text => !!text || 'Это поле нужно заполнить',
+        length: text => (text?.length >= 6 && text?.length <= 20) || 'От 6 до 20 символов',
+      },
+      loading: false,
     }
   },
   methods: {
     submit() {
+      this.$refs.form.validate()
+      if (this.$refs.form.isValid) 
       this.$router.post(route('user.store', {
         name: this.name,
         email: this.email,
-        tel: this.tel,
+        tel: this.$refs.tel.$modelValue,
         password: this.password
+      }, {
+        preserveScroll: true,
+        onStart: this.loadingStart,
+        onFinish: this.loadingEnd,
       }))
-    }
+    },
+    loadingStart() {
+      this.loading = true
+    },
+    loadingEnd() {
+      this.loading = false
+    },
   }
 }
 </script>
