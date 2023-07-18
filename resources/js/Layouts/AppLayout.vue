@@ -13,25 +13,25 @@
       </span> 
 
       <NavItem
-        :active="$page.url === '/catalog'"
+        :active="$page.url.includes('/products')"
       >
         каталог
       </NavItem>
 
       <NavItem
-        :active="$page.url === '/cart'"
+        :active="$page.url.includes('/cart')"
       >
         корзина
       </NavItem>
       
       <NavItem
-        :active="$page.url === '/about'"
+        :active="$page.url.includes('/about')"
       >
         о нас
       </NavItem>
 
       <NavItem
-        :active="$page.url === '/profile'"
+        :active="$page.url.includes('/profile')"
         v-if="$page.props.user"
         @click="$router.get(route('profile'))"
       >
@@ -39,7 +39,7 @@
       </NavItem>
 
       <NavItem
-        :active="$page.url === '/login'"
+        :active="$page.url.includes('/login')"
         v-else
         @click="$router.get(route('login'))"
       >

@@ -37,7 +37,7 @@
 
       <div class="nav-divider"></div> <!--в мобилке ломает вёрстку, сделать бургер меню-->
 
-      <NavItem icon>
+      <NavItem @click="$router.get(route('products.index'))" icon>
         <v-icon icon="mdi-shopping"/>
         <v-tooltip
           activator="parent"

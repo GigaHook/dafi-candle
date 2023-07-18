@@ -32,6 +32,7 @@ export default {
   color: #FFFF33 !important;
 }
 .active{
+  opacity: 1;
   color: #FFFF33 !important;
 }
 </style>

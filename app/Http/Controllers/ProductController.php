@@ -22,7 +22,7 @@ class ProductController extends Controller
 
     public function index(): InertiaResponse {
         return Inertia::render('Products/ProductsIndex', [
-            'products' => Product::paginate(12),
+            'products' => Product::with('type')->paginate(12),
         ]);
     }
 
@@ -35,12 +35,16 @@ class ProductController extends Controller
         return back();
     }
 
-    public function show(string $id) {
-        return Inertia::render('Products/ProductsShow', ['product' => Product::find($id)]);
+    public function show(Product $product) {
+        return Inertia::render('Products/ProductsShow', [
+            'product' => $product->load('type')
+        ]);
     }
 
     public function edit(string $id) {
-        return Inertia::render('Products/ProductsEdit', ['product' => Product::find($id)]);
+        return Inertia::render('Products/ProductsEdit', [
+            'product' => Product::find($id)
+        ]);
     }
 
     public function update(Request $request, string $id) {

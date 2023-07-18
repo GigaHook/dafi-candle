@@ -36,7 +36,6 @@ class HandleInertiaRequests extends Middleware
             'user' => auth()->user(),
             'storage' => asset('storage/assets'),
             'types' => Type::all(),
-            'products' => Product::all(),
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
                     'location' => $request->url(),
