@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app style="background-color: ;">
 
     <v-app-bar
       style="background: black;"
@@ -14,6 +14,7 @@
 
       <NavItem
         :active="$page.url.includes('/products')"
+        @click="$router.get(route('products.index'))"
       >
         каталог
       </NavItem>

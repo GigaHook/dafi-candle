@@ -19,14 +19,11 @@ import VueTheMask from 'vue-the-mask'
 //mixins
 import { router } from '@inertiajs/vue3';
 
-//components
+//compoents 
+import { Head } from '@inertiajs/vue3'
 import BtnPrimary from './Components/BtnPrimary.vue'
 import BtnSecondary from './Components/BtnSecondary.vue'
 import FormInput from './Components/FormInput.vue'
-import { Head } from '@inertiajs/vue3'
-
-//layput
-import AppLayout from './Layouts/AppLayout.vue'
 
 const mainTheme = {
     dark: false,
@@ -53,7 +50,7 @@ const appName = 'Dafi Candle'
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
+    resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue',)),
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) })
         .use(plugin)
@@ -61,10 +58,10 @@ createInertiaApp({
         .use(vuetify)
         .use(VueTheMask)
 
+        .component('Head', Head)
         .component('BtnPrimary', BtnPrimary)
         .component('BtnSecondary', BtnSecondary)
         .component('FormInput', FormInput)
-        .component('Head', Head)
 
         app.config.globalProperties.$router = router
 

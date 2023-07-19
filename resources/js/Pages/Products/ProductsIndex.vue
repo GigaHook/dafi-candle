@@ -1,33 +1,33 @@
 <template>
   <Head title="Каталог"/>
+  <main>
+    <v-container fluid>
+      <v-row style="min-height: calc(100vh - 72px);">
 
-  <v-container fluid>
-    <v-row style="min-height: calc(100vh - 72px);">
+        <v-col
+          cols="12"
+        >
+          Фильтры
+        </v-col>
 
-      <v-col
-        style="background-color: #ccc;"
-        cols="12"
-      >
-        Фильтры
-      </v-col>
-
-      <ProductCard
-        v-for="product in products.data"
-        :product="product"
-      />
-      
-      <v-col cols="12" class="pt-4">
-        <v-pagination
-          :length="products.last_page"
-          v-model="products.current_page"
-          @next="next"
-          @prev="prev"
-          @update:modelValue="toPage"
+        <ProductCard
+          v-for="product in products.data"
+          :product="product"
         />
-      </v-col>
 
-    </v-row>
-  </v-container>
+        <v-col cols="12" class="pt-4">
+          <v-pagination
+            :length="products.last_page"
+            v-model="products.current_page"
+            @next="next"
+            @prev="prev"
+            @update:modelValue="toPage"
+          />
+        </v-col>
+
+      </v-row>
+    </v-container>
+  </main>
 </template>
 
 <script>
@@ -65,5 +65,7 @@ export default {
 </script>
 
 <style scoped>
-
+main{
+  background-color:#191919;
+}
 </style>

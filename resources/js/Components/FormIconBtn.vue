@@ -10,3 +10,8 @@
     <slot/>
   </v-btn>
 </template>
+<script>
+export default {
+  name: 'FormIconBtn'
+}
+</script>

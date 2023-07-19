@@ -6,3 +6,8 @@
     class="mb-3"
   />
 </template>
+<script>
+export default {
+  name: 'FormInput'
+}
+</script>

@@ -6,8 +6,9 @@
     <v-card
       @mouseover="hover = true"
       @mouseleave="hover = false"
-      color="black"
-      class="fill-height d-flex flex-wrap flex-column justify-space-between"
+      class="fill-height d-flex flex-column justify-space-between"
+      color="grey-darken-4"
+      elevation="3"
     >
 
       <v-img
@@ -20,24 +21,31 @@
           :model-value="hover"
           class="align-center justify-center"
         >
-          <BtnPrimary @click="$router.get(route('products.show', product.id))">Подробнее</BtnPrimary>
+          <BtnPrimary @click="$router.get(route('products.show', product.id))">
+            Подробнее
+          </BtnPrimary>
         </v-overlay>
       </v-img>
 
-      <div class="px-4 pt-1">
+      <div class="px-4 py-1">
         <div class="font-weight-bold text-h6">{{ product.name }}</div>
         <div class="text-subtitle-1 me-auto">
           {{ product.type.name }}
           <span v-if="product.type.name != 'Саше'">свеча</span>
         </div>
       </div>
-      
-      <div class="d-felx justify-space-between">
+      <v-divider/>
+      <div class="d-flex justify-space-between align-center pa-2">
+        <div class="ms-4">
+          {{ product.price }}
+          <v-icon icon="mdi-currency-rub" size="18" class="ms-n1 mb-1"/>
+        </div>
+        
         <v-btn
           variant="text"
           color="primary"
           max-width="fit-content"
-          class="ma-2 px-2"
+          class="px-2"
         >
           Купить
         </v-btn>

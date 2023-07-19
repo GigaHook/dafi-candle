@@ -3,3 +3,9 @@
     <slot/>
   </v-btn>
 </template>
+
+<script>
+export default {
+  name: 'BtnPrimary'
+}
+</script>

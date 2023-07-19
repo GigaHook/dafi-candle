@@ -35,7 +35,7 @@
         Прайс-лист
       </NavItem>
 
-      <div class="nav-divider"></div> <!--в мобилке ломает вёрстку, сделать бургер меню-->
+      <div class="nav-divider"></div> 
 
       <NavItem @click="$router.get(route('products.index'))" icon>
         <v-icon icon="mdi-shopping"/>
@@ -94,75 +94,73 @@
     
 
     <v-sheet class="block text-white pt-24 px-8 position-relative">
-      <div class="position-absolute" ref="welcome"></div>
-        <v-row class="justify-space-between">
+      <div class="welcome position-absolute"></div>
+      <v-row class="justify-space-between">
 
-          <v-col xs="11" md="8" lg="7" xl="6">
-            <div class="d-flex flex-column" style="height: 100vw;">
-              <h1 class="text-h1 dafi-en">
-                Dafi Candle
-              </h1>
-              <p class="text-button" style="font-size: 20px !important;">
-                ОСОБЕННЫЕ СВЕЧИ ДЛЯ ТЕХ, <br>
-                КТО ЦЕНИТ КАЧЕСТВО
-              </p>
-            
-              <!--кнопки-->
-              <v-btn class="w-50 mt-4" size="large" color="primary">
-                смотреть свечи
-              </v-btn>
-              <v-btn class="w-50 mt-4" size="large" color="primary" variant="outlined">
-                весь каталог
-              </v-btn>
-            
-              <!--список-->
-              <div class="px-2 py-1 my-4 w-75">
-                <template v-for="text in [
-                  'Ручная работа',
-                  'Натуральный воск', 
-                  'Дизайн под заказ',
-                  'Премиальные ароматы',
-                  'Идеальный подарок',
-                ]">
-                  <v-icon
-                    icon="mdi-star-four-points"
-                    size="27"
-                    class="me-1 pb-2"
-                  />
-                  <span class="text-h5">{{ text }}</span><br>
-                </template>
-              </div>
-            </div>
-          </v-col>
+        <v-col xs="11" md="8" lg="7" xl="6">
+          <div class="d-flex flex-column" style="height: 100vw;">
+            <h1 class="text-h1 dafi-en">
+              Dafi Candle
+            </h1>
+            <p class="text-button" style="font-size: 20px !important;">
+              ОСОБЕННЫЕ СВЕЧИ ДЛЯ ТЕХ, <br>
+              КТО ЦЕНИТ КАЧЕСТВО
+            </p>
           
-          <v-col xs="11" md="4" xl="3">
-
-            <v-hover v-slot="{ isHovering, props }">
-              <v-img
-                class="welcome-img mb-7 ms-24"
-                height="260px"
-                width="260px"
-                v-bind="props"
-                src="img"
-                cover
-                aspect-ratio="1/1"
+            <!--кнопки-->
+            <v-btn class="w-50 mt-4" size="large" color="primary">
+              смотреть свечи
+            </v-btn>
+            <v-btn class="w-50 mt-4" size="large" color="primary" variant="outlined">
+              весь каталог
+            </v-btn>
+          
+            <!--список-->
+            <div class="px-2 py-1 my-4 w-75">
+              <template v-for="text in [
+                'Ручная работа',
+                'Натуральный воск', 
+                'Дизайн под заказ',
+                'Премиальные ароматы',
+                'Идеальный подарок',
+              ]">
+                <v-icon
+                  icon="mdi-star-four-points"
+                  size="27"
+                  class="me-1 pb-2"
+                />
+                <span class="text-h5">{{ text }}</span><br>
+              </template>
+            </div>
+          </div>
+        </v-col>
+        
+        <v-col xs="11" md="4" xl="3">
+          <v-hover v-slot="{ isHovering, props }">
+            <v-img
+              class="welcome-img mb-7 ms-24"
+              height="260px"
+              width="260px"
+              v-bind="props"
+              src="img"
+              cover
+              aspect-ratio="1/1"
+            >
+              <template #sources>
+                <source srcset="../../../public/storage/assets/images/eco/eco-8.jpg">
+              </template>
+              <v-overlay
+                :model-value="isHovering"
+                contained
+                class="d-flex justify-center align-center"
               >
-                <template #sources>
-                  <source srcset="../../../public/storage/assets/images/eco/eco-8.jpg">
-                </template>
-                <v-overlay
-                  :model-value="isHovering"
-                  contained
-                  class="d-flex justify-center align-center"
-                >
-                  <div class="text-h4 text-center">
-                    Ботанические
-                  </div>
-                </v-overlay>
-              </v-img>
-            </v-hover>
-
-          </v-col>
+                <div class="text-h4 text-center">
+                  Ботанические
+                </div>
+              </v-overlay>
+            </v-img>
+          </v-hover>
+        </v-col>
 
 
           <!--<v-col cols="3" class="mt-n8">
@@ -236,15 +234,13 @@
             </v-hover>
 
           </v-col>-->
-        </v-row>
+      </v-row>
+      
+      
+      <!--круглежки-->
+      <div style="height: 100vw; width:27vh" class="mt-n8">
         
-        
-        <!--круглежки-->
-        <div style="height: 100vw; width:27vh" class="mt-n8">
-
-          
-
-        </div>
+      </div>
   
       <div class="position-absolute text-center text-h5 w-100" style="bottom: 50px;">
         <b ref="about"></b>
@@ -349,7 +345,7 @@ export default {
 
   methods: {
     scrollTo(block) {
-      this.$refs[block].scrollIntoView({ behavior: "smooth" })
+      window.scrollTo(this.$refs[block].$el)
     },
     scrollHandler() {
       this.scroll = window.scrollY

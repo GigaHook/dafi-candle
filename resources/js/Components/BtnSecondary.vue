@@ -17,5 +17,10 @@
   opacity: 1;
   color: #FFFF33 !important;
 }
-
 </style>
+
+<script>
+export default {
+  name: 'BtnSecondary'
+}
+</script>

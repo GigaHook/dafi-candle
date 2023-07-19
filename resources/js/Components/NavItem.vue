@@ -13,6 +13,7 @@
 
 <script>
 export default {
+  name: 'NavItem',
   props: {
     active: {
       type: Boolean,

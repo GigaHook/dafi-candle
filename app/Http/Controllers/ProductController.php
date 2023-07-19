@@ -32,18 +32,19 @@ class ProductController extends Controller
 
     public function store(ProductStoreRequest $request): RedirectResponse {
         $this->productService->createProduct($request->validated());
-        return back();
+        return redirect()->route('products.index');
     }
 
     public function show(Product $product) {
         return Inertia::render('Products/ProductsShow', [
-            'product' => $product->load('type')
+            'product' => $product->load('type'),
+            'tags' => $product->tags,
         ]);
     }
 
-    public function edit(string $id) {
+    public function edit(Product $product) {
         return Inertia::render('Products/ProductsEdit', [
-            'product' => Product::find($id)
+            'product' => $product->load('type')
         ]);
     }
 
