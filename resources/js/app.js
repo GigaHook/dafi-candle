@@ -2,7 +2,7 @@ import './bootstrap';
 import '../css/app.css';
 
 import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
+import { createInertiaApp, Head } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 
@@ -16,11 +16,10 @@ import * as directives from 'vuetify/directives';
 //vue mask
 import VueTheMask from 'vue-the-mask'
 
-//mixins
+//mixins or something idk
 import { router } from '@inertiajs/vue3';
 
 //compoents 
-import { Head } from '@inertiajs/vue3'
 import BtnPrimary from './Components/BtnPrimary.vue'
 import BtnSecondary from './Components/BtnSecondary.vue'
 import FormInput from './Components/FormInput.vue'
@@ -29,10 +28,8 @@ const mainTheme = {
     dark: false,
     colors: {
         primary: '#FFFF33',
-        secondary: '#fff0dd',
-        accent: '#774141',
-        info: '#34312a',
-        warning: '#625f58'
+        background: '#181818',
+        surface: '#232323',
     }
 }
 

@@ -1,16 +1,14 @@
 <template>
   <v-col
     xl="3" lg="3" md="4" sm="6"
-    class="card"
+    style="aspect-ratio: 4 / 5;"
   >
     <v-card
       @mouseover="hover = true"
-      @mouseleave="hover = false"
+      @mouseleave="hover = false"      
       class="fill-height d-flex flex-column justify-space-between"
-      color="grey-darken-4"
       elevation="3"
     >
-
       <v-img
         :src="$page.props.storage + product.image"
         height="70%"
@@ -34,13 +32,10 @@
           <span v-if="product.type.name != 'Саше'">свеча</span>
         </div>
       </div>
+
       <v-divider/>
+      
       <div class="d-flex justify-space-between align-center pa-2">
-        <div class="ms-4">
-          {{ product.price }}
-          <v-icon icon="mdi-currency-rub" size="18" class="ms-n1 mb-1"/>
-        </div>
-        
         <v-btn
           variant="text"
           color="primary"
@@ -49,6 +44,11 @@
         >
           Купить
         </v-btn>
+
+        <div class="ms-4">
+          {{ product.price }}
+          <v-icon icon="mdi-currency-rub" size="18" class="ms-n1 mb-1"/>
+        </div>
       </div>
 
     </v-card>
@@ -64,12 +64,17 @@ export default {
   },
   props: {
     product: Object,
-  }
+  },
 }
 </script>
 
 <style scoped>
-.card{
-  aspect-ratio: 4 / 5;
+.img-icon{
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  background-color: #181818;
+  border-radius: 5px;
+  outline: 2px solid #181818;
 }
 </style>

@@ -1,33 +1,37 @@
 <template>
   <Head title="Каталог"/>
-  <main>
-    <v-container fluid>
-      <v-row style="min-height: calc(100vh - 72px);">
+  <v-container fluid>
+    <v-row style="min-height: calc(100vh - 72px);">
 
-        <v-col
-          cols="12"
-        >
-          Фильтры
-        </v-col>
+      <v-col cols="12">
+        <v-card elevation="3" class="px-4 py-2">
+          
+        </v-card>
+      </v-col>
+      
+      <ProductCard
+        v-for="product in products.data"
+        :key="product.id"
+        :product="product"
+      />
 
-        <ProductCard
-          v-for="product in products.data"
-          :product="product"
+      <v-col
+        v-if="products.total > 12"
+        cols="12"
+        class="pt-4"
+      >
+        <v-pagination
+          color="primary"
+          :length="products.last_page"
+          v-model="products.current_page"
+          @next="$router.get(products.next_page_url)"
+          @prev="$router.get(products.prev_page_url)"
+          @update:modelValue="page => $router.get(products.links[page].url)"
         />
+      </v-col>
 
-        <v-col cols="12" class="pt-4">
-          <v-pagination
-            :length="products.last_page"
-            v-model="products.current_page"
-            @next="next"
-            @prev="prev"
-            @update:modelValue="toPage"
-          />
-        </v-col>
-
-      </v-row>
-    </v-container>
-  </main>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -46,18 +50,7 @@ export default {
 
     }
   },
-  methods: {
-    next() {
-      this.$router.get(this.products.next_page_url)
-    },
-    prev() {
-      this.$router.get(this.products.prev_page_url)
-    },
-    toPage(page) {
-      this.$router.get(this.products.links[page].url)
-    }
 
-  },
   mounted() {
 
   }

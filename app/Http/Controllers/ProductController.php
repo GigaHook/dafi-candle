@@ -54,6 +54,6 @@ class ProductController extends Controller
 
     public function destroy(string $id): RedirectResponse {
         Product::destroy($id);
-        return back();
+        return redirect()->route('products.index');
     }
 }

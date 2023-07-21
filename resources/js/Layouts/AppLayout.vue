@@ -1,13 +1,11 @@
 <template>
-  <v-app style="background-color: ;">
+  <v-app>
+    <v-app-bar elevation="3">
 
-    <v-app-bar
-      style="background: black;"
-      elevation="3"
-    >
-      <span class="dafi-en me-auto ps-2"
+      <span
+        class="dafi-en me-auto ps-2"
         style="color:white; cursor: pointer; font-size: 50px; min-width:234px" 
-        @click="$router.get('/')"
+        @click="$router.get(route('home'))"
       >
         Dafi Candle
       </span> 
@@ -32,16 +30,16 @@
       </NavItem>
 
       <NavItem
-        :active="$page.url.includes('/profile')"
         v-if="$page.props.user"
+        :active="$page.url.includes('/profile')"
         @click="$router.get(route('profile'))"
       >
         профиль
       </NavItem>
 
       <NavItem
-        :active="$page.url.includes('/login')"
         v-else
+        :active="$page.url.includes('/login')"
         @click="$router.get(route('login'))"
       >
         войти
@@ -53,7 +51,6 @@
     <slot />
 
   </v-app>
-  
 </template>
 
 <script>
