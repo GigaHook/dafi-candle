@@ -1,17 +1,15 @@
 <template>
   <Head title="Добавить товар"/>
-
-  <v-img src="img" class="position-absolute" cover eager>
-    <template #sources>
-      <source srcset="../../../../public/storage/assets/images/main2.jpg">
-    </template>
-  </v-img>
-
   <v-container>
     <v-row class="justify-center align-center" style="min-height: 90vh;">
       <v-col xs="12" md="9" xl="6">
-        <v-card class="px-5 pb-5 pt-3" color="black">
-          <v-form @submit.prevent="submit" ref="form" validate-on="blur" :disabled="loading">
+        <v-card class="px-4 pt-2 pb-4" elevation="3">
+          <v-form 
+            @submit.prevent="submit" 
+            ref="form" 
+            validate-on="blur" 
+            :disabled="loading"
+          >
             <h1 class="text-h4 mb-4">Добавить товар</h1>
             <FormInput
               name="name"
@@ -24,13 +22,13 @@
               name="description"
               label="Описание"
               v-model="description"
-              :rules="[rules.description]"
+              :rules="[rules.required, rules.description]"
               variant="outlined"
               color="yellow"
               class="mb-3"
             />
             <v-file-input
-              name="iamge"
+              name="image"
               label="Изображение"
               v-model="image"
               :rules="[rules.required]"
@@ -40,6 +38,8 @@
               class="mb-3"
               accept="image/*"
               prepend-icon
+              :error-messages="errors.image"
+              @update:model-value="errors = {}"
             />
             <v-select
               name="type"
@@ -64,9 +64,14 @@
             <h2 class="text-h5 mb-4">Характеристики</h2>
             <v-slide-x-transition group>
               <div v-for="(tag, index) of tags" :key="index" class="d-flex">
-                <FormInput v-model="tag.name" label="Название" class="w-50 me-4" :rules="[rules.required]"/>
+                <FormInput
+                  v-model="tag.name" 
+                  label="Название" 
+                  class="w-50 me-4" 
+                  :rules="[rules.required]"
+                />
                 <FormInput v-model="tag.value" label="Значение" class="w-50 me-4"/>
-                <FormIconBtn @click="removeTag(index)" color="grey-darken-1">
+                <FormIconBtn @click="removeTag(index)" color="red">
                   <v-icon icon="mdi-close"/>
                 </FormIconBtn>
               </div>
@@ -82,7 +87,7 @@
                 Добавить
               </BtnPrimary>
               <BtnSecondary @click="cancel">
-                Отмена
+                Назад
               </BtnSecondary>
             </div>
           </v-form>
@@ -99,6 +104,9 @@ export default {
   layout: AppLayout,
   components: {
     FormIconBtn: FormIconBtn,
+  },
+  props: {
+    errors: Object,
   },
   data() {
     return {
@@ -131,6 +139,7 @@ export default {
         forceFormData: true,
         preserveScroll: true,
         onStart: this.loadingStart,
+        onSuccess: this.formReset,
         onFinish: this.loadingEnd,
       })
     },
@@ -139,13 +148,14 @@ export default {
     },
     loadingEnd() {
       this.loading = false
-      this.cancel()
+    },
+    formReset() {
+      this.$refs.form.reset()
     },
     cancel() {
-      this.$refs.form.reset()
-      this.$router.get(route('products.index', {
-        productCreated: 'Товар добавлен.'
-      }))
+      this.formReset()
+      this.loadingEnd()
+      this.$router.get(route('products.index'))
     },
     addTag() {
       this.tags.push({
@@ -156,6 +166,10 @@ export default {
     removeTag(index) {
       this.tags.splice(index, 1)
     },
+    resetErrors() {
+      this.form
+
+    }
   },
   computed: {
     types() {
@@ -169,7 +183,7 @@ export default {
     },
   },
   mounted() {
-    this.type = this.types[0]
+    this.type = this.types[0] ?? 'Обычный'
   }
 }
 </script>

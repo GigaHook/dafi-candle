@@ -18,6 +18,7 @@
           contained
           :model-value="hover"
           class="align-center justify-center"
+          scrim="black"
         >
           <BtnPrimary @click="$router.get(route('products.show', product.id))">
             Подробнее

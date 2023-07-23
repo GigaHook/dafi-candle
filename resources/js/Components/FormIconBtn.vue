@@ -4,7 +4,7 @@
     class="rounded"
     height="44"
     width="44"
-    variant="outlined"
+    variant="tonal"
     color="yellow"
   >
     <slot/>
