@@ -3,6 +3,7 @@
   <v-container fluid>
     <v-row style="min-height: calc(100vh - 72px);">
 
+      <!--FILTERS-->
       <v-col cols="12">
         <v-expansion-panels elevation="3" class="mb-n1">
           <v-expansion-panel density="compact">
@@ -14,7 +15,7 @@
             <v-expansion-panel-text>
               <v-row dense>
 
-                <v-col md="2" cols="12">
+                <v-col md="2" sm="6" cols="12">
                   <p class="text-h6">Тип</p>
                   <v-switch
                     v-for="type in types"
@@ -28,12 +29,13 @@
                   />
                 </v-col>
 
-                <v-col md="2" cols="12">
-                  <p class="text-h6">Сорттровать по</p>
+                <v-col md="4" sm="6" cols="12">
+                  <p class="text-h6 mb-1">Сортировать по</p>
                   <v-select
                     variant="outlined"
                     density="compact"
-                    :items="['Возрастанию стоимости', 'Убыванию стоимости']"
+                    :items="[...sortOptions.values()]"
+                    v-model="sortValue"
                   />
                 </v-col>
 
@@ -44,12 +46,14 @@
         </v-expansion-panels>
       </v-col>
       
+      <!--PRODUCTS-->
       <ProductCard
         v-for="product in filteredProducts"
         :key="product.id"
         :product="product"
       />
 
+      <!--PAGINATION-->
       <v-col
         v-if="products.total > 12"
         cols="12"
@@ -80,10 +84,16 @@ export default {
 
   props: {
     products: Object,
+    sortValue: {
+      type: String,
+      default:
+    }
   },
 
   data() {
     return {
+      sortValue: null,
+      sortedProducts: [],
       filterTypes: [],
       filteredProducts: [],
     }
@@ -93,13 +103,39 @@ export default {
     types() {
       return this.$page.props.types.map(elem => elem.name)
     },
+    
+    sortOptions() {
+      return new Map()
+        .set('price asc', 'По возрастанию цены')
+        .set('price desc', 'По убыванию цены')
+        .set('created_at asd', 'Сначала старые')
+        .set('created_at desc', 'Сначала новые')
+        .set('name asd', 'В алфавитном порядке')
+        .set('name desc', 'В обратном алфавитном порядке')
+    },
+
+    allOptions() {
+      return {
+
+      }
+    }
   },
 
   methods: {
+    sort(field, order) {
+      this.sortedProducts = this.products.data.slice().sort((a, b) => {
+        let modifier = order === 'asc' ? 1 : -1
+        if (a[field] < b[field]) return -modifier; 
+        if (a[field] > b[field]) return modifier
+        return 0
+      })
+    },
+
     filter() {
-      this.filteredProducts = this.products.data.filter(product => {
+      this.filteredProducts = this.sortedProducts.filter(product => {
         return this.filterTypes.includes(product.type.name)
       })
+
     }
   },
 
@@ -110,8 +146,12 @@ export default {
     }
   },
 
+
+
   mounted() {
+    if (this.sortValue == null) this.sortValue = this.sortOptions.get('created_at desc')
     this.filterTypes = this.types
+    this.sort('name', 'asc')
     this.filter()
   },
 }
