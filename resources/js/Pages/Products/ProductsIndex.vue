@@ -34,7 +34,7 @@
                   <v-select
                     variant="outlined"
                     density="compact"
-                    :items="[...sortOptions.values()]"
+                    :items="[...sortOptions.keys()]"
                     v-model="sortValue"
                   />
                 </v-col>
@@ -63,9 +63,9 @@
           color="primary"
           :length="products.last_page"
           v-model="products.current_page"
-          @next="$router.get(products.next_page_url)"
-          @prev="$router.get(products.prev_page_url)"
-          @update:modelValue="page => $router.get(products.links[page].url)"
+          @next="next"
+          @prev="prev"
+          @update:modelValue="toPage"
         />
       </v-col>
 
@@ -84,15 +84,11 @@ export default {
 
   props: {
     products: Object,
-    sortValue: {
-      type: String,
-      default:
-    }
   },
 
   data() {
     return {
-      sortValue: null,
+      sortValue: 'Сначала новые',
       sortedProducts: [],
       filterTypes: [],
       filteredProducts: [],
@@ -106,22 +102,33 @@ export default {
     
     sortOptions() {
       return new Map()
-        .set('price asc', 'По возрастанию цены')
-        .set('price desc', 'По убыванию цены')
-        .set('created_at asd', 'Сначала старые')
-        .set('created_at desc', 'Сначала новые')
-        .set('name asd', 'В алфавитном порядке')
-        .set('name desc', 'В обратном алфавитном порядке')
+        .set('По возрастанию цены', 'price asc')
+        .set('По убыванию цены', 'price desc')
+        .set('Сначала старые', 'created_at desc')
+        .set('Сначала новые', 'created_at asc')
+        .set('В алфавитном порядке', 'name asc')
+        .set('В обратном алфавитном порядке', 'name desc')
     },
 
-    allOptions() {
-      return {
-
-      }
-    }
   },
 
   methods: {
+    next() {
+      const options = this.sortOptions.get(this.sortValue).split(' ')
+      this.$router.get(this.products.next_page_url, {
+        sortBy: options[0],
+        sortOrder: options[1],
+      })
+    },
+
+    prev() {
+      this.$router.get(this.products.prev_page_url)
+    },
+
+    toPage(page) {
+      this.$router.get(this.products.links[page].url)
+    },
+
     sort(field, order) {
       this.sortedProducts = this.products.data.slice().sort((a, b) => {
         let modifier = order === 'asc' ? 1 : -1
@@ -132,7 +139,7 @@ export default {
     },
 
     filter() {
-      this.filteredProducts = this.sortedProducts.filter(product => {
+      this.filteredProducts = this.products.data.filter(product => {
         return this.filterTypes.includes(product.type.name)
       })
 
@@ -149,9 +156,8 @@ export default {
 
 
   mounted() {
-    if (this.sortValue == null) this.sortValue = this.sortOptions.get('created_at desc')
+    //this.sortValue = this.sortValue ?? this.sortOptions.keys[3]
     this.filterTypes = this.types
-    this.sort('name', 'asc')
     this.filter()
   },
 }

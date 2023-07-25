@@ -20,9 +20,9 @@ class ProductController extends Controller
         $this->middleware('admin')->except(['index', 'show']);
     }
 
-    public function index(): InertiaResponse {
+    public function index(Request $request): InertiaResponse {
         return Inertia::render('Products/ProductsIndex', [
-            'products' => Product::with('type')->paginate(12),
+            'products' => $this->productService->sortProducts($request->all())
         ]);
     }
 
