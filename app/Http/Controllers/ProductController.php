@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\SortingOptionsRequest;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\RedirectResponse;
@@ -20,10 +21,12 @@ class ProductController extends Controller
         $this->middleware('admin')->except(['index', 'show']);
     }
 
-    public function index(Request $request): InertiaResponse {
-        return Inertia::render('Products/ProductsIndex', [
-            'products' => $this->productService->sortProducts($request->all())
-        ]);
+    public function index(SortingOptionsRequest $request): InertiaResponse {
+        //dd($request);
+        return Inertia::render(
+            'Products/ProductsIndex', 
+            $this->productService->prepareProps($request->validated()),
+        );
     }
 
     public function create(): InertiaResponse {

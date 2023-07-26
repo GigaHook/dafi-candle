@@ -5,8 +5,8 @@
 
       <!--FILTERS-->
       <v-col cols="12">
-        <v-expansion-panels elevation="3" class="mb-n1">
-          <v-expansion-panel density="compact">
+        <v-expansion-panels elevation="3" class="mb-n1" v-model="expanded">
+          <v-expansion-panel density="compact" :value="true">
 
             <v-expansion-panel-title class="text-h6">
               Фильтры
@@ -22,7 +22,7 @@
                     :key="type"
                     :value="type"
                     :label="type"
-                    v-model="filterTypes"
+                    v-model="selectedTypes"
                     hide-details
                     density="compact"
                     color="primary"
@@ -34,8 +34,9 @@
                   <v-select
                     variant="outlined"
                     density="compact"
-                    :items="[...sortOptions.keys()]"
+                    :items="[...sortValues.keys()]"
                     v-model="sortValue"
+                    @update:model-value="sort"
                   />
                 </v-col>
 
@@ -84,14 +85,17 @@ export default {
 
   props: {
     products: Object,
+    prevSortValue: String,
+    prevExpanded: Boolean,
+    prevSelectedTypes: Object
   },
 
   data() {
     return {
-      sortValue: 'Сначала новые',
-      sortedProducts: [],
-      filterTypes: [],
+      sortValue: null,
+      selectedTypes: [],
       filteredProducts: [],
+      expanded: null,
     }
   },
 
@@ -100,64 +104,67 @@ export default {
       return this.$page.props.types.map(elem => elem.name)
     },
     
-    sortOptions() {
+    sortValues() {
       return new Map()
         .set('По возрастанию цены', 'price asc')
         .set('По убыванию цены', 'price desc')
-        .set('Сначала старые', 'created_at desc')
-        .set('Сначала новые', 'created_at asc')
+        .set('Сначала старые', 'created_at asc')
+        .set('Сначала новые', 'created_at desc')
         .set('В алфавитном порядке', 'name asc')
         .set('В обратном алфавитном порядке', 'name desc')
+    },
+
+    sortOptions() {
+      const options = this.sortValues.get(this.sortValue).split(' ')
+      return {
+        sortBy: options[0],
+        sortOrder: options[1],
+        sortValue: this.sortValue,
+        expanded: Number(!!this.expanded), //wtf idk
+        selectedTypes: this.selectedTypes
+      }
     },
 
   },
 
   methods: {
+    sort() {
+      this.$router.get(this.products.links[this.products.current_page].url, this.sortOptions)
+    },
+
     next() {
-      const options = this.sortOptions.get(this.sortValue).split(' ')
-      this.$router.get(this.products.next_page_url, {
-        sortBy: options[0],
-        sortOrder: options[1],
-      })
+      this.$router.get(this.products.next_page_url, this.sortOptions)
     },
 
     prev() {
-      this.$router.get(this.products.prev_page_url)
+      this.$router.get(this.products.prev_page_url, this.sortOptions)
     },
 
     toPage(page) {
-      this.$router.get(this.products.links[page].url)
+      this.$router.get(this.products.links[page].url, this.sortOptions)
     },
 
-    sort(field, order) {
-      this.sortedProducts = this.products.data.slice().sort((a, b) => {
-        let modifier = order === 'asc' ? 1 : -1
-        if (a[field] < b[field]) return -modifier; 
-        if (a[field] > b[field]) return modifier
-        return 0
-      })
-    },
-
+    //TODO переделать на беке
     filter() {
       this.filteredProducts = this.products.data.filter(product => {
-        return this.filterTypes.includes(product.type.name)
+        return this.selectedTypes.includes(product.type.name)
       })
 
     }
   },
 
   watch: {
-    filterTypes(newValue) {
-      if (newValue.every(v => !v)) newValue[0] = this.types[0]
+    //фильтрование при изменении выбранных типов
+    selectedTypes(newValue) {
+      if (!newValue.length) newValue[0] = this.types[0]
       this.filter()
     }
   },
 
-
-
   mounted() {
-    //this.sortValue = this.sortValue ?? this.sortOptions.keys[3]
-    this.filterTypes = this.types
+    this.sortValue = this.prevSortValue ?? 'Сначала новые'
+    this.expanded = this.prevExpanded
+    this.selectedTypes = this.prevSelectedTypes ?? this.types
     this.filter()
   },
 }

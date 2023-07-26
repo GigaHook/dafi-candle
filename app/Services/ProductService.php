@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Product;
 use App\Services\FileService;
 use App\Services\TagService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ProductService 
@@ -22,19 +21,27 @@ class ProductService
         DB::transaction(function() use ($data) {
             $data['image'] = $this->fileService->uploadImage($data['image']);
             $product = Product::create($data);
-            if (!empty($data['tags'])) {
-                foreach ($data['tags'] as $tag) {
-                    $this->tagService->createTag($tag, $product);
-                }
+            if (empty($data['tags'])) return;
+            foreach ($data['tags'] as $tag) {
+                $this->tagService->createTag($tag, $product);
             }
         });
     }
 
-    public function sortProducts(array $data) {
-        $query = Product::query()->with('type');
-        if (isset($data['sortBy'])) $query->orderBy($data['sortBy'], $data['sortOrder']);
-        return $query->paginate(12);
+    public function prepareProps(array $data): array {
+        return [
+            'products' => $this->sortProducts($data),
+            'prevSortValue' => $data['sortValue'] ?? null,
+            'prevExpanded' => (bool) ($data['expanded'] ?? false),
+            'prevSelectedTypes' => $data['selectedTypes'] ?? null
+        ];
+    }
 
-        //return Product::with('type')->orderBy($options[0], $options[1])->paginate(12);
+    private function sortProducts(array $data) {
+        $query = Product::query()->with('type');
+        if (isset($data['sortBy'])) {
+            $query->orderBy($data['sortBy'], $data['sortOrder']);
+        }
+        return $query->paginate(12);
     }
 }
