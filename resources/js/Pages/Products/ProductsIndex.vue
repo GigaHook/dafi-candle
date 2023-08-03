@@ -5,8 +5,8 @@
 
       <!--FILTERS-->
       <v-col cols="12">
-        <v-expansion-panels elevation="3" class="mb-n1" v-model="expanded">
-          <v-expansion-panel density="compact" :value="true">
+        <v-expansion-panels elevation="3" class="mb-n1">
+          <v-expansion-panel density="compact">
 
             <v-expansion-panel-title class="text-h6">
               Фильтры
@@ -18,14 +18,16 @@
                 <v-col md="2" sm="6" cols="12">
                   <p class="text-h6">Тип</p>
                   <v-switch
-                    v-for="type in types"
-                    :key="type"
-                    :value="type"
-                    :label="type"
+                    v-for="type in $page.props.types"
+                    :key="type.id"
+                    :value="type.id"
+                    :label="type.name"
                     v-model="selectedTypes"
                     hide-details
                     density="compact"
                     color="primary"
+                    multiple
+                    disabled-class="disabled-switch"
                   />
                 </v-col>
 
@@ -34,9 +36,9 @@
                   <v-select
                     variant="outlined"
                     density="compact"
-                    :items="[...sortValues.keys()]"
-                    v-model="sortValue"
-                    @update:model-value="sort"
+                    :items="sortNames"
+                    v-model="sortModelValue"
+                    @update:model-value="update(products.links[products.current_page].url)"
                   />
                 </v-col>
 
@@ -49,14 +51,22 @@
       
       <!--PRODUCTS-->
       <ProductCard
-        v-for="product in filteredProducts"
+        v-if="!loading"
+        v-for="product in products.data"
         :key="product.id"
         :product="product"
       />
 
+      <v-col v-else cols="12" class="d-flex justify-center align-center">
+        <v-progress-circular
+          indeterminate
+          color="primary"
+          size="100"
+        />
+      </v-col>
+
       <!--PAGINATION-->
       <v-col
-        v-if="products.total > 12"
         cols="12"
         class="pt-4"
       >
@@ -64,8 +74,8 @@
           color="primary"
           :length="products.last_page"
           v-model="products.current_page"
-          @next="next"
-          @prev="prev"
+          @next="update(products.next_page_url)"
+          @prev="update(products.prev_page_url)"
           @update:modelValue="toPage"
         />
       </v-col>
@@ -85,42 +95,59 @@ export default {
 
   props: {
     products: Object,
-    prevSortValue: String,
-    prevExpanded: Boolean,
-    prevSelectedTypes: Object
   },
 
   data() {
     return {
-      sortValue: null,
+      loading: false,
+      sortModelValue: null,
       selectedTypes: [],
-      filteredProducts: [],
-      expanded: null,
+      sortValues: [
+        {
+          id: 1,
+          name: 'По возрастанию цены',
+          sortBy: 'price',
+          sortOrder: 'asc',
+        },{
+          id: 2,
+          name: 'По убыванию цены',
+          sortBy: 'price',
+          sortOrder: 'desc',
+        },{
+          id: 3,
+          name: 'Сначала старые',
+          sortBy: 'created_at',
+          sortOrder: 'asc',
+        },{
+          id: 4,
+          name: 'Сначала новые',
+          sortBy:'created_at',
+          sortOrder: 'desc',
+        },{
+          id: 5,
+          name: 'В алфавитном порядке',
+          sortBy: 'name',
+          sortOrder: 'asc',
+        },
+      ],
+      requestOptions: {
+        preserveState: true,
+        onStart: () => this.loading = true,
+        onFinish: () => this.loading = false,
+      }
     }
   },
 
   computed: {
-    types() {
-      return this.$page.props.types.map(elem => elem.name)
-    },
-    
-    sortValues() {
-      return new Map()
-        .set('По возрастанию цены', 'price asc')
-        .set('По убыванию цены', 'price desc')
-        .set('Сначала старые', 'created_at asc')
-        .set('Сначала новые', 'created_at desc')
-        .set('В алфавитном порядке', 'name asc')
-        .set('В обратном алфавитном порядке', 'name desc')
+    sortNames() {
+      return this.sortValues.map(value => value.name)
     },
 
-    sortOptions() {
-      const options = this.sortValues.get(this.sortValue).split(' ')
+    requestData() {
+      const sortValue = this.sortValues.find(value => value.name == this.sortModelValue)
       return {
-        sortBy: options[0],
-        sortOrder: options[1],
-        sortValue: this.sortValue,
-        expanded: Number(!!this.expanded), //wtf idk
+        sortBy: sortValue.sortBy,
+        sortOrder: sortValue.sortOrder,
         selectedTypes: this.selectedTypes
       }
     },
@@ -128,44 +155,21 @@ export default {
   },
 
   methods: {
-    sort() {
-      this.$router.get(this.products.links[this.products.current_page].url, this.sortOptions)
-    },
-
-    next() {
-      this.$router.get(this.products.next_page_url, this.sortOptions)
-    },
-
-    prev() {
-      this.$router.get(this.products.prev_page_url, this.sortOptions)
+    update(link) {
+      this.$router.get(link, this.requestData, this.requestOptions)
     },
 
     toPage(page) {
-      this.$router.get(this.products.links[page].url, this.sortOptions)
+      this.$router.get(this.products.links[page].url, this.requestData, this.requestOptions)
     },
-
-    //TODO переделать на беке
-    filter() {
-      this.filteredProducts = this.products.data.filter(product => {
-        return this.selectedTypes.includes(product.type.name)
-      })
-
-    }
-  },
-
-  watch: {
-    //фильтрование при изменении выбранных типов
-    selectedTypes(newValue) {
-      if (!newValue.length) newValue[0] = this.types[0]
-      this.filter()
-    }
   },
 
   mounted() {
-    this.sortValue = this.prevSortValue ?? 'Сначала новые'
-    this.expanded = this.prevExpanded
-    this.selectedTypes = this.prevSelectedTypes ?? this.types
-    this.filter()
+    this.sortModelValue = 'Сначала новые'
+    this.selectedTypes = this.$page.props.types.map(type => type.id)
+    this.$watch('selectedTypes', () => {
+      this.update(this.products.links[this.products.current_page].url)
+    })
   },
 }
 </script>
@@ -173,5 +177,8 @@ export default {
 <style scoped>
 main{
   background-color:#191919;
+}
+.disabled-switch{
+  background-color: darkgoldenrod;
 }
 </style>
