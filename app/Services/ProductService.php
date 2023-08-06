@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
 use App\Services\FileService;
 use App\Services\TagService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class ProductService 
@@ -25,13 +27,11 @@ class ProductService
      */
     public function createProduct(array $data): void {
         DB::transaction(function() use ($data) {
-            $data['image'] = $this->fileService->uploadImage($data['image']);
+            $this->fileService->uploadImage($data['image']);
 
             $product = Product::create($data);
             
-            foreach ($data['tags'] as $tag) {
-                $this->tagService->createTag($tag, $product);
-            }
+            $this->tagService->createTags($data['tags'], $product);
         });
     }
 
@@ -50,9 +50,24 @@ class ProductService
         if (isset($data['sortBy']) && isset($data['sortOrder'])) {
             $query->orderBy($data['sortBy'], $data['sortOrder']);
         }
+        else $query->orderBy('created_at', 'desc');
 
         $products = $query->with('type')->paginate(12);
         
         return $products;
+    }
+
+    public function updateProduct(array $data, Product $product): void {
+        DB::transaction(function() use ($data, $product) {
+            if (isset($data['image'])) {
+                $this->fileService->uploadImage($data['image']);
+                $this->fileService->deleteImage($product->image);
+            }
+            else $data['image'] = $product->image;
+
+            $product->update(Arr::except($data, ['tags']));
+
+            $this->tagService->updateTags($data['tags'], $product);
+        });
     }
 }

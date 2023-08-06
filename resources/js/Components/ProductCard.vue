@@ -13,7 +13,26 @@
         :src="$page.props.storage + product.image"
         height="70%"
         cover
+        class="position-relative"
       >
+        <v-btn
+          v-if="$page.props.user?.is_admin"
+          icon="mdi-pencil"
+          class="self-right position-absolute ma-1"
+          style="right:0; z-index: 4000;"
+          @click="$router.get(route('products.edit', product.id))"
+          size="40"
+        />
+
+        <v-btn
+          v-if="$page.props.user?.is_admin"
+          icon="mdi-delete"
+          class="self-right position-absolute ma-1"
+          style="right:44px; z-index: 4000;"
+          @click="$router.delete(route('products.destroy', product.id))"
+          size="40"
+        />
+
         <v-overlay
           contained
           :model-value="hover"
@@ -56,16 +75,19 @@
   </v-col>
 </template>
 
+<script setup>
+import { ref } from 'vue'
+
+const hover = ref(false)
+
+defineProps({
+  product: Object
+})
+</script>
+
 <script>
 export default {
-  data() {
-    return {
-      hover: false,
-    }
-  },
-  props: {
-    product: Object,
-  },
+  name: 'ProductCard'
 }
 </script>
 

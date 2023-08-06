@@ -1,13 +1,8 @@
 <template>
-  <v-img src="img" class="position-absolute" cover eager>
-    <template #sources>
-      <source srcset="../../../public/storage/assets/images/main2.jpg">
-    </template>
-  </v-img>
   <v-container>
     <v-row class="justify-center align-center" style="min-height: 90vh;">
       <v-col sm="9" md="7" lg="5" xl="4" xs="10">
-        <v-card class="px-5 pb-5 pt-3" color="black">
+        <v-card class="px-5 pb-5 pt-3">
           <v-form @submit.prevent="submit">
             <h1 class="text-h4 mb-4">Войти в аккаунт</h1>
             <v-tabs
@@ -23,7 +18,6 @@
                   v-model="email"
                   label="E-mail"
                   type="email"
-                  name="email"
                   class="mt-4"
                 />
               </v-window-item>
@@ -31,7 +25,6 @@
                 <FormInput
                   v-model="tel"
                   label="Телефон"
-                  name="tel"
                   type="tel"
                   class="mt-4"
                 />
@@ -41,7 +34,6 @@
               v-model="password"
               label="Пароль"
               type="password"
-              name="password"
               hint="От 6 до 20 символов"
               min="6"
               max="20"
@@ -69,7 +61,6 @@ export default {
   data() {
     return {
       tab: null,
-      name: null,
       email: null,
       tel: null,
       password: null,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\RedirectResponse;
@@ -45,16 +46,18 @@ class ProductController extends Controller
 
     public function edit(Product $product) {
         return Inertia::render('Products/ProductsEdit', [
-            'product' => $product->load('type')
+            'product' => $product->load('type'),
+            'tags' => $product->tags,
         ]);
     }
 
-    public function update(Request $request, string $id) {
-        //
+    public function update(ProductUpdateRequest $request, Product $product) {
+        $this->productService->updateProduct($request->validated(), $product);
+        return redirect()->route('products.index');
     }
 
-    public function destroy(string $id): RedirectResponse {
-        Product::destroy($id);
+    public function destroy(Product $product): RedirectResponse {
+        $product->delete();
         return redirect()->route('products.index');
     }
 }
