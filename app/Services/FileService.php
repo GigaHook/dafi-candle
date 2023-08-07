@@ -14,7 +14,7 @@ class FileService
      * @return string
      */
     public function uploadImage(UploadedFile &$file): void {
-        $filename = uniqid().$file->getExtension();
+        $filename = uniqid().'.'.$file->getClientOriginalExtension();
         $path = Storage::disk('images')->put($filename, $file);
         $file = '/upload/images/'.$path;
     }
@@ -22,4 +22,5 @@ class FileService
     public function deleteImage(string $path): void {
         Storage::delete('/upload/images/'.$path);
     }
+    //TODO ебля с файлами, переделать ато сохраняет в папку с именеем файла внутри которой файл лол чзх wtf
 }

@@ -30,8 +30,9 @@ class ProductService
             $this->fileService->uploadImage($data['image']);
 
             $product = Product::create($data);
-            
-            $this->tagService->createTags($data['tags'], $product);
+
+            $this->tagService->createTags($data['tags']);
+            $this->tagService->syncTags($product);
         });
     }
 
@@ -58,16 +59,24 @@ class ProductService
     }
 
     public function updateProduct(array $data, Product $product): void {
+        if (isset($data['image'])) {
+            $this->fileService->uploadImage($data['image']);
+            $this->fileService->deleteImage($product->image);
+        }
+        else $data['image'] = $product->image;
+
         DB::transaction(function() use ($data, $product) {
-            if (isset($data['image'])) {
-                $this->fileService->uploadImage($data['image']);
-                $this->fileService->deleteImage($product->image);
-            }
-            else $data['image'] = $product->image;
-
             $product->update(Arr::except($data, ['tags']));
+            $this->tagService->createTags($data['tags']);
+            $this->tagService->syncTags($product);
+        });
+    }
 
-            $this->tagService->updateTags($data['tags'], $product);
+    public function deleteProduct(Product $product): void {
+        DB::transaction(function() use($product) {
+            $tagIds = $product->tags->pluck('id');
+            $product->delete();
+            $this->tagService->deleteUnusedTags($tagIds);
         });
     }
 }

@@ -44,8 +44,8 @@
             style="white-space: nowrap;"
           >
             {{ tag.name }}
-            <v-divider v-if="tag.value" class="mx-2"/>
-            {{ tag.value }}
+            <v-divider class="mx-2"/>
+            {{ tag.value ?? 'Да' }}
           </div>
         </v-card>
       </v-col>

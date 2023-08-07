@@ -4,44 +4,44 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Models\Tag;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class TagService 
 {
-    public function createTags(array $tags, Product $product): void {
-        $tagIds = [];
+    private static $newIds;
 
-        foreach ($tags as $tag) {
-            $tagIds[] = Tag::firstOrCreate([
+    public function createTags(array $tagData): void {
+        $tags = [];
+
+        foreach ($tagData as $tag) {
+            $tags[] = Tag::firstOrCreate([
                 'name' => $tag['name'],
                 'value' => $tag['value'],  
-            ])->id;
+            ]);
         }
 
-        $product->tags()->sync($tagIds);
-        
-        //$product->tags()->attach(Tag::firstOrCreate([
-        //    'name' => $tag['name'],
-        //    'value' => $tag['value'],
-        //])->id);
+        self::$newIds = Arr::pluck($tags, 'id');
     }
 
-    public function updateTags(array $tags, Product $product): void {
-        $tagIds = Tag::whereIn('name', array_column($tags, 'name'))
-                    ->whereIn('value', array_column($tags, 'value'))
-                    ->groupBy('name', 'value')
-                    ->havingRaw('COUNT(*) = ?', [count($tags)]) //fckng magic
-                    ->pluck('id');
-        
-        $product->tags()->sync($tagIds);
+    public function syncTags(Product $product): void {
+        if ($product->tags->count() == 0) {
+            $product->tags()->sync(self::$newIds); 
+            self::$newIds = [];
+            return;
+        }
 
-        //лажа
-        //надо firstOrCreate'нуть каждый из переданных тегов,
-        //потом сунуть всё в массив или коллекцию
-        //потом из этого всего взять только id
-        //и засинхронить с этим массивом id
+        $currentIds = $product->tags->pluck('id');
+        $product->tags()->sync(self::$newIds);  
+        $updatedIds = $product->tags->pluck('id');
+        $detachedIds = $currentIds->diff($updatedIds);
+
+        $this->deleteUnusedTags($detachedIds);
+
+        self::$newIds = [];
     }
 
-    public function deleteTag(array $tag, Product $product): void {
-
+    public function deleteUnusedTags($detachedIds): void {
+        Tag::whereKey($detachedIds)->doesntHave('products')->delete();
     }
 }
