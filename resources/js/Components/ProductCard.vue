@@ -10,7 +10,7 @@
       elevation="3"
     >
       <v-img
-        :src="$page.props.storage + product.image"
+        :src="`storage/upload/${product.image}`"
         height="70%"
         cover
         class="position-relative"

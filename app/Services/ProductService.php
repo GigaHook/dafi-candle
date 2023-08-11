@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
 use App\Services\FileService;
 use App\Services\TagService;
@@ -26,22 +25,49 @@ class ProductService
      * @return void
      */
     public function createProduct(array $data): void {
-        DB::transaction(function() use ($data) {
-            $this->fileService->uploadImage($data['image']);
-
-            $product = Product::create($data);
-
-            $this->tagService->createTags($data['tags']);
-            $this->tagService->syncTags($product);
-        });
+        $this->fileService->uploadImage($data['image']);
+        $product = Product::create($data);
+        $this->tagService->createTags($product, $data['tags']);
     }
 
     /**
-     * фильтры, сортировка, пагинация
+     * загрузка нового изрображения и ядаление старого,
+     * обновление продукта и его тегов, создание новых, удаление неиспольующихся
+     * @param array $data
+     * @param \App\Models\Product $product
+     * @return void
+     */
+    public function updateProduct(array $data, Product $product): void {
+        if (isset($data['image'])) {
+            $this->fileService->uploadImage($data['image']);
+            $this->fileService->deleteImage($product->image);
+        } else {
+            $data['image'] = $product->image;
+        }
+
+        $product->update(Arr::except($data, ['tags']));
+        $product->refresh();
+        $this->tagService->updateTags($product, $data['tags']);
+    }
+
+    /**
+     * Удаление продукта, картинки, отвязка тегов и удаление неиспольующихся
+     * @param \App\Models\Product $product
+     * @return void
+     */
+    public function deleteProduct(Product $product): void {
+        $tagIds = $product->tags()->pluck('tags.id');
+        $product->delete();
+        $this->tagService->deleteUnusedTags($tagIds);
+        $this->fileService->deleteImage($product->image);        
+    }
+    
+    /**
+     * фильтры, сортировка, пагинация для ProductsIndex страницы
      * @param array $data
      * @return array
      */
-    public function prepareProducts(array $data): LengthAwarePaginator {
+    public function processProducts(array $data): LengthAwarePaginator {
         $query = Product::query();
 
         if (isset($data['selectedTypes'])) {
@@ -50,33 +76,12 @@ class ProductService
 
         if (isset($data['sortBy']) && isset($data['sortOrder'])) {
             $query->orderBy($data['sortBy'], $data['sortOrder']);
+        } else {
+            $query->orderBy('created_at', 'desc');
         }
-        else $query->orderBy('created_at', 'desc');
 
         $products = $query->with('type')->paginate(12);
         
         return $products;
-    }
-
-    public function updateProduct(array $data, Product $product): void {
-        if (isset($data['image'])) {
-            $this->fileService->uploadImage($data['image']);
-            $this->fileService->deleteImage($product->image);
-        }
-        else $data['image'] = $product->image;
-
-        DB::transaction(function() use ($data, $product) {
-            $product->update(Arr::except($data, ['tags']));
-            $this->tagService->createTags($data['tags']);
-            $this->tagService->syncTags($product);
-        });
-    }
-
-    public function deleteProduct(Product $product): void {
-        DB::transaction(function() use($product) {
-            $tagIds = $product->tags->pluck('id');
-            $product->delete();
-            $this->tagService->deleteUnusedTags($tagIds);
-        });
     }
 }

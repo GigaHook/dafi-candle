@@ -4,41 +4,38 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Models\Tag;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 
 class TagService 
 {
-    private static $newIds;
-
-    public function createTags(array $tagData): void {
-        $tags = [];
+    public function createTags(Product $product, array $tagData): void {
+        $newTagIds = [];
 
         foreach ($tagData as $tag) {
-            $tags[] = Tag::firstOrCreate([
+            $newTagIds[] = Tag::firstOrCreate([
                 'name' => $tag['name'],
                 'value' => $tag['value'],  
-            ]);
+            ])->id;
         }
 
-        self::$newIds = Arr::pluck($tags, 'id');
+        $product->tags()->sync($newTagIds);
     }
 
-    public function syncTags(Product $product): void {
-        if ($product->tags->count() == 0) {
-            $product->tags()->sync(self::$newIds); 
-            self::$newIds = [];
-            return;
+    public function updateTags(Product $product, array $tagData): void {
+        $newTagIds = [];
+
+        foreach ($tagData as $tag) {
+            $newTagIds[] = Tag::firstOrCreate([
+                'name' => $tag['name'],
+                'value' => $tag['value'],  
+            ])->id;
         }
 
-        $currentIds = $product->tags->pluck('id');
-        $product->tags()->sync(self::$newIds);  
-        $updatedIds = $product->tags->pluck('id');
+        $currentIds = $product->tags()->pluck('tags.id');
+        $product->tags()->sync($newTagIds);
+        $updatedIds = $product->tags()->pluck('tags.id');
         $detachedIds = $currentIds->diff($updatedIds);
-
+        
         $this->deleteUnusedTags($detachedIds);
-
-        self::$newIds = [];
     }
 
     public function deleteUnusedTags($detachedIds): void {

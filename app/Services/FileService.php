@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class FileService
 {
@@ -15,12 +16,16 @@ class FileService
      */
     public function uploadImage(UploadedFile &$file): void {
         $filename = uniqid().'.'.$file->getClientOriginalExtension();
-        $path = Storage::disk('images')->put($filename, $file);
-        $file = '/upload/images/'.$path;
+        Storage::disk('upload')->put($filename, File::get($file));
+        $file = $filename;
     }
-
-    public function deleteImage(string $path): void {
-        Storage::delete('/upload/images/'.$path);
+ 
+    /**
+     * no comment
+     * @param string $filename
+     * @return void
+     */
+    public function deleteImage(string $filename): void {
+        Storage::disk('upload')->delete($filename);
     }
-    //TODO ебля с файлами, переделать ато сохраняет в папку с именеем файла внутри которой файл лол чзх wtf
 }

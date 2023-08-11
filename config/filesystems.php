@@ -44,18 +44,18 @@ return [
             'throw' => false,
         ],
 
-        'images' => [
+        'upload' => [
             'driver' => 'local',
-            'root' => storage_path('app/public/assets/upload/images'),
-            'url' => env('APP_URL').'/images',
+            'root' => storage_path('app/public/upload'),
+            'url' => '/storage/upload',
             'visibility' => 'public',
             'throw' => false,
         ],
 
-        'textfiles' => [
+        'assets' => [
             'driver' => 'local',
-            'root' => storage_path('app/public/assets/upload/textfiles'),
-            'url' => env('APP_URL').'/textfiles',
+            'root' => storage_path('app/public/assets'),
+            'url' => '/storage/assets',
             'visibility' => 'public',
             'throw' => false,
         ],

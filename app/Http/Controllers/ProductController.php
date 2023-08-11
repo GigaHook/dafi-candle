@@ -22,9 +22,8 @@ class ProductController extends Controller
     }
 
     public function index(Request $request): InertiaResponse {
-        $products = $this->productService->prepareProducts($request->all());
         return Inertia::render('Products/ProductsIndex', [
-            'products' => $products,
+            'products' => $this->productService->processProducts($request->all()),
         ]);
     }
 
@@ -37,27 +36,27 @@ class ProductController extends Controller
         return redirect()->route('products.index');
     }
 
-    public function show(Product $product) {
+    public function show(Product $product): InertiaResponse {
         return Inertia::render('Products/ProductsShow', [
             'product' => $product->load('type'),
             'tags' => $product->tags,
         ]);
     }
 
-    public function edit(Product $product) {
+    public function edit(Product $product): InertiaResponse {
         return Inertia::render('Products/ProductsEdit', [
             'product' => $product->load('type'),
             'tags' => $product->tags,
         ]);
     }
 
-    public function update(ProductUpdateRequest $request, Product $product) {
+    public function update(ProductUpdateRequest $request, Product $product): RedirectResponse {
         $this->productService->updateProduct($request->validated(), $product);
         return redirect()->route('products.index');
     }
 
     public function destroy(Product $product): RedirectResponse {
-        //$product->delete();
+        $this->productService->deleteProduct($product);
         return redirect()->route('products.index');
     }
 }

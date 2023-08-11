@@ -14,9 +14,9 @@
 
       <v-col xl="3" lg="4" md="5" sm="6" cols="12">
         <v-img
-          :src="$page.props.storage + product.image"
+        :src="`../storage/upload/${product.image}`"
           style="aspect-ratio: 3 / 4;"
-          class="mb-4"
+          class="mb-4 rounded"
         />
 
         <BtnPrimary class="me-4">
