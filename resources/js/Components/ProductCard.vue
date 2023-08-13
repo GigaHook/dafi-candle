@@ -57,6 +57,7 @@
       
       <div class="d-flex justify-space-between align-center pa-2">
         <v-btn
+          @click="$router.post(route('cart.store'), { id: product.id })"
           variant="text"
           color="primary"
           max-width="fit-content"

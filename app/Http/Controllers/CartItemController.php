@@ -3,63 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Models\CartItem;
+use App\Services\Cart\CartServiceInterface;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
+
 
 class CartItemController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    private $cartService;
+
+    public function __construct(CartServiceInterface $cartService) {
+        $this->cartService = $cartService;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function index(): InertiaResponse {
+        $this->cartService->assembleCart();
+        return Inertia::render('Cart', [
+            'cart' => $this->cartService->cart,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request): void {
+        $this->cartService->addItem($request->id);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(CartItem $cartItem)
-    {
-        //
+    public function update(Request $request): void {
+        $this->cartService->removeItem($request->id);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CartItem $cartItem)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, CartItem $cartItem)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(CartItem $cartItem)
-    {
-        //
+    public function destroy(): void {
+        $this->cartService->clearCart();
     }
 }

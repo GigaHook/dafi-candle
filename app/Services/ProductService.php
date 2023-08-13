@@ -7,7 +7,6 @@ use App\Services\FileService;
 use App\Services\TagService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 
 class ProductService 
 {

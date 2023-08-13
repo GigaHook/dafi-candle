@@ -28,4 +28,10 @@ class Product extends Model
     public function tags(): BelongsToMany {
         return $this->belongsToMany(Tag::class, 'product_tags');
     }
+
+    public function users(): BelongsToMany {
+        return $this->belongsToMany(user::class, 'cartitems')
+                    ->withPivot('quantity')
+                    ->as('cartItem');
+    }
 }

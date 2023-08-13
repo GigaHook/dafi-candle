@@ -19,7 +19,7 @@
           class="mb-4 rounded"
         />
 
-        <BtnPrimary class="me-4">
+        <BtnPrimary class="me-4" @click="$router.post(route('cart.store'), { id: product.id })">
           Купить
         </BtnPrimary>
 

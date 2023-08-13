@@ -19,6 +19,7 @@
 
         <NavItem
           :active="$page.url.includes('/cart')"
+          @click="$router.get(route('cart.index'))"
         >
           корзина
         </NavItem>
