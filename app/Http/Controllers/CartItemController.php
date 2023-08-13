@@ -3,36 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\CartItem;
+use App\Services\Cart\AuthCartService;
+use App\Services\Cart\GuestCartService;
+use App\Services\Cart\CartService;
 use App\Services\Cart\CartServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 
 
 class CartItemController extends Controller
 {
-    private $cartService;
-
-    public function __construct(CartServiceInterface $cartService) {
-        $this->cartService = $cartService;
-    }
-
     public function index(): InertiaResponse {
-        $this->cartService->assembleCart();
+        $this->defineCartClass()->assembleCart();
         return Inertia::render('Cart', [
-            'cart' => $this->cartService->cart,
+            'cart' => $this->defineCartClass()->cart,
         ]);
     }
 
     public function store(Request $request): void {
-        $this->cartService->addItem($request->id);
+        $this->defineCartClass()->addItem($request->id);
     }
 
     public function update(Request $request): void {
-        $this->cartService->removeItem($request->id);
+        $this->defineCartClass()->removeItem($request->id);
     }
 
     public function destroy(): void {
-        $this->cartService->clearCart();
+        $this->defineCartClass()->clearCart();
+    }
+
+    private function defineCartClass(): AuthCartService|GuestCartService {
+        return auth()->check()
+            ? new AuthCartService
+            : new GuestCartService;
     }
 }

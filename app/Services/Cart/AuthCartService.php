@@ -6,8 +6,10 @@ use App\Services\Cart\CartService;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\DB;
 
-class AuthCartService extends CartService implements CartServiceInterface
+class AuthCartService extends CartService
 {
+    public $cart = [];
+
     public function assembleCart(): void {
         $this->cart['items'] = [];
         $this->cart['totalQuantity'] = 0;
@@ -29,6 +31,7 @@ class AuthCartService extends CartService implements CartServiceInterface
         ], [
             'quantity' => DB::raw('quantity + 1'),
         ]);
+        //TODO не работает добавление
     }
 
     public function removeItem(int $id): void {

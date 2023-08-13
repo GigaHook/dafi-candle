@@ -9,15 +9,11 @@ class CartItem extends Model
 {
     use HasFactory;
 
+    protected $table = 'cartitems';
+    public $timestamps = false;
     protected $fillable = [
         'user_id',
         'product_id',
         'count'
     ];
-
-    public static $recentCreatedThreshold = 10;
-
-    public function wasRecentlyCreated(): bool {
-        return $this->wasRecentlyCreated;
-    }
 }

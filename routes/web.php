@@ -41,8 +41,7 @@ Route::middleware('auth')->group(function() {
 Route::resource('products', ProductController::class);
 
 Route::resource('cart', CartItemController::class)
-     ->except(['show', 'create', 'edit'])
-     ->middleware('cart.service');
+     ->except(['show', 'create', 'edit']);
 
 //Route::middleware('auth')->group(function () {
 //    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
