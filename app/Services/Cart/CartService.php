@@ -4,25 +4,11 @@ namespace App\Services\Cart;
 
 abstract class CartService
 {
-
     /**
-     * чтобы не собирать корзину 2 раза
-     * @param mixed $method
-     * @param mixed $argumetns
-     * @return void
+     * Получаем корзину
+     * @return array
      */
-    public function __call($method, $argumetns): void {
-        $this->$method(...$argumetns);
-        if ($method !== 'assembleCart') {
-            $this->assembleCart();
-        }
-    }
-    
-    /**
-     * Наполняет корзину всяким
-     * @return void
-     */
-    abstract public function assembleCart(): void;
+    abstract public function getCart(): array;
 
     /**
      * Добавляет в корзину всякое/увеличивает кол-во

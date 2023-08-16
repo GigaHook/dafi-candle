@@ -57,7 +57,8 @@
       
       <div class="d-flex justify-space-between align-center pa-2">
         <v-btn
-          @click="$router.post(route('cart.store'), { id: product.id })"
+          @click="addToCart"
+          :loading="loading"
           variant="text"
           color="primary"
           max-width="fit-content"
@@ -78,12 +79,25 @@
 
 <script setup>
 import { ref } from 'vue'
+import { router } from '@inertiajs/vue3';
 
-const hover = ref(false)
-
-defineProps({
+const props = defineProps({
   product: Object
 })
+
+const hover = ref(false)
+const loading = ref(false)
+
+function addToCart() {
+  router.post(route('cart.store'), {
+    id: props.product.id
+  }, {
+    preserveScroll: true,
+    onStart: () => { loading.value = true },
+    onFinish: () => { loading.value = false },
+  })
+}
+
 </script>
 
 <script>

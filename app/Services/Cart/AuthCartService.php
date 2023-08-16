@@ -4,34 +4,39 @@ namespace App\Services\Cart;
 
 use App\Services\Cart\CartService;
 use App\Models\CartItem;
-use Illuminate\Support\Facades\DB;
 
 class AuthCartService extends CartService
 {
-    public $cart = [];
+    public function getCart(): array {
+        $cart = [
+            'items' => [],
+            'totalQuantity' => 0,
+            'totalPrice' => 0,
+        ];
 
-    public function assembleCart(): void {
-        $this->cart['items'] = [];
-        $this->cart['totalQuantity'] = 0;
-        $this->cart['totalPrice'] = 0;
-        
         foreach (auth()->user()->products as $product) {
             $quantity = $product->cartItem->quantity;
             $product->quantity = $quantity;
-            $this->cart['items'][] = $product;
-            $this->cart['totalQuantity'] += $quantity;
-            $this->cart['totalPrice'] += $quantity * $product->price;
+            $cart['items'][] = $product;
+            $cart['totalQuantity'] += $quantity;
+            $cart['totalPrice'] += $quantity * $product->price;
         }
+
+        return $cart;
     }
 
     public function addItem(int $id): void {
-        CartItem::updateOrCreate([
+        $item = CartItem::firstOrCreate([
             'product_id' => $id,
             'user_id' => auth()->id(),
         ], [
-            'quantity' => DB::raw('quantity + 1'),
+            'quantity' => 1,
         ]);
-        //TODO не работает добавление
+
+        if ($item->quantity == 1) {
+            $item->quantity++;
+            $item->save();
+        }
     }
 
     public function removeItem(int $id): void {

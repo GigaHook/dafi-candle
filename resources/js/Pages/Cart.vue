@@ -18,8 +18,8 @@
 
       <v-col cols="3">
         <v-card class="px-4 pt-2 pb-4">
-          Всего товаров: todo <br>
-          На цену: todo <br>
+          Всего товаров: {{ cart.totalQuantity }} <br>
+          На цену: {{ cart.totalPrice }} <br>
           <BtnPrimary class="mt-1">Заказать</BtnPrimary>
         </v-card>
       </v-col>
@@ -37,10 +37,7 @@ defineComponent({
 })
 
 defineProps({
-  cart: {
-    type: Object,
-    required: false,
-  }
+  cart: Object,
 })
 </script>
 
