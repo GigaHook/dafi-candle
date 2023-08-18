@@ -1,26 +1,39 @@
 <template>
+  <Head title="Корзина"/>
   <v-container>
-    <v-row>
+    <v-row class="justify-center">
 
       <v-col cols="9">
-        <v-card class="px-4 py-2">
-          <h2 class="text-h5">
+        <v-card class="pa-4 pt-2" elevation="3">
+          <h2 class="text-h5 mb-2">
             Корзина
           </h2>
-          <v-row>
+          <v-row dense v-if="cart.items.length">
             <CartItemCard
               v-for="product in cart.items"
+              :key="product.id"
               :product="product"
+              :last="product == cart.items[cart.items.length - 1]"
             />
           </v-row>
+          <div v-else>
+            Нет предметов в корзине
+          </div>
         </v-card>
       </v-col>
 
-      <v-col cols="3">
-        <v-card class="px-4 pt-2 pb-4">
+      <v-col cols="3" xl="2">
+        <v-card class="px-4 pt-2 pb-4" elevation="3">
           Всего товаров: {{ cart.totalQuantity }} <br>
           На цену: {{ cart.totalPrice }} <br>
-          <BtnPrimary class="mt-1">Заказать</BtnPrimary>
+          <div class="d-flex justify-space-between align-center mt-2">
+            <BtnPrimary class="mt-1">
+              Заказать
+            </BtnPrimary>
+            <BtnSecondary @click="$router.delete(route('cart.destroy', 0))">
+              Очистить
+            </BtnSecondary>
+          </div>
         </v-card>
       </v-col>
 

@@ -4,35 +4,37 @@ namespace App\Services\Cart;
 
 use App\Models\Product;
 use App\Services\Cart\CartService;
-use App\Models\CartItem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
 
-class GuestCartService extends CartService
+class GuestCartService implements CartService
 {
-    public function __construct() {
-        if (!Cookie::has('cart')) {
-            $cart = [
-                'items' => collect([]),
-                'totalQuantity' => 0,
-                'totalPrice' => 0,
-            ];
+    private $cartItems;
 
-            $this->saveCart($cart);
+    public function __construct() {
+        if (!Cookie::has('cartItems')) {
+            Cookie::queue('cartItems', serialize([]), now()->addMonth()->unix() / 60);
+            $this->cartItems = [];
+        } else {
+            $this->cartItems = unserialize(Cookie::get('cartItems'));
         }
     }
 
-    public function getCart(): array {
-        $cart = unserialize(Cookie::get('cart'));
+    public function __destruct() {
+        Cookie::queue('cartItems', serialize($this->cartItems), now()->addMonth()->unix() / 60);
+    }
 
-        $cart['totalQuantity'] = 0;
-        $cart['totalPrice'] = 0;
-    
-        foreach ($cart['items'] as $item) {
+    public function getCart(): array {
+        $cart = [
+            'items' => [],
+            'totalQuantity' => 0,
+            'totalPrice' => 0,
+        ];
+        
+        foreach ($this->cartItems as $item) {
             $product = Product::find($item['product_id']);
-            //$cart['items'][$item] = $product; TODO чё за херь блять мозг умер 0,,,0
-            $cart['items'] = $cart['items']->map(function($oldItem) use ($item) {
-                return $oldItem == $item ? $item : $oldItem;
-            });
+            $product->quantity = $item['quantity'];
+            $cart['items'][] = $product;
             $cart['totalQuantity'] += $product->quantity;
             $cart['totalPrice'] += $product->quantity * $product->price;
         }
@@ -41,33 +43,32 @@ class GuestCartService extends CartService
     }
 
     public function addItem(int $id): void {
-        $cart = unserialize(Cookie::get('cart'));
-        $item = $cart['items']->firstWhere('product_id', $id);
-
-        if (!$item) {
-            $cart['items']->push(['product_id' => $id, 'quantity' => 1,]);
+        if (Arr::has($this->cartItems, $id)) {
+            $this->cartItems[$id]['quantity']++; 
         } else {
-            $cart['items'][$item]['quantity']++;
+            $this->cartItems[$id] = [
+                'product_id' => $id,
+                'quantity' => 1,
+            ];
         }
-
-        $this->saveCart($cart);
     }
 
     public function removeItem(int $id): void {
-        
+        if ($this->cartItems[$id]['quantity'] == 1) {
+            unset($this->cartItems[$id]);
+        } else {
+            $this->cartItems[$id]['quantity']--;
+        }
     }
 
     public function deleteItem(int $id): void {
-        
+        unset($this->cartItems[$id]);
     }
 
     public function clearCart(): void {
-        
+        $this->cartItems = [];
     }
 
-    private function saveCart(array $cart): void {
-        Cookie::queue('cart', serialize($cart), now()->addMonth()->unix() / 60);
-    }
     
     public static function transferItems(): void {
 

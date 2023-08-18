@@ -5,7 +5,7 @@ namespace App\Services\Cart;
 use App\Services\Cart\CartService;
 use App\Models\CartItem;
 
-class AuthCartService extends CartService
+class AuthCartService implements CartService
 {
     public function getCart(): array {
         $cart = [
@@ -33,7 +33,7 @@ class AuthCartService extends CartService
             'quantity' => 1,
         ]);
 
-        if ($item->quantity == 1) {
+        if (!$item->wasRecentlyCreated()) {
             $item->quantity++;
             $item->save();
         }

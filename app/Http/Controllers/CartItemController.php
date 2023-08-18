@@ -27,11 +27,15 @@ class CartItemController extends Controller
         $this->cartService()->addItem($request->id);
     }
 
-    public function update(Request $request): void {
-        $this->cartService()->removeItem($request->id);
+    public function update(int $id): void {
+        $this->cartService()->removeItem($id);
     }
 
-    public function destroy(): void {
+    public function destroy(int $id): void {
+        $this->cartService()->deleteItem($id);
+    }
+
+    public function clear(): void {
         $this->cartService()->clearCart();
     }
 }
