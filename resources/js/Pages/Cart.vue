@@ -30,7 +30,7 @@
             <BtnPrimary class="mt-1">
               Заказать
             </BtnPrimary>
-            <BtnSecondary @click="$router.delete(route('cart.destroy', 0))">
+            <BtnSecondary @click="$router.get(route('cart.clear'))">
               Очистить
             </BtnSecondary>
           </div>

@@ -80,7 +80,6 @@ export default {
           email: this.email,
           password: this.password,
         })
-        return
       }
     }
   }

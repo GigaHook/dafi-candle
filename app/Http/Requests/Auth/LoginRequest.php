@@ -28,7 +28,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => ['required_without:tel', 'string', 'email'],
-            'tel' => ['required_without:email', 'string', 'regex:/[0-9]{11,12}/', 'min:11', 'max:11'],
+            'tel' => ['required_without:email', 'string', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10', 'max:30'],
             'password' => ['required', 'string', 'max:20', 'min:6'],
         ];
     }

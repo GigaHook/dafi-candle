@@ -26,27 +26,35 @@ class AuthCartService implements CartService
     }
 
     public function addItem(int $id): void {
-        $item = CartItem::firstOrCreate([
+        $item = CartItem::firstWhere([
             'product_id' => $id,
             'user_id' => auth()->id(),
-        ], [
-            'quantity' => 1,
         ]);
 
-        if (!$item->wasRecentlyCreated()) {
+        if (!$item) {
+            CartItem::create([
+                'product_id' => $id,
+                'user_id' => auth()->id(),
+                'quantity' => 1,
+            ]);
+        } else {
             $item->quantity++;
             $item->save();
         }
     }
 
     public function removeItem(int $id): void {
-        CartItem::where([
+        $item = CartItem::firstWhere([
             'product_id' => $id,
             'user_id' => auth()->id(),
-        ])->update(function($item) {
-            if ($item->quantity < 2) $item->delete();
-            else $item->quantity--;
-        });
+        ]);
+        
+        if ($item->quantity < 2) {
+            $item->delete();
+        } else {
+            $item->quantity--;
+            $item->save();
+        }
     }
 
     public function deleteItem(int $id): void {

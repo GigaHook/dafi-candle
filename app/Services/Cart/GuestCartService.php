@@ -2,7 +2,9 @@
 
 namespace App\Services\Cart;
 
+use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\User;
 use App\Services\Cart\CartService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
@@ -69,8 +71,17 @@ class GuestCartService implements CartService
         $this->cartItems = [];
     }
 
-    
-    public static function transferItems(): void {
+    public function transferItems(User $user): void {
+        if ($this->cartItems == []) return;
 
+        foreach ($this->cartItems as $item) {
+            CartItem::create([
+                'product_id' => $item['product_id'],
+                'user_id' => $user->id,
+                'quantity' => $item['quantity'],
+            ]);
+        }
+
+        $this->clearCart();
     }
 }

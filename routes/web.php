@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CartItemController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,9 @@ Route::resource('products', ProductController::class);
 
 Route::resource('cart', CartItemController::class)
      ->except(['show', 'create', 'edit']);
+Route::get('cart/clear', [CartItemController::class, 'clear'])->name('cart.clear');
+
+Route::resource('orders', OrderController::class)->middleware('auth');
 
 //Route::middleware('auth')->group(function () {
 //    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

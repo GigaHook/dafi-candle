@@ -21,7 +21,6 @@
             <FormInput
               v-model="name"
               label="Имя"
-              name="name"
               type="text"
               :rules="[rules.required]"
             />
@@ -29,13 +28,11 @@
               v-model="email"
               label="E-mail"
               type="email"
-              name="email"
               :rules="[rules.required]"
             />
             <FormInput
               v-model="tel"
               label="Телефон"
-              name="tel"
               type="tel"
               v-mask="'+7 (###) ###-##-##'"
               :rules="[rules.required]"
@@ -45,7 +42,6 @@
               v-model="password"
               label="Пароль"
               type="password"
-              name="password"
               hint="От 6 до 20 символов"
               min="6"
               max="20"
@@ -95,7 +91,7 @@ export default {
       this.$router.post(route('user.store', {
         name: this.name,
         email: this.email,
-        tel: this.$refs.tel.$modelValue,
+        tel: this.tel,
         password: this.password
       }, {
         preserveScroll: true,
