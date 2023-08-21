@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\OrderAdress;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
@@ -26,5 +28,9 @@ class Order extends Model
         return $this->belongsToMany(Product::class, 'orderitems')
                     ->withPivot('quantity')
                     ->as('orderItem');
+    }
+
+    public function adress(): HasOne {
+        return $this->hasOne(OrderAdress::class);
     }
 }

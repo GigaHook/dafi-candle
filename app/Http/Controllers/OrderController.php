@@ -3,63 +3,51 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Services\Cart\AuthCartService;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
+    private $orderService;
+    private $cartService;
+
+    public function __construct() {
+        $this->orderService = new OrderService;
+        $this->cartService = new AuthCartService;
+    }
+
+    public function index() {
+        return Inertia::render('Orders/OrdersIndex', [
+            'orders' => $this->orderService->getOrders()
+        ]);
+    }
+
+    public function create() {
+        return Inertia::render('Orders/OrdersCreate', [
+            'cart' => $this->cartService->getCart(),
+        ]);
+    }
+
+    public function store(Request $request) {
+        $this->orderService->createOrder();
+    }
+
+    public function show(Order $order) {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
+    public function edit(Order $order) {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
+    public function update(Request $request, Order $order) {
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Order $order)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Order $order)
-    {
-        //
+    public function destroy(Order $order) {
+        $this->orderService->deleteOrder($order);
     }
 }

@@ -27,7 +27,7 @@
           Всего товаров: {{ cart.totalQuantity }} <br>
           На цену: {{ cart.totalPrice }} <br>
           <div class="d-flex justify-space-between align-center mt-2">
-            <BtnPrimary class="mt-1">
+            <BtnPrimary @click="$router.get(route('orders.create'))" class="mt-1">
               Заказать
             </BtnPrimary>
             <BtnSecondary @click="$router.get(route('cart.clear'))">

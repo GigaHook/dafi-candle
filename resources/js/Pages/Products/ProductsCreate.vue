@@ -26,6 +26,7 @@
               variant="outlined"
               color="yellow"
               class="mb-3"
+              hide-details="auto"
             />
             <v-file-input
               name="image"
@@ -40,6 +41,7 @@
               prepend-icon
               :error-messages="errors.image"
               @update:model-value="errors = {}"
+              hide-details="auto"
             />
             <v-select
               name="type"
@@ -51,6 +53,7 @@
               color="yellow"
               density="compact"
               class="mb-3"
+              hide-details="auto"
             />
             <FormInput
               name="price"
