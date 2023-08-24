@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderStoreRequest;
 use App\Models\Order;
 use App\Services\Cart\AuthCartService;
 use App\Services\OrderService;
@@ -31,8 +32,8 @@ class OrderController extends Controller
         ]);
     }
 
-    public function store(Request $request) {
-        $this->orderService->createOrder();
+    public function store(OrderStoreRequest $request) {
+        $this->orderService->createOrder($request->validated());
     }
 
     public function show(Order $order) {

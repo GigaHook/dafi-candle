@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Adress;
 use App\Models\CartItem;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -56,5 +57,9 @@ class User extends Authenticatable
 
     public function orders(): HasMany {
         return $this->hasMany(Order::class);
+    }
+
+    public function adresses(): HasMany {
+        return $this->hasMany(Adress::class);
     }
 }

@@ -2,7 +2,7 @@
   <Head title="Изменить товар"/>
   <v-container>
     <v-row class="justify-center align-center" style="min-height: 90vh;">
-      <v-col xs="12" md="9" xl="6">
+      <v-col xs="12" sm="8" md="7" lg="6" xl="4">
         <v-card class="px-4 pt-2 pb-4" elevation="3">
           <v-form 
             @submit.prevent="submit" 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,9 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orderadresses', function (Blueprint $table) {
-            $table->foreignIdFor(Order::class)->constrained()->onDelete('cascade');
-            $table->enum('type', ['СДЭК', 'Почта РФ'])->default('СДЭК');
+        Schema::create('adresses', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
+            $table->enum('type', ['СДЭК', 'Почта РФ']);
             $table->string('city')->max(50);
             $table->string('street')->max(150);
             $table->string('house_number')->max(50);
@@ -23,6 +25,7 @@ return new class extends Migration
             $table->string('name')->max(50);
             $table->string('lastname')->max(50);
             $table->string('patronymic')->max(50);
+            $table->string('tel')->max(50);
         });
     }
 
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orderadresses');
+        Schema::dropIfExists('adresses');
     }
 };

@@ -2,7 +2,7 @@
   <Head title="Регистрация"/>
   <v-container>
     <v-row class="justify-center align-center" style="min-height: 90vh;">
-      <v-col sm="9" md="7" lg="5" xl="4" xs="10">
+      <v-col xs="12" sm="8" md="7" lg="6" xl="4">
         <v-card class="px-5 pb-4 pt-3">
           <v-form
             @submit.prevent="submit"

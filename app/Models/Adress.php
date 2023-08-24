@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class OrderAdress extends Model
+class Adress extends Model
 {
     use HasFactory;
     
     public $timestamps = false;
     protected $table = 'orderadress';
     protected $fillable = [
-        'order_id',
+        'user_id',
         'type',
         'city',
         'street',
@@ -23,9 +24,14 @@ class OrderAdress extends Model
         'name',
         'middlename',
         'lastname',
+        'tel',
     ];
     
-    public function order(): BelongsTo {
-        return $this->belongsTo(Order::class);
+    public function orders(): HasMany {
+        return $this->hasMany(Order::class);
+    }
+
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class);
     }
 }

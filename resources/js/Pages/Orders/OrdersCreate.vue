@@ -2,10 +2,10 @@
   <Head title="Оформление заказа"/>
   <v-container>
     <v-row class="justify-center align-center" style="min-height: 90vh;">
-      <v-col xs="12" md="7" xl="5">
+      <v-col xs="12" sm="8" md="7" lg="6" xl="4">
         <v-card class="px-4 pt-2 pb-4" elevation="3">
 
-          <h1 class="text-h5">Оформление заказа</h1>
+          <h1 class="text-h5 mb-2">Оформление заказа</h1>
 
           <v-tabs v-model="tab" fixed-tabs>
             <v-tab name="cdek">Доставка по СДЭК</v-tab>
@@ -15,14 +15,98 @@
           <v-window v-model="tab">
             <v-window-item value="cdek">
               <v-form 
-                @submit.prevent="cdekSubmit"
+                @submit.prevent
+                validate-on="blur" 
+                :readonly="cdekFormData.processing"
+                ref="cdekVForm"
+              >
+                <h2 class="text-h6 my-2">
+                  Адрес доставки
+                  <sup class="text-grey text-subtitle-2">*отделения СДЭК</sup>
+                </h2>
+
+                <v-row dense>
+                  
+                  <v-col cols="6" class="mb-n2">
+                    <FormInput
+                      v-model="cdekFormData.city"
+                      :rules="[rules.required, rules.max]"
+                      label="Город"
+                      type="text"
+                    />
+                  </v-col>
+
+                  <v-col cols="6" class="mb-n2">
+                    <FormInput
+                      v-model="cdekFormData.house_number"
+                      :rules="[rules.required, rules.max]"
+                      label="Дом, строение"
+                      type="text"
+                    />
+                  </v-col>
+
+                  <v-col cols="6" class="mb-n2">
+                    <FormInput
+                      v-model="cdekFormData.street"
+                      :rules="[rules.required, rules.street]"
+                      label="Улица"
+                      type="text"
+                    />
+                  </v-col>
+
+                  <v-col cols="6" class="mb-n2">
+                    <FormInput
+                      v-model="cdekFormData.flat_number"
+                      :rules="[rules.max]"
+                      label="Квартира, помещение"
+                      type="text"
+                    />
+                  </v-col>
+
+                </v-row>
+
+                <h2 class="text-h6 mb-2">Контактные данные</h2>
+
+                <FormInput
+                  v-model="cdekFormData.name"
+                  :rules="[rules.required, rules.max]"
+                  label="Имя"
+                  type="text"
+                />
+                <FormInput
+                  v-model="cdekFormData.lastname"
+                  :rules="[rules.required, rules.max]"
+                  label="Фамилия"
+                  type="text"
+                />
+                <FormInput
+                  v-model="cdekFormData.patronymic"
+                  :rules="[rules.required, rules.max]"
+                  label="Отчество"
+                  type="text"
+                />
+                <FormInput
+                  v-model="cdekFormData.tel"
+                  :rules="[rules.required, rules.max]"
+                  label="Телефон"
+                  type="tel"
+                  v-mask="'+7 (###) ###-##-##'"
+                />
+
+              </v-form>
+            </v-window-item>
+
+            <v-window-item value="post">
+              <v-form 
+                @submit.prevent
                 validate-on="blur" 
                 :disabled="loading"
                 ref="postVForm"
               >
                 <h2 class="text-h6 my-2">Адрес доставки</h2>
+                
                 <v-row dense>
-
+                  
                   <v-col cols="6" class="mb-n2">
                     <FormInput
                       v-model="postFormData.city"
@@ -36,7 +120,7 @@
                     <FormInput
                       v-model="postFormData.house_number"
                       :rules="[rules.required, rules.max]"
-                      label="Дом/строение"
+                      label="Дом, строение"
                       type="text"
                     />
                   </v-col>
@@ -45,7 +129,7 @@
                     <FormInput
                       v-model="postFormData.street"
                       :rules="[rules.required, rules.street]"
-                      label="Улица, проспект"
+                      label="Улица"
                       type="text"
                     />
                   </v-col>
@@ -53,9 +137,19 @@
                   <v-col cols="6" class="mb-n2">
                     <FormInput
                       v-model="postFormData.flat_number"
-                      :rules="[rules.required, rules.max]"
+                      :rules="[rules.max]"
                       label="Квартира, помещение"
                       type="text"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" class="mb-n2">
+                    <FormInput
+                      v-model="postFormData.postal_сode"
+                      :rules="[rules.required, rules.postalCode]"
+                      label="Почтовый индекс"
+                      type="tel"
+                      v-mask="'######'"
                     />
                   </v-col>
 
@@ -76,33 +170,32 @@
                   type="text"
                 />
                 <FormInput
-                  v-model="postFormData.middlename"
+                  v-model="postFormData.patronymic"
                   :rules="[rules.required, rules.max]"
                   label="Отчество"
                   type="text"
                 />
-                <BtnPrimary>
-                  Оформить заказ
-                </BtnPrimary>
-              </v-form>
-            </v-window-item>
-
-            <v-window-item value="cdek">
-              <v-form 
-                @submit.prevent="cdekSubmit"
-                validate-on="blur" 
-                :disabled="loading"
-              >
-              <FormInput
-                  v-model="postFormData.postal_сode"
+                <FormInput
+                  v-model="postFormData.tel"
                   :rules="[rules.required, rules.max]"
-                  label="Почтовый индекс"
+                  label="Телефон"
                   type="tel"
-                  v-mask="'######'"
+                  v-mask="'+7 (###) ###-##-##'"
                 />
+                
               </v-form>
             </v-window-item>
           </v-window>
+
+          <div class="d-flex justify-space-between align-center pt-1">
+            <BtnPrimary @click="submit" :loading="loading">
+              Оформить заказ
+            </BtnPrimary>
+            
+            <BtnSecondary @click="$router.get(route('cart.index'))" :disabled="loading">
+              Отмена
+            </BtnSecondary>
+          </div>
 
         </v-card>
       </v-col>
@@ -111,8 +204,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useForm, router } from '@inertiajs/vue3'
+import { ref, computed, onMounted } from 'vue'
+import { useForm, usePage } from '@inertiajs/vue3'
 
 const cart = defineProps({
   cart: Object
@@ -120,37 +213,80 @@ const cart = defineProps({
 
 const tab = ref('cdek')
 const loading = ref(false)
-const postVForm = ref()
 const cdekVForm = ref()
+const postVForm = ref()
+const page = usePage()
+const user = computed(() => page.props.user)
 
 const rules = {
   required: v => !!v || 'Это поле нужно заполнить',
-  max: v => v >= 50 || 'Слишком длинное значение',
-  street: v => v >= 150 || 'Слишком длинное значение',
+  max: v => v?.length <= 50 || 'Слишком длинное значение',
+  street: v => v?.length <= 150 || 'Слишком длинное значение',
+  postalCode: v => v?.length == 6 || 'Почтовый индекс должен состоять из 6 цифр'
 }
-
-const postFormData = useForm({
-  city: null,
-  street: null,
-  house_number: null,
-  flat_number: null,
-  postal_code: null,
-  name: null,
-  lastname: null,
-  middlename: null,
-})
 
 const cdekFormData = useForm({
-
+  type:         'СДЭК',
+  city:         null,
+  house_number: null,
+  street:       null,
+  flat_number:  null,
+  name:         null,
+  lastname:     null,
+  patronymic:   null,
+  tel:          null,
+  price:        cart.totalPrice,
 })
 
-function postSubmit() {
+const postFormData = useForm({
+  type:         'Почта РФ',
+  city:         null,
+  house_number: null,
+  street:       null,
+  flat_number:  null,
+  postal_code:  null,
+  name:         null,
+  lastname:     null,
+  patronymic:   null,
+  tel:          null,
+  price:        cart.totalPrice,
+})
 
+async function submit() {
+  if (tab.value == 'cdek') cdekSubmit()
+  else postSubmit()
 }
 
-function cdekSubmit() {
-
+async function cdekSubmit() {
+  const { isValid } = await cdekVForm.value.validate()
+  if (isValid) {
+    cdekFormData.post(route('orders.store'), {
+      preserveScroll: true,
+      preserveState: true,
+      onStart: () => loading.value = true,
+      onFinish: () => loading.value = false
+    })
+  }
 }
+
+async function postSubmit() {
+  const { isValid } = await postVForm.value.validate()
+  if (isValid) {
+    postFormData.post(route('orders.store'), {
+      preserveScroll: true,
+      preserveState: true,
+      onStart: () => loading.value = true,
+      onFinish: () => loading.value = false
+    })
+  }
+}
+
+onMounted(() => {
+  cdekFormData.name = user?.value.name
+  postFormData.name = user?.value.name
+  cdekFormData.tel = user?.value.tel
+  postFormData.tel = user?.value.tel
+})
 
 </script>
 
