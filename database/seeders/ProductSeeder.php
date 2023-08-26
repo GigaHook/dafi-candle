@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -14,13 +15,6 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (range(1, 32) as $i) {
-            DB::table('products')->insert([
-                'name' => Str::random(),
-                'description' => Str::random(120),
-                'type_id' => rand(1, 4),
-            ]);
-            //TODO сделать фабрику 
-        }
+        Product::factory()->count(30)->create();
     }
 }

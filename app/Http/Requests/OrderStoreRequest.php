@@ -22,16 +22,15 @@ class OrderStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => 'required|string',
+            'type' => 'required|string|max:50',
             'city' => 'required|string|max:50',
             'street' => 'required|string|max:150',
             'house_number' => 'required|string|max:50',
             'flat_number' => 'string|max:50',
             'postal_code' => 'integer|max:6',
             'name' => 'required|string|max:50',
-            'middlename' => 'required|string|max:50',
             'lastname' => 'required|string|max:50',
-            'price' => 'required|string|max:50'
+            'partonymic' => 'required|string|max:50',
         ];
     }
 }

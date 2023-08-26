@@ -15,7 +15,7 @@
           <v-window v-model="tab">
             <v-window-item value="cdek">
               <v-form 
-                @submit.prevent
+                @submit.prevent="submit"
                 validate-on="blur" 
                 :readonly="cdekFormData.processing"
                 ref="cdekVForm"
@@ -235,7 +235,6 @@ const cdekFormData = useForm({
   lastname:     null,
   patronymic:   null,
   tel:          null,
-  price:        cart.totalPrice,
 })
 
 const postFormData = useForm({
@@ -249,16 +248,16 @@ const postFormData = useForm({
   lastname:     null,
   patronymic:   null,
   tel:          null,
-  price:        cart.totalPrice,
 })
 
 async function submit() {
-  if (tab.value == 'cdek') cdekSubmit()
+  if (tab.value == 0) cdekSubmit()
   else postSubmit()
 }
 
 async function cdekSubmit() {
   const { isValid } = await cdekVForm.value.validate()
+  console.log(cdekVForm.value)
   if (isValid) {
     cdekFormData.post(route('orders.store'), {
       preserveScroll: true,
@@ -271,6 +270,7 @@ async function cdekSubmit() {
 
 async function postSubmit() {
   const { isValid } = await postVForm.value.validate()
+  alert(isValid)
   if (isValid) {
     postFormData.post(route('orders.store'), {
       preserveScroll: true,

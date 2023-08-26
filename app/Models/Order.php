@@ -25,7 +25,7 @@ class Order extends Model
     }
     
     public function adress(): BelongsTo {
-        return $this->BelongsTo(Adress::class);
+        return $this->belongsTo(Adress::class);
     }
 
     public function products(): BelongsToMany {
