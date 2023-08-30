@@ -15,7 +15,7 @@
           <v-window v-model="tab">
             <v-window-item value="cdek">
               <v-form 
-                @submit.prevent="submit"
+                @submit.prevent
                 validate-on="blur" 
                 :readonly="cdekFormData.processing"
                 ref="cdekVForm"
@@ -188,7 +188,7 @@
           </v-window>
 
           <div class="d-flex justify-space-between align-center pt-1">
-            <BtnPrimary @click="submit" :loading="loading">
+            <BtnPrimary @click="tab == 0 ? cdekSubmit() : postSubmit()" :loading="loading">
               Оформить заказ
             </BtnPrimary>
             
@@ -250,15 +250,8 @@ const postFormData = useForm({
   tel:          null,
 })
 
-async function submit() {
-  if (tab.value == 0) cdekSubmit()
-  else postSubmit()
-}
-
 async function cdekSubmit() {
-  const { isValid } = await cdekVForm.value.validate()
-  console.log(cdekVForm.value)
-  if (isValid) {
+  if (await cdekVForm.value.validate()) {
     cdekFormData.post(route('orders.store'), {
       preserveScroll: true,
       preserveState: true,
@@ -269,9 +262,7 @@ async function cdekSubmit() {
 }
 
 async function postSubmit() {
-  const { isValid } = await postVForm.value.validate()
-  alert(isValid)
-  if (isValid) {
+  if (await postVForm.value.validate()) {
     postFormData.post(route('orders.store'), {
       preserveScroll: true,
       preserveState: true,

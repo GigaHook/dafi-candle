@@ -20,13 +20,13 @@ class OrderController extends Controller
         $this->cartService = new AuthCartService;
     }
 
-    public function index() {
+    public function index(): InertiaResponse {
         return Inertia::render('Orders/OrdersIndex', [
             'orders' => $this->orderService->getOrders()
         ]);
     }
 
-    public function create() {
+    public function create(): InertiaResponse {
         return Inertia::render('Orders/OrdersCreate', [
             'cart' => $this->cartService->getCart(),
         ]);

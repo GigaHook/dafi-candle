@@ -12,7 +12,7 @@ class Adress extends Model
     use HasFactory;
     
     public $timestamps = false;
-    protected $table = 'orderadress';
+    protected $table = 'adresses';
     protected $fillable = [
         'user_id',
         'type',
@@ -22,8 +22,8 @@ class Adress extends Model
         'flat_number',
         'postal_code',
         'name',
-        'middlename',
         'lastname',
+        'patronymic',
         'tel',
     ];
     

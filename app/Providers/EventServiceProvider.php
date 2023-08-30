@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\OrderPlaced;
+use App\Listeners\HandleOrderPlacement;
+use App\Services\Cart\GuestCartService;
 use Illuminate\Auth\Events\Registered;
-use App\Listeners\TransferCartItems;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
@@ -15,8 +17,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        Registered::class => [
-            TransferCartItems::class,
+        OrderPlaced::class => [
+            HandleOrderPlacement::class,
         ],
     ];
 
@@ -24,8 +26,13 @@ class EventServiceProvider extends ServiceProvider
      * Register any events for your application.
      */
     public function boot(): void
-    {
-        //
+    {   
+        /**
+         * Сохранение товаров в корзине при регистрации
+         */
+        Event::listen(Registered::class, function (Registered $event) {
+            (new GuestCartService)->transferItems($event->user);
+        });
     }
 
     /**

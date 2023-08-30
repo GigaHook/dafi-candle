@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+use App\Events\OrderPlaced;
 use App\Models\Adress;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -21,8 +22,8 @@ class OrderService
 
     public function getOrders(): Collection {
         return auth()->user()->is_admin
-            ? Order::query()->where('user_id', auth()->id())->load('orderitems')
-            : Order::all()->load('orderitems');
+            ? Order::query()->where('user_id', auth()->id())->load('orderitems') //для юзера
+            : Order::all()->load('orderitems'); //для админа
     }
 
     public function createOrder(array $data): void {
@@ -42,6 +43,8 @@ class OrderService
                     'quantity' => $product->quantity,
                 ]);
             }
+
+            event(new OrderPlaced($order, $adress));
         });
     }
 

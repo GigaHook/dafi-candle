@@ -30,7 +30,8 @@ class OrderStoreRequest extends FormRequest
             'postal_code' => 'integer|max:6',
             'name' => 'required|string|max:50',
             'lastname' => 'required|string|max:50',
-            'partonymic' => 'required|string|max:50',
+            'patronymic' => 'required|string|max:50',
+            'tel' => 'required|string|max:50',
         ];
     }
 }
