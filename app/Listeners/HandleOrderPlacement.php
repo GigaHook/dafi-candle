@@ -3,11 +3,11 @@
 namespace App\Listeners;
 
 use App\Models\User;
-use App\Notifications\OrderPlacedAlternative;
 use App\Services\Cart\AuthCartService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use DefStudio\Telegraph\Facades\Telegraph;
+use Illuminate\Support\Str;
 
 class HandleOrderPlacement
 {
@@ -18,23 +18,14 @@ class HandleOrderPlacement
     {
         (new AuthCartService)->clearCart();
 
-        $message = $this->generateMessage();
-
-        $response = Telegraph::message($message)->send();
-        
-        User::find(2)->notify(new OrderPlacedAlternative());
-        /*if ($response->telegraphError()) {
-            try {
-            } catch (\Exception) {
-                dd($event);
-            }
-        }*/
-
+        $message = $this->generateMessage($event);
+        Telegraph::message($message)->send();
     }
 
-    private function generateMessage(): string
+    private function generateMessage($event): string
     {
+        //Str::after();
         return "zxc";
-    }
+    } 
 
 }
