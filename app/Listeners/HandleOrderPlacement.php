@@ -17,15 +17,17 @@ class HandleOrderPlacement
     public function handle(object $event): void
     {
         (new AuthCartService)->clearCart();
-
         $message = $this->generateMessage($event);
         Telegraph::message($message)->send();
     }
 
     private function generateMessage($event): string
     {
-        //Str::after();
-        return "zxc";
+        $message = "";
+
+
+
+        return $message;
     } 
 
 }
