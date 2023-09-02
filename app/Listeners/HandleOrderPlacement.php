@@ -7,7 +7,6 @@ use App\Services\Cart\AuthCartService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use DefStudio\Telegraph\Facades\Telegraph;
-use Illuminate\Support\Str;
 
 class HandleOrderPlacement
 {
@@ -23,9 +22,20 @@ class HandleOrderPlacement
 
     private function generateMessage($event): string
     {
-        $message = "";
+        $order = $event->order;
+        $adress = $event->adress;
 
+        $message = "Новый заказ от "
+                  ."<b>".$adress->name." "
+                  .$adress->lastname."<//b>/n/n"
+                  ."Содержание:/n";
 
+        foreach ($order->products as $product) {
+            $message .= $product->name." x".$product->orderItem->quantity;
+        }
+        
+        
+        
 
         return $message;
     } 
