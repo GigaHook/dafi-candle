@@ -53,23 +53,37 @@
         <slot />
       </v-main>
 
+      <SnackbarList/>
+
+      <v-snackbar
+        timeout="4000"
+      >
+        asdzxc
+        <v-btn>
+          asd
+        </v-btn>
+      </v-snackbar>
+
     </v-layout>
   </v-app>
 </template>
 
+<script setup>
+import { ref } from 'vue'
+
+const asd = ref(true)
+</script>
+
 <script>
-import NavItem from '../Components/NavItem.vue'
-import AdminSidebar from '../Components/AdminSidebar.vue'
+import NavItem from '@/Components/NavItem.vue'
+import AdminSidebar from '@/Components/AdminSidebar.vue'
+import SnackbarList from '@/Components/SnackbarList.vue'
 
 export default {
   components: {
     NavItem,
-    AdminSidebar
-  },
-  data() {
-    return {
-
-    }
+    AdminSidebar,
+    SnackbarList,
   },
 }
 

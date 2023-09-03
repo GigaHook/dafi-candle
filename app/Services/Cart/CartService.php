@@ -11,28 +11,28 @@ interface CartService
     public function getCart(): array;
 
     /**
-     * Добавляет в корзину всякое/увеличивает кол-во
+     * Добавляем в корзину всякое/увеличиваем кол-во
      * @param int $id
      * @return void
      */
     public function addItem(int $id): void;
 
     /**
-     * Удаляет из корзины всякое/уменьшает кол-во
+     * Удаляем из корзины всякое/уменьшаем кол-во
      * @param int $id
      * @return void
      */
     public function removeItem(int $id): void;
 
     /**
-     * Полностью удаляет предмет из корзины, несмотря на его кол-во
+     * Удаляем предмет из корзины
      * @param int $id
      * @return void
      */
     public function deleteItem(int $id): void;
 
     /**
-     * Удаляет все предметы из корзины
+     * Удаляем все предметы из корзины
      * @return void
      */
     public function clearCart(): void;

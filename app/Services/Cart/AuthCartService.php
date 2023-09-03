@@ -4,9 +4,13 @@ namespace App\Services\Cart;
 
 use App\Services\Cart\CartService;
 use App\Models\CartItem;
+use App\Services\NotificationService;
 
 class AuthCartService implements CartService
 {
+    public function __construct(
+        private NotificationService $notificationService = new NotificationService
+    ) {}
     public function getCart(): array {
         $cart = [
             'items' => [],
@@ -37,6 +41,8 @@ class AuthCartService implements CartService
                 'user_id' => auth()->id(),
                 'quantity' => 1,
             ]);
+
+            $this->notificationService->snackbar('Товар добавлен в корзину', 'mdi-cart-check');
         } else {
             $item->quantity++;
             $item->save();
@@ -51,6 +57,7 @@ class AuthCartService implements CartService
         
         if ($item->quantity < 2) {
             $item->delete();
+            $this->notificationService->snackbar('Товар удалён из корзины', 'mdi-cart-remove');
         } else {
             $item->quantity--;
             $item->save();
@@ -62,6 +69,8 @@ class AuthCartService implements CartService
             'product_id' => $id,
             'user_id' => auth()->id(),
         ])->delete();
+
+        $this->notificationService->snackbar('Товар удалён из корзины', 'mdi-cart-remove');
     }
 
     public function clearCart(): void {

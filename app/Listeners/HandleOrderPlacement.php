@@ -16,27 +16,21 @@ class HandleOrderPlacement
     public function handle(object $event): void
     {
         (new AuthCartService)->clearCart();
-        $message = $this->generateMessage($event);
+        $message = $this->generateMessage($event->order, $event->adress);
         Telegraph::message($message)->send();
     }
 
-    private function generateMessage($event): string
+    private function generateMessage($order, $adress): string
     {
-        $order = $event->order;
-        $adress = $event->adress;
-
         $message = "Новый заказ от "
                   ."<b>".$adress->name." "
                   .$adress->lastname."<//b>/n/n"
                   ."Содержание:/n";
 
         foreach ($order->products as $product) {
-            $message .= $product->name." x".$product->orderItem->quantity;
+            $message .= $product->name." x".$product->orderItem->quantity."/n";
         }
         
-        
-        
-
         return $message;
     } 
 

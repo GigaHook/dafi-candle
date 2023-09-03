@@ -62,7 +62,7 @@ class ProductService
     }
     
     /**
-     * фильтры, сортировка, пагинация для ProductsIndex страницы
+     * фильтры, сортировка, пагинация для ProductsIndex
      * @param array $data
      * @return array
      */
