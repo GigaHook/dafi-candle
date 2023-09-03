@@ -91,8 +91,6 @@
 
     </v-app-bar>
 
-    
-
     <v-sheet class="block text-white pt-24 px-8 position-relative">
       <div class="welcome position-absolute"></div>
       <v-row class="justify-space-between">
@@ -238,9 +236,9 @@
       
       
       <!--круглежки-->
-      <div style="height: 100vw; width:27vh" class="mt-n8">
+      <!--<div style="height: 100vw; width:27vh" class="mt-n8">
         
-      </div>
+      </div>-->
   
       <div class="position-absolute text-center text-h5 w-100" style="bottom: 50px;">
         <b ref="about"></b>
