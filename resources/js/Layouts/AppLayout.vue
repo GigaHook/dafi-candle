@@ -52,7 +52,8 @@
       <v-main>
         <slot />
       </v-main>
-
+      
+      <!--да сука почему блять не работает-->
       <v-snackbar
         v-for="(snackbar, index) in snackbars.filter(s => s.isShown)"
         :key="snackbar.text + index"
