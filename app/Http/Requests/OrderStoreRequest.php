@@ -27,7 +27,7 @@ class OrderStoreRequest extends FormRequest
             'street' => 'required|string|max:150',
             'house_number' => 'required|string|max:50',
             'flat_number' => 'string|max:50',
-            'postal_code' => 'integer|max:6',
+            'postal_code' => 'string|max:6',
             'name' => 'required|string|max:50',
             'lastname' => 'required|string|max:50',
             'patronymic' => 'required|string|max:50',

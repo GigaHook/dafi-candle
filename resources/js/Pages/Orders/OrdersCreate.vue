@@ -145,7 +145,7 @@
 
                   <v-col cols="12" class="mb-n2">
                     <FormInput
-                      v-model="postFormData.postal_сode"
+                      v-model="postFormData.postal_code"
                       :rules="[rules.required, rules.postalCode]"
                       label="Почтовый индекс"
                       type="tel"

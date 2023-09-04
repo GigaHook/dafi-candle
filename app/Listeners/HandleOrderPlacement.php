@@ -22,16 +22,17 @@ class HandleOrderPlacement
 
     private function generateMessage($order, $adress): string
     {
-        $message = "Новый заказ от "
+        /*$message = "Новый заказ от "
                   ."<b>".$adress->name." "
                   .$adress->lastname."<//b>/n/n"
                   ."Содержание:/n";
 
         foreach ($order->products as $product) {
             $message .= $product->name." x".$product->orderItem->quantity."/n";
-        }
+        }*/
         
-        return $message;
+        //return $message;
+        return 'asdzxc';
     } 
 
 }

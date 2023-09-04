@@ -55,23 +55,13 @@
 
       <SnackbarList/>
 
-      <v-snackbar
-        timeout="4000"
-      >
-        asdzxc
-        <v-btn>
-          asd
-        </v-btn>
-      </v-snackbar>
 
     </v-layout>
   </v-app>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 
-const asd = ref(true)
 </script>
 
 <script>

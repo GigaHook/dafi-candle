@@ -7,6 +7,8 @@ use App\Services\Cart\CartService;
 use App\Services\Cart\CartServiceInterface;
 use App\Services\Cart\GuestCartService;
 use App\Services\NotificationService;
+use DefStudio\Telegraph\Models\TelegraphBot;
+use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(NotificationService::class, fn() => new NotificationService);
+        
     }
 
     /**
@@ -26,6 +28,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        TelegraphBot::firstOrCreate([
+            'token' => env('TELEGRAM_BOT_TOKEN'),
+            'name' => env('TELEGRAM_BOT_NAME'),
+        ])->chats()->firstOrCreate([
+            'chat_id' => env('TELEGRAM_CHAT_ID'),
+            'name' => env('TELEGRAM_CHAT_NAME'),
+        ]);
     }
 }
