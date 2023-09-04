@@ -53,15 +53,48 @@
         <slot />
       </v-main>
 
-      <SnackbarList/>
+      <v-snackbar
+        v-for="(snackbar, index) in snackbars.filter(s => s.isShown)"
+        :key="snackbar.text + index"
+        v-model="snackbar.isShown"
+        :style="`bottom: ${index * 60}px`"
+      >
+        {{ Math.random() }} <br>
+        {{ index }}
+        <v-btn @click="snackbar.isShown = false">
+          <v-icon icon="mdi-close"/>
+        </v-btn>
+      </v-snackbar>
 
+
+      <!--<template
+        v-for="(snackbar, index) in snackbars"
+      >
+        <v-snackbar
+          timeout="2000"
+          :model-value="true"
+          @update:model-value="snackbars.splice(index, 1)"
+          :style="`bottom: ${index * 60}px`"
+        >
+          {{ index }} asd {{ Math.random() }}
+        </v-snackbar>
+      </template>-->
 
     </v-layout>
   </v-app>
 </template>
 
 <script setup>
+import { reactive } from 'vue'
+import { usePage, router } from '@inertiajs/vue3'
 
+const page = usePage()
+const snackbars = reactive([])
+
+router.on('finish', () => {
+  snackbars.push(page.props.snackbar)
+  console.log(snackbars);
+})
 </script>
 
 <script>

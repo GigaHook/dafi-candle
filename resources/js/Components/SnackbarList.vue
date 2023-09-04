@@ -3,8 +3,7 @@
     v-for="(snackbar, index) in snackbars"
     :key="Math.random(3)"
     :style="`bottom: ${index * 60}px`"
-    :model-value="!!snackbar.isShown"
-    @update:model-value="snackbar.isShown = false"
+    @update:model-value="snackbars.splice(index, 1)"
     timeout="4000"
   >
     {{ snackbar.text }}
@@ -12,15 +11,15 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { reactive } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
 
 const page = usePage()
-const snackbars = ref([])
+const snackbars = reactive([])
 
 router.on('finish', () => {
-  snackbars.value.push(page.props.snackbar)
-  console.log(snackbars.value);
+  snackbars.push(page.props.snackbar)
+  console.log(snackbars);
 })
 
 </script>

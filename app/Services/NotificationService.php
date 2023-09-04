@@ -17,7 +17,7 @@ class NotificationService {
         ]);
     }
 
-    public function alert() {
+    public function badge() {
         //должно добавляет красный кружочек к чему небудь
     }
 }
