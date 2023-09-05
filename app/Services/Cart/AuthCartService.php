@@ -65,7 +65,6 @@ class AuthCartService implements CartService
             'product_id' => $id,
             'user_id' => auth()->id(),
         ])->delete();
-
         toast('Товар удалён из корзины');
     }
 
