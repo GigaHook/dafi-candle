@@ -50,6 +50,7 @@
         <div class="text-subtitle-1 me-auto">
           {{ product.type.name }}
           <span v-if="product.type.name != 'Саше'">свеча</span>
+          <span v-else>&#x301;</span>
         </div>
       </div>
 

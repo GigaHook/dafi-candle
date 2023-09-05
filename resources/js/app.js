@@ -1,23 +1,27 @@
-import './bootstrap';
-import '../css/app.css';
+import './bootstrap'
+import '../css/app.css'
 
-import { createApp, h } from 'vue';
-import { createInertiaApp, Head } from '@inertiajs/vue3';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
+import { createApp, h } from 'vue'
+import { createInertiaApp, Head } from '@inertiajs/vue3'
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
+import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
 
 //vuetify
 import { createVuetify } from 'vuetify'
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles';
-import * as components from 'vuetify/components';
-import * as directives from 'vuetify/directives';
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
 
 //vue mask
 import VueTheMask from 'vue-the-mask'
 
+//notifications
+import Toast, { POSITION, TYPE } from "vue-toastification"
+import "vue-toastification/dist/index.css"
+
 //mixins or something idk
-import { router } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3'
 
 //compoents 
 import BtnPrimary from './Components/BtnPrimary.vue'
@@ -54,6 +58,7 @@ createInertiaApp({
         .use(ZiggyVue, Ziggy)
         .use(vuetify)
         .use(VueTheMask)
+        .use(Toast, { position: POSITION.BOTTOM_RIGHT })
 
         .component('Head', Head)
         .component('BtnPrimary', BtnPrimary)

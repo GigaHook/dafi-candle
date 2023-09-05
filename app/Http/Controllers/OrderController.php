@@ -8,7 +8,6 @@ use App\Services\Cart\AuthCartService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Inertia\Response as InertiaResponse;
 
 class OrderController extends Controller
 {
@@ -20,13 +19,13 @@ class OrderController extends Controller
         $this->cartService = new AuthCartService;
     }
 
-    public function index(): InertiaResponse {
+    public function index(): \Inertia\Response {
         return Inertia::render('Orders/OrdersIndex', [
             'orders' => $this->orderService->getOrders()
         ]);
     }
 
-    public function create(): InertiaResponse {
+    public function create(): \Inertia\Response {
         return Inertia::render('Orders/OrdersCreate', [
             'cart' => $this->cartService->getCart(),
         ]);

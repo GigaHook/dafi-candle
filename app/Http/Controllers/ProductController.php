@@ -9,7 +9,6 @@ use App\Services\ProductService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Inertia\Response as InertiaResponse;
 
 class ProductController extends Controller
 {
@@ -21,13 +20,13 @@ class ProductController extends Controller
         $this->middleware('admin')->except(['index', 'show']);
     }
 
-    public function index(Request $request): InertiaResponse {
+    public function index(Request $request): \Inertia\Response {
         return Inertia::render('Products/ProductsIndex', [
             'products' => $this->productService->processProducts($request->all()),
         ]);
     }
 
-    public function create(): InertiaResponse {
+    public function create(): \Inertia\Response {
         return Inertia::render('Products/ProductsCreate');
     }
 
@@ -36,14 +35,14 @@ class ProductController extends Controller
         return redirect()->route('products.index');
     }
 
-    public function show(Product $product): InertiaResponse {
+    public function show(Product $product): \Inertia\Response {
         return Inertia::render('Products/ProductsShow', [
             'product' => $product->load('type'),
             'tags' => $product->tags,
         ]);
     }
 
-    public function edit(Product $product): InertiaResponse {
+    public function edit(Product $product): \Inertia\Response {
         return Inertia::render('Products/ProductsEdit', [
             'product' => $product->load('type'),
             'tags' => $product->tags,

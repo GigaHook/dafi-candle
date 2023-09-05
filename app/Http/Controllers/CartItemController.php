@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Services\Cart\AuthCartService;
 use App\Services\Cart\CartService;
 use App\Services\Cart\GuestCartService;
-use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -35,6 +34,6 @@ class CartItemController extends Controller
 
     public function clear(): void {
         $this->cartService()->clearCart();
-        (new NotificationService)->snackbar('Корзина очищена', 'mdi-cart-remove');
+        toast('Корзина очищена', 'mdi-cart-remove');
     }
 }

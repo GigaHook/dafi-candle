@@ -9,7 +9,7 @@ class TypeController extends Controller
 {
 
     public function __construct() {
-        //$this->middleware('admin')->only('create', 'delete'); TODO
+        //$this->middleware('admin')->only('create', 'delete'); 
     }
 
     

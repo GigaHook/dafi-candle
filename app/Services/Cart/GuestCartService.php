@@ -6,7 +6,6 @@ use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\User;
 use App\Services\Cart\CartService;
-use App\Services\NotificationService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cookie;
 
@@ -14,9 +13,7 @@ class GuestCartService implements CartService
 {
     private $cartItems;
 
-    public function __construct(
-        private NotificationService $notificationService = new NotificationService
-    ) {
+    public function __construct() {
         if (!Cookie::has('cartItems')) {
             Cookie::queue('cartItems', serialize([]), now()->addMonth()->unix() / 60);
             $this->cartItems = [];
@@ -57,14 +54,14 @@ class GuestCartService implements CartService
             ];
             
         }
-        $this->notificationService->snackbar('Товар добавлен в корзину', 'mdi-cart-check');
+        toast('Товар добавлен в корзину', 'mdi-cart-check');
         
     }
 
     public function removeItem(int $id): void {
         if ($this->cartItems[$id]['quantity'] == 1) {
             unset($this->cartItems[$id]);
-            $this->notificationService->snackbar('Товар удалён из корзины', 'mdi-cart-remove');
+            toast('Товар удалён из корзины', 'mdi-cart-remove');
 
         } else {
             $this->cartItems[$id]['quantity']--;
@@ -73,7 +70,7 @@ class GuestCartService implements CartService
 
     public function deleteItem(int $id): void {
         unset($this->cartItems[$id]);
-        $this->notificationService->snackbar('Товар удалён из корзины', 'mdi-cart-remove');
+        toast('Товар удалён из корзины', 'mdi-cart-remove');
     }
 
     public function clearCart(): void {

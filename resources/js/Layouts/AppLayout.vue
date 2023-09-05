@@ -53,64 +53,36 @@
         <slot />
       </v-main>
       
-      <!--да сука почему блять не работает-->
-      <v-snackbar
-        v-for="(snackbar, index) in snackbars.filter(s => s.isShown)"
-        :key="snackbar.text + index"
-        v-model="snackbar.isShown"
-        :style="`bottom: ${index * 60}px`"
-      >
-        {{ Math.random() }} <br>
-        {{ index }}
-        <v-btn @click="snackbar.isShown = false">
-          <v-icon icon="mdi-close"/>
-        </v-btn>
-      </v-snackbar>
-
-
-      <!--<template
-        v-for="(snackbar, index) in snackbars"
-      >
-        <v-snackbar
-          timeout="2000"
-          :model-value="true"
-          @update:model-value="snackbars.splice(index, 1)"
-          :style="`bottom: ${index * 60}px`"
-        >
-          {{ index }} asd {{ Math.random() }}
-        </v-snackbar>
-      </template>-->
+      
 
     </v-layout>
   </v-app>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
-import { usePage, router } from '@inertiajs/vue3'
-
-const page = usePage()
-const snackbars = reactive([])
-
-router.on('finish', () => {
-  snackbars.push(page.props.snackbar)
-  console.log(snackbars);
-})
-</script>
-
-<script>
 import NavItem from '@/Components/NavItem.vue'
 import AdminSidebar from '@/Components/AdminSidebar.vue'
 import SnackbarList from '@/Components/SnackbarList.vue'
 
-export default {
-  components: {
-    NavItem,
-    AdminSidebar,
-    SnackbarList,
-  },
-}
+import { defineComponent } from 'vue'
+import { usePage, router } from '@inertiajs/vue3'
+import { useToast } from "vue-toastification";
 
+defineComponent({
+  NavItem,
+  AdminSidebar,
+  SnackbarList,
+})
+
+const page = usePage()
+const toast = useToast()
+
+router.on('finish', () => {
+  toast.success(page.props.toast.text, {
+    timeout: 2000,
+    type: TYPE[page.props.toast.type]
+  })
+})
 </script>
 
 <style>
@@ -125,7 +97,7 @@ export default {
 .dafi-en {
   font-family: "qirania" !important;
 }
-.dafi-ru{
+.dafi-ru {
   font-family: "pehlevi" !important;
 }
 .title {
