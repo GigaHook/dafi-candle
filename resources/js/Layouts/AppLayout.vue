@@ -53,8 +53,6 @@
         <slot />
       </v-main>
       
-      
-
     </v-layout>
   </v-app>
 </template>
@@ -62,7 +60,6 @@
 <script setup>
 import NavItem from '@/Components/NavItem.vue'
 import AdminSidebar from '@/Components/AdminSidebar.vue'
-import SnackbarList from '@/Components/SnackbarList.vue'
 
 import { defineComponent } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
@@ -71,7 +68,6 @@ import { useToast } from "vue-toastification";
 defineComponent({
   NavItem,
   AdminSidebar,
-  SnackbarList,
 })
 
 const page = usePage()
