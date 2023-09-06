@@ -34,6 +34,6 @@ class CartItemController extends Controller
 
     public function clear(): void {
         $this->cartService()->clearCart();
-        toast('Корзина очищена', 'mdi-cart-remove');
+        toast('Корзина очищена');
     }
 }

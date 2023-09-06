@@ -52,17 +52,14 @@ class GuestCartService implements CartService
                 'product_id' => $id,
                 'quantity' => 1,
             ];
-            
+            toast('Товар добавлен в корзину');
         }
-        toast('Товар добавлен в корзину', 'mdi-cart-check');
-        
     }
 
     public function removeItem(int $id): void {
         if ($this->cartItems[$id]['quantity'] == 1) {
             unset($this->cartItems[$id]);
-            toast('Товар удалён из корзины', 'mdi-cart-remove');
-
+            toast('Товар удалён из корзины');
         } else {
             $this->cartItems[$id]['quantity']--;
         }
@@ -70,7 +67,7 @@ class GuestCartService implements CartService
 
     public function deleteItem(int $id): void {
         unset($this->cartItems[$id]);
-        toast('Товар удалён из корзины', 'mdi-cart-remove');
+        toast('Товар удалён из корзины');
     }
 
     public function clearCart(): void {

@@ -63,7 +63,8 @@ import AdminSidebar from '@/Components/AdminSidebar.vue'
 
 import { defineComponent } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
-import { useToast } from "vue-toastification";
+import { useToast, TYPE } from 'vue-toastification'
+
 
 defineComponent({
   NavItem,
@@ -74,9 +75,12 @@ const page = usePage()
 const toast = useToast()
 
 router.on('finish', () => {
-  toast.success(page.props.toast.text, {
-    timeout: 2000,
-    type: TYPE[page.props.toast.type]
+  toast(page.props.toast.text, {
+    timeout: 3000,
+    type: TYPE[page.props.toast.type],
+    toastClassName: 'main-toast',
+    bodyClassName: ['main-toast'],
+    hideProgressBar: true,
   })
 })
 </script>
@@ -99,5 +103,12 @@ router.on('finish', () => {
 .title {
   font-size: 50px;
   font-family: "qirania";
+}
+.Vue-Toastification__toast.main-toast {
+  background-color: rgb(var(--v-theme-surface));
+  border-left: 4px solid rgb(var(--v-theme-primary));
+}
+.Vue-Toastification__toast.main-toast .Vue-Toastification__icon {
+  color: rgb(var(--v-theme-primary));
 }
 </style>
