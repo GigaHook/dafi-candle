@@ -47,6 +47,7 @@ Route::get('cart/clear', [CartItemController::class, 'clear'])->name('cart.clear
 
 Route::resource('orders', OrderController::class)->middleware('auth');
 
+
 //Route::middleware('auth')->group(function () {
 //    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 //    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

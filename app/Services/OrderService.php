@@ -22,7 +22,7 @@ class OrderService
 
     public function getOrders(): Collection {
         return auth()->user()->is_admin
-            ? Order::query()->where('user_id', auth()->id())->load('orderitems') //для юзера
+            ? Order::query()->where('user_id', auth()->id())->get()->load('products')->load('adresses') //для юзера
             : Order::all()->load('orderitems'); //для админа
     }
 

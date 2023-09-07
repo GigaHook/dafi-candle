@@ -17,7 +17,7 @@ class HandleOrderPlacement
     {
         (new AuthCartService)->clearCart();
         $message = $this->generateMessage($event->order, $event->adress);
-        Telegraph::message($message)->send();
+        //Telegraph::message($message)->send();
     }
 
     private function generateMessage($order, $adress): string

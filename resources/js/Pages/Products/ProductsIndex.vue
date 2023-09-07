@@ -1,7 +1,7 @@
 <template>
   <Head title="Каталог"/>
   <v-container fluid>
-    <v-row style="min-height: calc(100vh - 72px);">
+    <v-row>
 
       <!--FILTERS-->
       <v-col cols="12">
