@@ -11,13 +11,10 @@ use Inertia\Inertia;
 
 class OrderController extends Controller
 {
-    private $orderService;
-    private $cartService;
-
-    public function __construct() {
-        $this->orderService = new OrderService;
-        $this->cartService = new AuthCartService;
-    }
+    public function __construct(
+        private $orderService = new OrderService,
+        private $cartService = new AuthCartService,
+    ) {}
 
     public function index(): \Inertia\Response {
         return Inertia::render('Orders/OrdersIndex', [

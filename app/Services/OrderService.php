@@ -12,18 +12,15 @@ use Illuminate\Support\Facades\DB;
 
 class OrderService 
 {
-    private $adressService;
-    private $cartService;
-
-    public function __construct() {
-        $this->adressService = new AdressService;
-        $this->cartService = new AuthCartService;
-    }
+    public function __construct(
+        private $adressService = new AdressService,
+        private $cartService = new AuthCartService,
+    ) {}
 
     public function getOrders(): Collection {
         return auth()->user()->is_admin
-            ? Order::query()->where('user_id', auth()->id())->get()->load('products')->load('adresses') //для юзера
-            : Order::all()->load('orderitems'); //для админа
+            ? Order::where('user_id', auth()->id())->get()->load('products')->load('adress') //для юзера
+            : Order::get()->get()->load('products')->load('adress'); //для админа
     }
 
     public function createOrder(array $data): void {
@@ -45,6 +42,7 @@ class OrderService
             }
 
             event(new OrderPlaced($order, $adress));
+            toast('Заказ оформлен', 'success');
         });
     }
 

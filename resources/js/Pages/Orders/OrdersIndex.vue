@@ -5,8 +5,7 @@
       class="fill-height d-flex flex-column justify-space-between px-4 pt-2 pb-3"
       elevation="3"
     >
-      <h1 class="text-h4">Заказы</h1>
-
+      <h1 class="text-h5">Заказы</h1>
       <v-table density="compact" v-if="orders.length">
         <thead>
           <tr>
@@ -15,6 +14,9 @@
             </th>
             <th>
               Заказчик
+            </th>
+            <th>
+              Доставка
             </th>
             <th>
               Адрес
@@ -26,7 +28,9 @@
               Добавлен
             </th>
             <th>
-              Содержание
+              Статус
+            </th>
+            <th>
             </th>
           </tr>
         </thead>
@@ -37,19 +41,30 @@
               {{ order.id }}
             </td>
             <td>
-              фыв
+              {{ `${order.adress.name} ${order.adress.lastname} ${order.adress.patronymic}` }} 
             </td>
             <td>
-              фыв
+              {{ order.adress.type }}
             </td>
             <td>
-              фыв
+              {{ order.adress.city }},
+              {{ order.adress.street }},
+              {{ order.adress.house_number }},
+              {{ order.adress.flat_number ? order.adress.flat_number + ',' : '' }}
+              {{ order.adress.postal_code ? "почтовый индекс " + order.adress.postal_code + ',' : '' }}
             </td>
             <td>
-              фыв
+              {{ order.price }}
+              <v-icon icon="mdi-currency-rub" size="18" class="ms-n1 mb-1"/>
             </td>
             <td>
-              фыв
+              {{ order.created_at }}
+            </td>
+            <td>
+              {{ order.status }}
+            </td>
+            <td>
+              <BtnPrimary>Подробнее</BtnPrimary>
             </td>
           </tr>
         </tbody>
@@ -72,9 +87,11 @@ defineOptions({
   layout: AppLayout
 })
 
-const orders = defineProps({
-  orders: Object
+const { orders } = defineProps({
+  orders: Array
 })
+
+console.log(orders)
 
 </script>
 
