@@ -1,6 +1,6 @@
 <template>
   <Head title="Заказы"/>
-  <v-container fluid>
+  <v-container>
     <v-card
       class="fill-height d-flex flex-column justify-space-between px-4 pt-2 pb-3"
       elevation="3"
@@ -16,16 +16,7 @@
               Заказчик
             </th>
             <th>
-              Доставка
-            </th>
-            <th>
-              Адрес
-            </th>
-            <th>
               Стоимость
-            </th>
-            <th>
-              Добавлен
             </th>
             <th>
               Статус
@@ -34,40 +25,14 @@
             </th>
           </tr>
         </thead>
-
+          
         <tbody>
-          <tr v-for="order in orders">
-            <td>
-              {{ order.id }}
-            </td>
-            <td>
-              {{ `${order.adress.name} ${order.adress.lastname} ${order.adress.patronymic}` }} 
-            </td>
-            <td>
-              {{ order.adress.type }}
-            </td>
-            <td>
-              {{ order.adress.city }},
-              {{ order.adress.street }},
-              {{ order.adress.house_number }},
-              {{ order.adress.flat_number ? order.adress.flat_number + ',' : '' }}
-              {{ order.adress.postal_code ? "почтовый индекс " + order.adress.postal_code + ',' : '' }}
-            </td>
-            <td>
-              {{ order.price }}
-              <v-icon icon="mdi-currency-rub" size="18" class="ms-n1 mb-1"/>
-            </td>
-            <td>
-              {{ order.created_at }}
-            </td>
-            <td>
-              {{ order.status }}
-            </td>
-            <td>
-              <BtnPrimary>Подробнее</BtnPrimary>
-            </td>
-          </tr>
+          <OrdersTableRow
+            v-for="order in orders"
+            :order="order"
+          />
         </tbody>
+
       </v-table>
 
       <span v-else>
@@ -81,10 +46,15 @@
 <script setup>
 import { defineComponent } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
-import AppLayout from '@/Layouts/AppLayout.vue';
+import OrdersTableRow from '@/Components/OrdersTableRow.vue'
+import AppLayout from '@/Layouts/AppLayout.vue'
 
 defineOptions({
   layout: AppLayout
+})
+
+defineComponent({
+  OrdersTableRow: OrdersTableRow
 })
 
 const { orders } = defineProps({

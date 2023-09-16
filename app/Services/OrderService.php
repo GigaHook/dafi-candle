@@ -42,7 +42,6 @@ class OrderService
             }
 
             event(new OrderPlaced($order, $adress));
-            toast('Заказ оформлен', 'success');
         });
     }
 
