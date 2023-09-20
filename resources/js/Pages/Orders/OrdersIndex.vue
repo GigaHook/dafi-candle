@@ -28,52 +28,10 @@
         </thead>
           
         <tbody>
-          <!--<OrdersTableRow
+          <OrdersTableRow
             v-for="order in orders"
             :order="order"
-          />-->
-
-          <tr v-for="order in orders">
-            <td>
-              {{ order.id }}
-            </td>
-            <td>
-              {{ `${order.adress.name} ${order.adress.lastname} ${order.adress.patronymic}` }} 
-            </td>
-            <td>
-              {{ order.price }}
-              <v-icon icon="mdi-currency-rub" size="18" class="ms-n1 mb-1"/>
-            </td>
-            <td>
-              <v-select
-                variant="solo"
-                color="yellow"
-                density="compact"
-                hide-details="auto"
-                chips
-                :items="['В работе', 'Отправлен', 'Отменён']"
-                :model-value="order.status"
-                class="ms-n4"
-                style="max-width: fit-content;"
-              >
-                <template #chip="{ item }">
-                  <v-chip
-                    class="text-body-1 pa-4 rounded"
-                    :color="defineChipColor(item.raw)"
-                    variant="elevated"
-                  >
-                    {{ item.raw }}
-                  </v-chip>
-                </template>
-              </v-select>
-            </td>
-            <td>
-              <BtnPrimary @click="$router.post(route('orders.show', order.id))">
-                Подробнее
-              </BtnPrimary>
-            </td>
-          </tr>
-
+          />
         </tbody>
       </v-table>
 
@@ -103,17 +61,23 @@ const { orders } = defineProps({
   orders: Array
 })
 
-const defineChipColor = chip => {
+function defineChipColor(chip) {
   switch (chip) {
     case 'В работе':
-      return 'primary'
+      return 'blue-lighten-1'
     
     case 'Отправлен':
       return 'success'
-    
-    case 'Отменён':
-      return 'primarygrey-lighten-2'
+
+    default:
+      return 'grey-darken-3'
   }
+}
+
+function updateStatus(status) {
+  router.post(route('order.update', order.id), {
+
+  })
 }
 
 </script>

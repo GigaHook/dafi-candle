@@ -20,7 +20,7 @@ class OrderService
     public function getOrders(): Collection {
         return auth()->user()->is_admin
             ? Order::where('user_id', auth()->id())->get()->load('products')->load('adress') //для юзера
-            : Order::get()->get()->load('products')->load('adress'); //для админа
+            : Order::get()->load('products')->load('adress'); //для админа
     }
 
     public function createOrder(array $data): void {
