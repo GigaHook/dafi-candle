@@ -14,18 +14,21 @@
 
       <v-col xl="3" lg="4" md="5" sm="6" cols="12">
         <v-img
-        :src="`../storage/upload/${product.image}`"
+          :src="`../storage/upload/${product.image}`"
           style="aspect-ratio: 3 / 4;"
           class="mb-4 rounded"
+          cover
         />
 
-        <BtnPrimary class="me-4" @click="$router.post(route('cart.store'), { id: product.id })">
-          Купить
-        </BtnPrimary>
+        <div class="d-flex justify-space-between w-100">
+          <BtnPrimary @click="$router.post(route('cart.store'), { id: product.id })">
+            Купить
+          </BtnPrimary>
 
-        <BtnPrimary class="me-4" @click="$router.get(route('products.index'))">
-          Назад
-        </BtnPrimary>
+          <BtnSecondary @click="$router.get(route('products.index'))">
+            Назад
+          </BtnSecondary>
+        </div>
       </v-col>
       
       <v-col

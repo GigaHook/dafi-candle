@@ -15,7 +15,7 @@ class HandleOrderPlacement
      */
     public function handle(object $event): void
     {
-        toast('Заказ оформлен', 'success');
+        toast('Заказ оформлен', 'SUCCESS');
         (new AuthCartService)->clearCart();
         $message = $this->generateMessage($event->order, $event->adress);
         //Telegraph::message($message)->send();

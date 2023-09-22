@@ -36,17 +36,23 @@
         <v-overlay
           contained
           :model-value="hover"
-          class="align-center justify-center"
+          class="align-center justify-center text-button font-weight-bold overlay"
           scrim="black"
+          @click="$router.get(route('products.show', product.id))"
         >
-          <BtnPrimary @click="$router.get(route('products.show', product.id))">
-            Подробнее
-          </BtnPrimary>
+          Подробнее
         </v-overlay>
       </v-img>
 
       <div class="px-4 py-1">
-        <div class="font-weight-bold text-h6">{{ product.name }}</div>
+        <div
+          class="font-weight-bold text-h6 d-inline"
+          style="cursor: pointer;"
+          @click="$router.get(route('products.show', product.id))"  
+        >
+          {{ product.name }}
+        </div>
+
         <div class="text-subtitle-1 me-auto">
           {{ product.type.name }}
           <span v-if="product.type.name != 'Саше'">свеча</span>
@@ -94,8 +100,8 @@ function addToCart() {
     id: props.product.id
   }, {
     preserveScroll: true,
-    onStart: () => { loading.value = true },
-    onFinish: () => { loading.value = false },
+    onStart: () => loading.value = true,
+    onFinish: () => loading.value = false,
   })
 }
 
@@ -115,5 +121,14 @@ export default {
   background-color: #181818;
   border-radius: 5px;
   outline: 2px solid #181818;
+}
+
+.overlay{
+  transition: all .1s ease-in-out;
+  font-size: 16px !important;
+  cursor: pointer;
+} 
+.overlay:hover{
+  color: white;
 }
 </style>

@@ -37,15 +37,16 @@ Route::middleware('auth')->group(function() {
     Route::get('profile', function() {
         return Inertia::render('Profile');
     })->name('profile');
+
+    Route::resource('orders', OrderController::class);
+    Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');    
 });
 
 Route::resource('products', ProductController::class);
 
-Route::resource('cart', CartItemController::class)
-     ->except(['show', 'create', 'edit']);
+Route::resource('cart', CartItemController::class)->except(['show', 'create', 'edit']);
 Route::get('cart/clear', [CartItemController::class, 'clear'])->name('cart.clear');
 
-Route::resource('orders', OrderController::class)->middleware('auth');
 
 
 //Route::middleware('auth')->group(function () {

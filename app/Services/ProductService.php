@@ -10,13 +10,10 @@ use Illuminate\Support\Arr;
 
 class ProductService 
 {
-    protected $tagService;
-    protected $fileService;
- 
-    public function __construct() {
-        $this->tagService = new TagService();
-        $this->fileService = new FileService();
-    }
+    public function __construct(
+        protected $tagService = new TagService,
+        protected $fileService = new FileService,
+    ) {}
 
     /**
      * качает изображение, создаёт продукт и теги если они есть и связывает их
@@ -27,6 +24,7 @@ class ProductService
         $this->fileService->uploadImage($data['image']);
         $product = Product::create($data);
         $this->tagService->createTags($product, $data['tags']);
+        toast('Товар добавлен');
     }
 
     /**
@@ -62,7 +60,7 @@ class ProductService
     }
     
     /**
-     * фильтры, сортировка, пагинация для ProductsIndex
+     * фильтры, сортировка, пагинация
      * @param array $data
      * @return array
      */

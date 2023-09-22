@@ -10,8 +10,9 @@
 
         <thead>
           <tr>
-            <th> №</th>
+            <th>№</th>
             <th>Заказчик</th>
+            <th>Дата и время</th>
             <th>Стоимость</th>
             <th>Статус</th>
             <th></th>
@@ -52,24 +53,7 @@ const { orders } = defineProps({
   orders: Array
 })
 
-function defineChipColor(chip) {
-  switch (chip) {
-    case 'В работе':
-      return 'blue-lighten-1'
-    
-    case 'Отправлен':
-      return 'success'
 
-    default:
-      return 'grey-darken-3'
-  }
-}
-
-function updateStatus(status) {
-  router.post(route('order.update', order.id), {
-
-  })
-}
 
 </script>
 

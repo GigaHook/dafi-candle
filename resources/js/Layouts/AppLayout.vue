@@ -75,6 +75,7 @@ const page = usePage()
 const toast = useToast()
 
 router.on('finish', () => {
+  if (!page.props.toast) return
   toast(page.props.toast.text, {
     timeout: 3000,
     type: TYPE[page.props.toast.type],

@@ -4,18 +4,15 @@
     <v-row class="justify-center">
 
       <v-col cols="9">
-        <v-card class="pa-4 pt-2" elevation="3">
-          <h2 class="text-h5 mb-2">
-            Корзина
-          </h2>
-          <v-row dense v-if="cart.items.length">
-            <CartItemCard
-              v-for="product in cart.items"
-              :key="product.id"
-              :product="product"
-              :last="product == cart.items[cart.items.length - 1]"
-            />
-          </v-row>
+        <v-card class="pa-4 pb-2" elevation="3">
+            <v-scroll-x-transition v-if="cart.items.length" group>
+              <CartItemCard
+                v-for="product in cart.items"
+                :key="product.id"
+                :product="product"
+                :last="product == cart.items[cart.items.length - 1]"
+              />
+            </v-scroll-x-transition>
           <div v-else>
             Нет предметов в корзине
           </div>
@@ -25,11 +22,14 @@
       <v-col cols="3" xl="2">
         <v-card class="px-4 pt-2 pb-4" elevation="3">
           Всего товаров: {{ cart.totalQuantity }} <br>
-          На цену: {{ cart.totalPrice }} <br>
+          На цену: {{ cart.totalPrice }}
+          <v-icon icon="mdi-currency-rub" size="18" class="ms-n1 mb-1"/>
+          
           <div class="d-flex justify-space-between align-center mt-2">
             <BtnPrimary @click="$router.get(route('orders.create'))" class="mt-1">
               Заказать
             </BtnPrimary>
+
             <BtnSecondary @click="$router.get(route('cart.clear'))">
               Очистить
             </BtnSecondary>

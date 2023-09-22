@@ -19,8 +19,8 @@ class OrderService
 
     public function getOrders(): Collection {
         return auth()->user()->is_admin
-            ? Order::where('user_id', auth()->id())->get()->load('products')->load('adress') //для юзера
-            : Order::get()->load('products')->load('adress'); //для админа
+            ? Order::where('user_id', auth()->id())->get()->load('adress') //для юзера
+            : Order::get()->load('adress'); //для админа
     }
 
     public function createOrder(array $data): void {
@@ -43,6 +43,15 @@ class OrderService
 
             event(new OrderPlaced($order, $adress));
         });
+    }
+
+    public function updateStatus(Order $order, string $status): void {
+        $order->status = $status;
+        $order->save();
+    }
+
+    public function updateOrder(Order $order, array $data): void {
+        //TODO
     }
 
     public function deleteOrder(Order $order): void {

@@ -1,5 +1,5 @@
 <template>
-  <Head :title="`Заказ от ${order.created_at.split('T')[0]}`"/>
+  <Head :title="`Заказ №${order.id}`"/>
   <v-container>
     <v-card
       class="fill-height d-flex flex-column justify-space-between px-4 pt-2 pb-3"

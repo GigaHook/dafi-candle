@@ -12,7 +12,7 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    protected $productService;
+    private $productService;
     
     public function __construct() {
         $this->productService = new ProductService();
