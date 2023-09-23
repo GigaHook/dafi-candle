@@ -23,6 +23,7 @@
     },
     "dependencies": {
         "@mdi/js": "^7.2.96",
+        "vue-animated-counter": "^0.2.0",
         "vue-the-mask": "^0.11.1",
         "vue-toastification": "^2.0.0-rc.5",
         "vuetify": "^3.3.6"

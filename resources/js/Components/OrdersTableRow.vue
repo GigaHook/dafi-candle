@@ -30,7 +30,6 @@
         @update:model-value="updateStatus"
         :loading="loading"
       >
-      <!--вот тут остановился-->
         <template #chip="{ item }">
           <v-chip
             class="text-body-1 pa-4 rounded"

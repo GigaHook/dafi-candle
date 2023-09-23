@@ -20,6 +20,9 @@ import VueTheMask from 'vue-the-mask'
 import Toast, { POSITION, TYPE } from "vue-toastification"
 import "vue-toastification/dist/index.css"
 
+//animated counter
+import AnimatedCounter from "vue-animated-counter"
+
 //mixins or something idk
 import { router } from '@inertiajs/vue3'
 
@@ -64,6 +67,7 @@ createInertiaApp({
         .component('BtnPrimary', BtnPrimary)
         .component('BtnSecondary', BtnSecondary)
         .component('FormInput', FormInput)
+        .component("AnimatedCounter", AnimatedCounter)
 
         app.config.globalProperties.$router = router
 
