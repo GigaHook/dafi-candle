@@ -8,8 +8,8 @@
     </td>
 
     <td>
-      {{ order.created_at.split('T')[0] }} <br>
-      {{ order.created_at.split('T')[1].split('.')[0] }}
+      {{ createdAt[0] }} <br>
+      {{ orderTime() }}
     </td>
     
     <td>
@@ -28,7 +28,7 @@
         class="ms-n4"
         style="width:180px !important"
         @update:model-value="updateStatus"
-        :loading="loading"
+        :readonly="loading"
       >
         <template #chip="{ item }">
           <v-chip
@@ -62,6 +62,13 @@ const { order } = defineProps({
   order: Object
 })
 
+let createdAt = order.created_at.split('T')
+
+function orderTime() {
+  let fullTime = createdAt[1].split('.')[0].split(':')
+  return `${fullTime[0]}:${fullTime[1]}`
+}
+
 const status = ref(order.status)
 const loading = ref(false)
 
@@ -71,7 +78,8 @@ function updateStatus() {
   }, {
     preserveState: true,
     preserveScroll: true,
-    processing: loading.value
+    onStart: () => loading.value = true,
+    onFinish: () => loading.value = false,
   })
 }
 

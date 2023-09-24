@@ -10,7 +10,9 @@
       </v-list-item>
 
     </v-list>
+
     <v-divider/>
+
     <v-list nav density="compact">
 
       <v-list-item
@@ -23,7 +25,10 @@
         prepend-icon="mdi-notebook-multiple"
         title="Заказы"
         @click="$router.get(route('orders.index'))"
-      />
+        v-badge-icon="3"
+      >
+        
+      </v-list-item>
 
       <v-list-item
         prepend-icon="mdi-notebook-plus"

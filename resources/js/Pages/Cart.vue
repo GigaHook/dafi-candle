@@ -21,8 +21,8 @@
 
       <v-col cols="3" xl="2">
         <v-card class="px-4 pt-2 pb-4" elevation="3">
-          Всего товаров: <AnimatedCounter :value="cart.totalQuantity" :duration="500"/> <br>
-          На цену: <AnimatedCounter :value="cart.totalPrice" :duration="500"/><!--придумать что нибудь-->
+          Всего товаров: {{ cart.totalQuantity }} <br>
+          На цену: {{ cart.totalPrice }}
           <v-icon icon="mdi-currency-rub" size="18" class="ms-n1 mb-1"/>
           
           <div class="d-flex justify-space-between align-center mt-2">
