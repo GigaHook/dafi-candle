@@ -15,10 +15,11 @@
 
     <v-list nav density="compact">
 
-      <v-list-item
-        prepend-icon="mdi-plus-box"
+      <AdminSidebarItem
+        icon="mdi-plus-box"
         title="Добавить товар"
         @click="$router.get(route('products.create'))"
+        badge="3"
       />
 
       <v-list-item

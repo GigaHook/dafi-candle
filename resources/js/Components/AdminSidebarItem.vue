@@ -1,8 +1,6 @@
 <template>
-  <v-list-item
-    @click="$router.get(route(to))"
-  >
-    <template #append>
+  <v-list-item>
+    <template #append v-if="badge">
       <v-badge
         :content="badge"
         color="red"
@@ -11,9 +9,16 @@
     </template>
 
     <template #prepend>
-      <v-badge dot>
-        <v-icon :icon="icon"/>
+      <v-badge
+        dot
+        color="red" 
+        v-if="badge" 
+        class="me-8"
+      >
+        <v-icon :icon="icon" color="grey"/>
       </v-badge>
+
+      <v-icon :icon="icon" v-else/>
     </template>
 
   </v-list-item>
@@ -22,9 +27,8 @@
 <script setup>
 
 defineProps({
-  to: String,
   icon: String,
-  badge: Number,
+  badge: String,
 })
 
 
