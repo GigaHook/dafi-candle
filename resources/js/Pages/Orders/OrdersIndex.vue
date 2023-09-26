@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import { router } from '@inertiajs/vue3'
 import OrdersTableRow from '@/Components/OrdersTableRow.vue'
 import AppLayout from '@/Layouts/AppLayout.vue'
@@ -54,7 +54,12 @@ const { orders } = defineProps({
   orders: Array
 })
 
-
+onMounted(() => {
+  router.post(route('orders.removeBadges'), {
+    preserveState: true,
+    preserveScroll: true,
+  })
+})
 
 </script>
 

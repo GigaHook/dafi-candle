@@ -39,13 +39,15 @@ Route::middleware('auth')->group(function() {
     })->name('profile');
 
     Route::resource('orders', OrderController::class);
-    Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');    
+    Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status'); 
+    Route::post('orders/removeBadges', [OrderController::class, 'removeBadges'])->name('orders.removeBadges');
 });
 
 Route::resource('products', ProductController::class);
 
 Route::resource('cart', CartItemController::class)->except(['show', 'create', 'edit']);
 Route::get('cart/clear', [CartItemController::class, 'clear'])->name('cart.clear');
+Route::post('cart/removeBadges', [CartItemController::class, 'removeBadges'])->name('cart.removeBadges');
 
 
 
