@@ -70,4 +70,9 @@ class AuthCartService implements CartService
     public function clearCart(): void {
         CartItem::where(['user_id' => auth()->id()])->delete();
     }
+
+    public function removeBadges(): void 
+    {
+        
+    }
 }

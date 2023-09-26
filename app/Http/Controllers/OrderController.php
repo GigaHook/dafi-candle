@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Services\BadgeService;
 use App\Services\Cart\AuthCartService;
 use App\Services\OrderService;
+use Closure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -19,7 +20,14 @@ class OrderController extends Controller
         private $badgeService = new BadgeService,
 
     ) {
-        $this->middleware("admin")->only(["index"]);
+        $this->middleware('admin')->only(["index"]);
+
+        $this->middleware(function(Request $request, Closure $next) {
+            $this->badgeService->unsetCartBadges();
+            $this->orderService->removeBadges();
+            dd(session('badges'));
+            return $next($request);
+        })->only(['index']);
     }
 
     public function index(): \Inertia\Response 
@@ -70,11 +78,5 @@ class OrderController extends Controller
     public function destroy(Order $order): void 
     {
         $this->orderService->deleteOrder($order);
-    }
-
-    public function removeBadges(): void
-    {
-        $this->orderService->removeBadges();
-        $this->badgeService->unsetOrderBadges();
     }
 }

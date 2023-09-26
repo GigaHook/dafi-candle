@@ -17,6 +17,7 @@
 
     <NavItem
       :active="$page.url.includes('/cart')"
+      :badge="$page.props.badges.cart"
       @click="$router.get(route('cart.index'))"
     >
       корзина

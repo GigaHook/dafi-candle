@@ -19,8 +19,8 @@ class OrderService
     public function getOrders(): Collection 
     {
         return auth()->user()->is_admin
-            ? Order::where('user_id', auth()->id())->get()->load('adress') //для юзера
-            : Order::get()->load('adress'); //для админа
+            ? Order::where('user_id', auth()->id())->latest()->get()->load('adress') //для юзера
+            : Order::latest()->get()->load('adress'); //для админа
     }
 
     public function createOrder(array $data): void 

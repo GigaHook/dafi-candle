@@ -21,8 +21,8 @@
 
       <v-col cols="3" xl="2">
         <v-card class="px-4 pt-2 pb-4" elevation="3">
-          Всего товаров: {{ cart.totalQuantity }} <br>
-          На цену: {{ cart.totalPrice }}
+          Всего товаров {{ cart.totalQuantity }} <br>
+          На общую сумму {{ cart.totalPrice }}
           <v-icon icon="mdi-currency-rub" size="18" class="ms-n1 mb-1"/>
           
           <div class="d-flex justify-space-between align-center mt-2">
@@ -42,8 +42,14 @@
 </template>
 
 <script setup>
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted } from 'vue'
+import { router } from '@inertiajs/vue3'
 import CartItemCard from '../Components/CartItemCard.vue'
+import AppLayout from '../Layouts/AppLayout.vue'
+
+defineOptions({
+  layout: AppLayout
+})
 
 defineComponent({
   CartItemCard: CartItemCard
@@ -52,14 +58,7 @@ defineComponent({
 defineProps({
   cart: Object,
 })
-</script>
 
-<script>
-import AppLayout from '../Layouts/AppLayout.vue'
-
-export default {
-  layout: AppLayout
-}
 </script>
 
 <style scoped>

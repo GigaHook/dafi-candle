@@ -90,4 +90,9 @@ class GuestCartService implements CartService
 
         $this->clearCart();
     }
+
+    public function removeBadges(): void 
+    {
+        
+    }
 }

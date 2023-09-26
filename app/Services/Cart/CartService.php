@@ -36,4 +36,11 @@ interface CartService
      * @return void
      */
     public function clearCart(): void;
+
+    /**
+     * Убираем иконки уведомлений корзины
+     *
+     * @return void
+     */
+    public function removeBadges(): void;
 }
