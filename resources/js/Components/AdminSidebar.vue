@@ -19,17 +19,17 @@
         icon="mdi-plus-box"
         title="Добавить товар"
         @click="$router.get(route('products.create'))"
-        badge="3"
       />
 
-      <v-list-item
-        prepend-icon="mdi-notebook-multiple"
+      <AdminSidebarItem
+        icon="mdi-notebook-multiple"
         title="Заказы"
         @click="$router.get(route('orders.index'))"
+        :badge="$page.props.badges.ordersAdmin"
       />
 
-      <v-list-item
-        prepend-icon="mdi-notebook-plus"
+      <AdminSidebarItem
+        icon="mdi-notebook-plus"
         title="Создать заказ"
         @click="$router.get(route('orders.create'))"
       />
@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 import AdminSidebarItem from './AdminSidebarItem.vue'
 
 defineComponent({

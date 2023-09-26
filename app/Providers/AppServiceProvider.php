@@ -2,10 +2,6 @@
 
 namespace App\Providers;
 
-use App\Services\Cart\AuthCartService;
-use App\Services\Cart\CartService;
-use App\Services\Cart\CartServiceInterface;
-use App\Services\Cart\GuestCartService;
 use App\Services\NotificationService;
 use DefStudio\Telegraph\Models\TelegraphBot;
 use DefStudio\Telegraph\Models\TelegraphChat;

@@ -43,6 +43,12 @@
     </td>
 
     <td>
+      <v-chip v-if="!order.viewedAdmin">
+        Новый
+      </v-chip>
+    </td>
+
+    <td>
       <BtnSecondary
         @click="$router.get(route('orders.show', order.id))"
         class="text-button"
@@ -55,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { router } from '@inertiajs/vue3'
 
 const { order } = defineProps({
@@ -68,7 +74,6 @@ function orderTime() {
   let fullTime = createdAt[1].split('.')[0].split(':')
   return `${fullTime[0]}:${fullTime[1]}`
 }
-
 const status = ref(order.status)
 const loading = ref(false)
 
@@ -82,6 +87,10 @@ function updateStatus() {
     onFinish: () => loading.value = false,
   })
 }
+
+onMounted(() => {
+  
+})
 
 function defineChipColor(chip) {
   switch (chip) {

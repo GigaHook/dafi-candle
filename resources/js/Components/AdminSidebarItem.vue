@@ -1,21 +1,12 @@
 <template>
   <v-list-item>
     <template #append v-if="badge">
-      <v-badge
-        :content="badge"
-        color="red"
-        inline
-      />
+      <v-badge :content="badge" color="red" inline/>
     </template>
 
     <template #prepend>
-      <v-badge
-        dot
-        color="red" 
-        v-if="badge" 
-        class="me-8"
-      >
-        <v-icon :icon="icon" color="grey"/>
+      <v-badge v-if="badge" dot color="red" class="me-8">
+        <v-icon :icon="icon" color="grey-lighten-2"/>
       </v-badge>
 
       <v-icon :icon="icon" v-else/>
@@ -28,9 +19,8 @@
 
 defineProps({
   icon: String,
-  badge: String,
+  badge: Number,
 })
-
 
 </script>
 

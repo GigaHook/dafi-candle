@@ -70,7 +70,7 @@ createInertiaApp({
         app.mount(el)
 
         return app
-        
     },
+    
     progress: false,
 });

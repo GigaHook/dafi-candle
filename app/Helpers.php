@@ -8,9 +8,3 @@ if (!function_exists('toast')) {
         ]);
     }
 }
-
-if (!function_exists('badge')) {
-    function badge(string $elem, int $value=1) {
-        
-    }
-} 

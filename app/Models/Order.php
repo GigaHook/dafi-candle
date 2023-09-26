@@ -18,6 +18,8 @@ class Order extends Model
         'adress_id',
         'price',
         'status',
+        'viewed_admin',
+        'viewed_user',
     ];
 
     public function user(): BelongsTo {

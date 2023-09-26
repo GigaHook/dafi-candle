@@ -36,6 +36,7 @@ class GuestCartService implements CartService
         foreach ($this->cartItems as $item) {
             $product = Product::find($item['product_id']);
             $product->quantity = $item['quantity'];
+            $product->viewed = $item['viewed'];
             $cart['items'][] = $product;
             $cart['totalQuantity'] += $product->quantity;
             $cart['totalPrice'] += $product->quantity * $product->price;
@@ -51,6 +52,7 @@ class GuestCartService implements CartService
             $this->cartItems[$id] = [
                 'product_id' => $id,
                 'quantity' => 1,
+                'viewed' => false,
             ];
             toast('Товар добавлен в корзину');
         }
@@ -82,6 +84,7 @@ class GuestCartService implements CartService
                 'product_id' => $item['product_id'],
                 'user_id' => $user->id,
                 'quantity' => $item['quantity'],
+                'viewed' => $item['viewed'],
             ]);
         }
 

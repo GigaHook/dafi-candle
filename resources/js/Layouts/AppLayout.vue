@@ -1,51 +1,8 @@
 <template>
   <v-app>
     <v-layout>
-      <v-app-bar elevation="3">
-        <span
-          class="dafi-en me-auto ps-2"
-          style="color:white; cursor: pointer; font-size: 50px; min-width:234px"
-          @click="$router.get(route('home'))"
-        >
-          Dafi Candle
-        </span>
-
-        <NavItem
-          :active="$page.url.includes('/products')"
-          @click="$router.get(route('products.index'))"
-        >
-          каталог
-        </NavItem>
-
-        <NavItem
-          :active="$page.url.includes('/cart')"
-          @click="$router.get(route('cart.index'))"
-        >
-          корзина
-        </NavItem>
       
-        <NavItem
-          :active="$page.url.includes('/about')"
-        >
-          о нас
-        </NavItem>
-
-        <NavItem
-          v-if="$page.props.user"
-          :active="$page.url.includes('/profile')"
-          @click="$router.get(route('profile'))"
-        >
-          профиль
-        </NavItem>
-
-        <NavItem
-          v-else
-          :active="$page.url.includes('/login')"
-          @click="$router.get(route('login'))"
-        >
-          войти
-        </NavItem>
-      </v-app-bar>
+      <NavBar/>
 
       <AdminSidebar v-if="$page.props.user?.is_admin"/>
 
@@ -58,16 +15,15 @@
 </template>
 
 <script setup>
-import NavItem from '@/Components/NavItem.vue'
 import AdminSidebar from '@/Components/AdminSidebar.vue'
+import NavBar from '@/Components/NavBar.vue'
 
 import { defineComponent } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
 import { useToast, TYPE } from 'vue-toastification'
 
-
 defineComponent({
-  NavItem,
+  NavBar,
   AdminSidebar,
 })
 
@@ -75,7 +31,7 @@ const page = usePage()
 const toast = useToast()
 
 router.on('finish', () => {
-    if (!page.props.toast) return
+  if (page.props.toast) {
     toast(page.props.toast.text, {
       timeout: 3000,
       type: TYPE[page.props.toast.type],
@@ -83,8 +39,7 @@ router.on('finish', () => {
       bodyClassName: ['main-toast'],
       hideProgressBar: true,
     })
-
-  if (!page.props.badge) return
+  }
 })
 </script>
 
@@ -114,4 +69,5 @@ router.on('finish', () => {
 .Vue-Toastification__toast.main-toast .Vue-Toastification__icon {
   color: rgb(var(--v-theme-primary));
 }
+
 </style>

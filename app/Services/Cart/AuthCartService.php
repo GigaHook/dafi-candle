@@ -7,7 +7,6 @@ use App\Models\CartItem;
 
 class AuthCartService implements CartService
 {
-    public function __construct() {}
     public function getCart(): array {
         $cart = [
             'items' => [],
