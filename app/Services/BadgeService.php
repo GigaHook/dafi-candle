@@ -9,22 +9,38 @@ use App\Services\Cart\CartService;
 use App\Services\Cart\GuestCartService;
 use Illuminate\Http\Request;
 
+/**
+ * Управление иконками уведомлений внутри сессии
+ */
 class BadgeService
 {
+    /**
+     * Тут иконки(беджи)
+     * @var 
+     */
     private $badges;
 
-    public function __construct(
-        private Request $request,
-    )
+    /**
+     * Достаём из сессии массив с беджами, если нет, то создаём
+     */
+    public function __construct()
     {
-        $this->badges = $request->session()->has('badges') ? $request->session()->pull('badges') : [];
+        $this->badges = session()->has('badges') ? session()->pull('badges') : [];
     }
 
+    /**
+     * Ложим беджи обратно
+     */
     public function __destruct() 
     {
-        $this->request->session()->put('badges', $this->badges);
+        session()->put('badges', $this->badges);
     }
 
+    /**
+     * Устанавливаем беджи для заказов
+     * Для админа - в сайдбар, для юзера - в профиль
+     * @return void
+     */
     private function setOrderBadges(): void 
     {
         if (auth()->user()?->is_admin) {
@@ -39,6 +55,10 @@ class BadgeService
         }
     }
 
+    /**
+     * Устанавливаем беджи для корзины
+     * @return void
+     */
     private function setCartBadges(): void 
     {
         $cartService = auth()->check() ? new AuthCartService : new GuestCartService;
@@ -46,18 +66,30 @@ class BadgeService
         $this->badges['cart'] = collect($items)->where('viewed', false)->count();
     }
 
+    /**
+     * Установка всех беджей беджи заказов
+     * @return void
+     */
     public function setBadges(): void 
     {
         $this->setOrderBadges();
         $this->setCartBadges();
     }
 
+    /**
+     * Убираем беджи заказов
+     * @return void
+     */
     public function unsetOrderBadges(): void 
     {
         unset($this->badges['ordersAdmin']);
         unset($this->badges['ordersUser']);
     }
 
+    /**
+     * Убираем беджи корзины
+     * @return void
+     */
     public function unsetCartBadges(): void 
     {
         unset($this->badges['cart']);

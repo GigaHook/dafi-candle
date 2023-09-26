@@ -2,9 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Product;
 use App\Models\Type;
-use App\Services\BadgeService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;

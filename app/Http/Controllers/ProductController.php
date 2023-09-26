@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
+use App\Services\BadgeService;
 use App\Services\ProductService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,10 +13,10 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    private $productService;
-    
-    public function __construct() {
-        $this->productService = new ProductService();
+    public function __construct(
+        private $productService = new ProductService,
+        private $badgeService = new BadgeService,
+    ) {
         $this->middleware('auth')->except(['index', 'show']);
         $this->middleware('admin')->except(['index', 'show']);
     }
@@ -57,5 +58,11 @@ class ProductController extends Controller
     public function destroy(Product $product): RedirectResponse {
         $this->productService->deleteProduct($product);
         return redirect()->route('products.index');
+    }
+
+    public function removeBadges(array $ids): void {
+        $this->productService->removeBadges($ids);
+        $this->badgeService->unsetCartBadges($ids);
+        //TODO тут остановился
     }
 }

@@ -16,7 +16,7 @@ class PutBadgesIntoSession
      */
     public function handle(Request $request, Closure $next): Response
     {
-        (new BadgeService($request))->setBadges();
+        (new BadgeService)->setBadges();
 
         return $next($request);
     }
