@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Events\OrderPlaced;
 use App\Listeners\HandleOrderPlacement;
+use App\Listeners\SetBadgesAfterAuth;
 use App\Services\Cart\GuestCartService;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
@@ -19,6 +21,10 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         OrderPlaced::class => [
             HandleOrderPlacement::class,
+        ],
+
+        Login::class => [
+            SetBadgesAfterAuth::class,
         ],
     ];
 

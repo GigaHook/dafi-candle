@@ -25,7 +25,7 @@
         icon="mdi-notebook-multiple"
         title="Заказы"
         @click="$router.get(route('orders.index'))"
-        :badge="$page.props.badges.ordersAdmin"
+        :badge="$page.url !== '/orders' && $page.props.badges.ordersAdmin"
       />
 
       <AdminSidebarItem
@@ -60,4 +60,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>

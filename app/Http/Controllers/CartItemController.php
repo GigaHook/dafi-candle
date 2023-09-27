@@ -16,7 +16,7 @@ class CartItemController extends Controller
     {
         $this->middleware(function(Request $request, Closure $next) {
             $response = $next($request);
-            (new BadgeService)->unsetCartBadges();
+            (new BadgeService)->removeCartBadges();
             $this->cartService()->removeBadges();
             return $response;
         })->only(['index']);

@@ -15,84 +15,65 @@ use Illuminate\Http\Request;
 class BadgeService
 {
     /**
-     * Тут иконки(беджи)
-     * @var 
-     */
-    private $badges;
-
-    /**
-     * Достаём из сессии массив с беджами, если нет, то создаём
-     */
-    public function __construct()
-    {
-        $this->badges = session()->has('badges') ? session()->pull('badges') : [];
-    }
-
-    /**
-     * Ложим беджи обратно
-     */
-    public function __destruct() 
-    {
-        session()->put('badges', $this->badges);
-    }
-
-    /**
      * Устанавливаем беджи для заказов
      * Для админа - в сайдбар, для юзера - в профиль
      * @return void
      */
-    private function setOrderBadges(): void 
+    public function setOrdersBadges(): void 
     {
+        $badges = session()->pull('badges');
+
         if (auth()->user()?->is_admin) {
-            $this->badges['ordersAdmin'] = Order::where([
+            $badges['ordersAdmin'] = Order::where([
                 'viewed_admin' => false,
             ])->count();
         } else {
-            $this->badges['ordersUser'] = Order::where([
+            $badges['ordersUser'] = Order::where([
                 'viewed_user' => false,
-                'user_id' => auth()->id(),
             ])->count();
         }
+
+        session(['badges' => $badges]);
     }
 
     /**
      * Устанавливаем беджи для корзины
      * @return void
      */
-    private function setCartBadges(): void 
+    public function setCartBadges(): void 
     {
-        $cartService = auth()->check() ? new AuthCartService : new GuestCartService;
-        $items = $cartService->getCart()['items'];
-        $this->badges['cart'] = collect($items)->where('viewed', false)->count();
-    }
-
-    /**
-     * Установка всех беджей беджи заказов
-     * @return void
-     */
-    public function setBadges(): void 
-    {
-        $this->setOrderBadges();
-        $this->setCartBadges();
+        //$cartService = auth()->check() ? new AuthCartService : new GuestCartService;
+        //$items = $cartService->getCart()['items'];
+        //$this->badges['cart'] = collect($items)->where('viewed', false)->count();
     }
 
     /**
      * Убираем беджи заказов
      * @return void
      */
-    public function unsetOrderBadges(): void 
-    {
-        unset($this->badges['ordersAdmin']);
-        unset($this->badges['ordersUser']);
+    public function removeOrdersBadges(): void 
+    {   
+        $badges = session()->pull('badges');
+        $badges['ordersAdmin'] = 0;
+        $badges['ordersUser'] = 0;
+        session(['badges' => $badges]);
     }
 
     /**
      * Убираем беджи корзины
      * @return void
      */
-    public function unsetCartBadges(): void 
+    public function removeCartBadges(): void 
     {
-        unset($this->badges['cart']);
+        //unset($this->badges['cart']);
     }
 }
+
+//v1
+//order observer -> on create -> session(admin badges)++ -> set badges -> remove on index vitit
+//order observer -> on status change -> session(user badges)++ -> set badges -> remove on profile visit
+
+
+
+
 

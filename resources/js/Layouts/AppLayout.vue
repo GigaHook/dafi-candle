@@ -18,7 +18,7 @@
 import AdminSidebar from '@/Components/AdminSidebar.vue'
 import NavBar from '@/Components/NavBar.vue'
 
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
 import { useToast, TYPE } from 'vue-toastification'
 
@@ -29,6 +29,20 @@ defineComponent({
 
 const page = usePage()
 const toast = useToast()
+
+onMounted(() => {
+  if (page.props.user?.is_admin) {
+    setInterval(() => {
+      router.post(route('badges'), {
+        location: page.url
+      }, {
+        preserveState: true,
+        preserveScroll: true,
+      })
+      console.log(page.props.badges.ordersAdmin);
+    }, 5000)
+  }
+})
 
 router.on('finish', () => {
   if (page.props.toast) {
@@ -41,6 +55,7 @@ router.on('finish', () => {
     })
   }
 })
+
 </script>
 
 <style>

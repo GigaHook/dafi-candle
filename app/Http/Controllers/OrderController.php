@@ -20,17 +20,16 @@ class OrderController extends Controller
         private $badgeService = new BadgeService,
     ) {
         $this->middleware('admin')->only(["index"]);
-
         $this->middleware(function(Request $request, Closure $next) {
             $response = $next($request);
-            $this->orderService->removeBadges();
+            $this->orderService->viewOrders();
             return $response;
-        })->only(["index"]);
+        })->only(["index"]); //TODO убрать это всё отсюда нахер
     }
 
     public function index(): \Inertia\Response 
-    {
-        $this->badgeService->unsetOrderBadges();
+    {   
+        $this->badgeService->removeOrdersBadges();
         return Inertia::render('Orders/OrdersIndex', [
             'orders' => $this->orderService->getOrders()
         ]);
