@@ -7,7 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PutBadgesIntoSession
+class SetBadges
 {
     /**
      * Handle an incoming request.
@@ -15,9 +15,8 @@ class PutBadgesIntoSession
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {
+    {   
         (new BadgeService)->setBadges();
-
         return $next($request);
     }
 }

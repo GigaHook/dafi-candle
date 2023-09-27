@@ -39,11 +39,16 @@
 </template>
 
 <script setup>
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
+import { router } from '@inertiajs/vue3'
 import AdminSidebarItem from './AdminSidebarItem.vue'
 
 defineComponent({
   AdminSidebarItem
+})
+
+onMounted(() => {
+  
 })
 
 </script>

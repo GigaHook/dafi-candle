@@ -64,7 +64,7 @@ class OrderService
 
     public function removeBadges(): void
     {
-        if (auth()->user()?->is_admin) {
+        if (auth()->user()->is_admin) {
             Order::where('viewed_admin', false)->update(['viewed_admin' => true]);
         } else {
             Order::where('viewed_user', false)->update(['viewed_user' => true]);

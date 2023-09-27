@@ -18,20 +18,19 @@ class OrderController extends Controller
         private $orderService = new OrderService,
         private $cartService = new AuthCartService,
         private $badgeService = new BadgeService,
-
     ) {
         $this->middleware('admin')->only(["index"]);
 
         $this->middleware(function(Request $request, Closure $next) {
-            $this->badgeService->unsetCartBadges();
+            $response = $next($request);
             $this->orderService->removeBadges();
-            dd(session('badges'));
-            return $next($request);
-        })->only(['index']);
+            return $response;
+        })->only(["index"]);
     }
 
     public function index(): \Inertia\Response 
     {
+        $this->badgeService->unsetOrderBadges();
         return Inertia::render('Orders/OrdersIndex', [
             'orders' => $this->orderService->getOrders()
         ]);
@@ -62,7 +61,7 @@ class OrderController extends Controller
 
     public function edit(Order $order): \Inertia\Response 
     {
-        return Inertia::render();
+        return Inertia::render(); //TODO
     }
 
     public function update(OrderUpdateRequest $request, Order $order): void 
@@ -78,5 +77,10 @@ class OrderController extends Controller
     public function destroy(Order $order): void 
     {
         $this->orderService->deleteOrder($order);
+    }
+
+    public function clearBadges(): void 
+    {
+        
     }
 }

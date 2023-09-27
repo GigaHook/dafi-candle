@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function() {
 
     Route::resource('orders', OrderController::class);
     Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+    Route::post('orders/badges', [OrderController::class, 'clearBadges'])->name('orders.badges');
 });
 
 Route::resource('products', ProductController::class);
