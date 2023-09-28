@@ -7,7 +7,6 @@
     >
       <h1 class="text-h5">Заказы</h1>
       <v-table density="compact" v-if="orders.length">
-
         <thead>
           <tr>
             <th>№</th>
@@ -24,6 +23,7 @@
           <OrdersTableRow
             v-for="order in orders"
             :order="order"
+            :key="order.id"
           />
         </tbody>
       </v-table>
@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { defineComponent } from 'vue'
+import { defineComponent, } from 'vue'
 import { router } from '@inertiajs/vue3'
 import OrdersTableRow from '@/Components/OrdersTableRow.vue'
 import AppLayout from '@/Layouts/AppLayout.vue'

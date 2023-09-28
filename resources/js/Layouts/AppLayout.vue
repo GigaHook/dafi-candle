@@ -21,6 +21,7 @@ import NavBar from '@/Components/NavBar.vue'
 import { defineComponent, onMounted } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
 import { useToast, TYPE } from 'vue-toastification'
+import { useDisplay } from 'vuetify'
 
 defineComponent({
   NavBar,
@@ -29,6 +30,7 @@ defineComponent({
 
 const page = usePage()
 const toast = useToast()
+const display = useDisplay()
 
 onMounted(() => {
   if (page.props.user?.is_admin) {
@@ -39,8 +41,7 @@ onMounted(() => {
         preserveState: true,
         preserveScroll: true,
       })
-      console.log(page.props.badges.ordersAdmin);
-    }, 5000)
+    }, 10000)
   }
 })
 

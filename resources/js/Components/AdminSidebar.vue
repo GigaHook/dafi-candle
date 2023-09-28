@@ -25,7 +25,7 @@
         icon="mdi-notebook-multiple"
         title="Заказы"
         @click="$router.get(route('orders.index'))"
-        :badge="$page.url !== '/orders' && $page.props.badges.ordersAdmin"
+        :badge="Number($page.url !== '/orders' && $page.props.badges.ordersAdmin)"
       />
 
       <AdminSidebarItem
@@ -39,24 +39,13 @@
 </template>
 
 <script setup>
-import { defineComponent, onMounted } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { defineComponent } from 'vue'
 import AdminSidebarItem from './AdminSidebarItem.vue'
 
 defineComponent({
   AdminSidebarItem
 })
 
-onMounted(() => {
-  
-})
-
-</script>
-
-<script>
-export default {
-  name: 'AdminSidebar'
-}
 </script>
 
 <style scoped>

@@ -31,9 +31,7 @@
         </div>
       </v-col>
       
-      <v-col
-        xl="5" lg="6" md="6" sm="6" cols="12"
-      >
+      <v-col xl="5" lg="6" md="6" sm="6" cols="12">
         <v-card class="px-4 py-2">  
           <h2 class="text-h5">Описание</h2>
           <p class="mb-4">{{ product.description }}</p>

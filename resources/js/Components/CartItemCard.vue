@@ -1,6 +1,6 @@
 <template>
   <v-row dense>
-    <v-col cols="2">
+    <v-col cols="12" sm="4" md="3"> <!--2-->
       <v-img
         @mouseover="hover = true"
         @mouseleave="hover = false"  
@@ -22,7 +22,7 @@
       </v-img>
     </v-col>
     
-    <v-col cols="7">
+    <v-col cols="12" sm="6" md="6"> <!--7-->
       <div
         @mouseover="hover = true"
         @mouseleave="hover = false" 
@@ -48,53 +48,54 @@
       />
     </v-col>
   
-    <v-col cols="2" class="d-flex justify-center">
-      <v-btn
-        variant="tonal"
-        icon="mdi-minus"
-        size="32"
-        rounded="lg"
-        color="primary"
-        @click="$router.patch(route('cart.update', product.id))"
-      />
-      <div class="mx-4 pt-1">
-        {{ product.quantity }}
-      </div>
-      <v-btn
-        variant="tonal"
-        icon="mdi-plus"
-        size="32"
-        rounded="lg"
-        color="primary"
-        @click="$router.post(route('cart.store'), { id: product.id })"
-      />
+    <v-col
+      cols="6" md="2"
+      :class="display.md.value && 'ms-n10'"
+    > <!--2-->
+      <CartItemControls :product="product"/>
     </v-col>
     
-    <v-col cols="1" class="d-flex flex-column justify-space-between align-end">
-      <div>
+    <v-spacer v-if="display.md"/>
+
+    <v-col
+      cols="6" md="1"
+      class="d-flex flex-column justify-space-between align-end"
+    > <!--1-->
+      <div class="text-no-wrap">
         {{ product.price * product.quantity }}
         <v-icon icon="mdi-currency-rub" size="16" class="ms-n1 mb-1"/>
       </div>
       <v-btn
         variant="plain"
         icon="mdi-delete-outline"
-        @click="$router.delete(route('cart.destroy', product.id))"
+        @click="$router.delete(route('cart.destroy', product.id), { preserveScroll: true })"
       />
     </v-col>
 
-    <v-col cols="12"><v-divider v-if="!last" class="my-2"/></v-col>
+    <v-col cols="12"> <!--12-->
+      <v-divider v-if="!last" class="my-2"/>
+    </v-col>
+
   </v-row>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, defineComponent } from 'vue'
+import CartItemControls from './CartItemControls.vue'
+import { useDisplay } from 'vuetify'
 
+const display = useDisplay()
 const hover = ref(false)
+
+defineComponent({
+  CartItemControls: CartItemControls,
+})
 
 defineProps({
   product: Object,
   last: Boolean
 })
+
 </script>
 
 <style scoped>

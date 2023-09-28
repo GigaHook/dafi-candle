@@ -13,19 +13,8 @@ class BadgeController extends Controller
      */
     public function __invoke(Request $request)
     {
-        if (!(new OrderService)->checkForNewOrders()) {
-            if ($request->location != '/orders') {
-                (new BadgeService)->setOrdersBadges();
-            }
+        if ((new OrderService)->checkForNewOrders() && $request->location != '/orders') {
+            (new BadgeService)->setOrdersBadges();
         }
-        
-
-        //запрос сюда раз в 5 сек (только если user->is_admin)
-        //если есть заказы с viewedAdmin = false
-        //ререндерим компонент с новым заказом, если мы на странице с заказами, ставим viewedAdmin = true
-        //+badges
-        //toast(new order)
-        //
-        //
     }
 }

@@ -59,10 +59,4 @@ class ProductController extends Controller
         $this->productService->deleteProduct($product);
         return redirect()->route('products.index');
     }
-
-    public function removeBadges(array $ids): void {
-        $this->productService->removeBadges($ids);
-        $this->badgeService->unsetCartBadges($ids);
-        //TODO тут остановился
-    }
 }

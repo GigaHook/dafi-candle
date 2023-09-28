@@ -1,37 +1,36 @@
 <template>
-  <v-col
-    xl="3" lg="3" md="4" sm="6"
-    style="aspect-ratio: 4 / 5;"
-  >
+  <v-col xl="3" lg="3" md="4" sm="6" cols="12">
     <v-card
       @mouseover="hover = true"
       @mouseleave="hover = false"      
       class="fill-height d-flex flex-column justify-space-between"
+      style="min-height: fit-content !important;"
       elevation="3"
     >
       <v-img
         :src="`storage/upload/${product.image}`"
-        height="70%"
         cover
-        class="position-relative"
+        style="height: 320px"
       >
-        <v-btn
-          v-if="$page.props.user?.is_admin"
-          icon="mdi-pencil"
-          class="self-right position-absolute ma-1"
-          style="right:0; z-index: 4000;"
-          @click="$router.get(route('products.edit', product.id))"
-          size="40"
-        />
-
-        <v-btn
-          v-if="$page.props.user?.is_admin"
-          icon="mdi-delete"
-          class="self-right position-absolute ma-1"
-          style="right:44px; z-index: 4000;"
-          @click="$router.delete(route('products.destroy', product.id))"
-          size="40"
-        />
+        <div class="d-flex justify-end">
+          <v-btn
+            v-if="$page.props.user?.is_admin"
+            icon="mdi-pencil"
+            class="ma-1"
+            style="z-index: 4000;"
+            @click="$router.get(route('products.edit', product.id))"
+            size="40"
+          />
+  
+          <v-btn
+            v-if="$page.props.user?.is_admin"
+            icon="mdi-delete"
+            class="ma-1"
+            style="z-index: 4000;"
+            @click="$router.delete(route('products.destroy', product.id))"
+            size="40"
+          />
+        </div>
 
         <v-overlay
           contained
@@ -44,7 +43,16 @@
         </v-overlay>
       </v-img>
 
-      <div class="px-4 py-1">
+      <div class="px-4 py-1 position-relative" style="min-height: 68px !important;">
+        <v-slide-x-reverse-transition class="position-absolute right-0 ma-1">
+          <v-icon
+            v-if="$page.props.cart.items.find(item => item.id == product.id)"
+            icon="mdi-cart-check"
+            size="32"
+            class="position-absolute"
+          />
+        </v-slide-x-reverse-transition>
+
         <div
           class="font-weight-bold text-h6 d-inline"
           style="cursor: pointer;"
@@ -62,21 +70,26 @@
 
       <v-divider/>
       
-      <div class="d-flex justify-space-between align-center pa-2">
+      <div class="d-flex flex-nowrap justify-space-between align-center ms-2 me-4" style="min-height: 52px !important;">
         <v-btn
+          v-if="!$page.props.cart.items.find(item => item.id == product.id)"
           @click="addToCart"
           :loading="loading"
           variant="text"
           color="primary"
           max-width="fit-content"
-          class="px-2"
         >
           Купить
         </v-btn>
 
-        <div class="ms-4">
+        <CartItemControls
+          v-else
+          :product="$page.props.cart.items.find(item => item.id == product.id)"
+        />
+
+        <div class="d-flex flex-nowrap align-center">
           {{ product.price }}
-          <v-icon icon="mdi-currency-rub" size="18" class="ms-n1 mb-1"/>
+          <v-icon icon="mdi-currency-rub" size="18"/>
         </div>
       </div>
 
@@ -85,10 +98,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { router } from '@inertiajs/vue3';
+import { ref, defineComponent } from 'vue'
+import { router } from '@inertiajs/vue3'
+import CartItemControls from './CartItemControls.vue'
 
-const props = defineProps({
+defineComponent({
+  CartItemControls: CartItemControls,
+})
+
+const { product } = defineProps({
   product: Object
 })
 
@@ -97,7 +115,7 @@ const loading = ref(false)
 
 function addToCart() {
   router.post(route('cart.store'), {
-    id: props.product.id
+    id: product.id
   }, {
     preserveScroll: true,
     onStart: () => loading.value = true,
@@ -105,12 +123,6 @@ function addToCart() {
   })
 }
 
-</script>
-
-<script>
-export default {
-  name: 'ProductCard'
-}
 </script>
 
 <style scoped>

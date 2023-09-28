@@ -42,9 +42,10 @@ class BadgeService
      */
     public function setCartBadges(): void 
     {
-        //$cartService = auth()->check() ? new AuthCartService : new GuestCartService;
-        //$items = $cartService->getCart()['items'];
-        //$this->badges['cart'] = collect($items)->where('viewed', false)->count();
+        $items = cartService()->getCart()['items'];
+        $badges = session()->pull('badges');
+        $badges['cart'] = collect($items)->where('viewed', false)->count();
+        session(['badges' => $badges]);
     }
 
     /**
@@ -65,13 +66,12 @@ class BadgeService
      */
     public function removeCartBadges(): void 
     {
-        //unset($this->badges['cart']);
+        $badges = session()->pull('badges');
+        $badges['cart'] = 0;
+        session(['badges' => $badges]);
     }
 }
 
-//v1
-//order observer -> on create -> session(admin badges)++ -> set badges -> remove on index vitit
-//order observer -> on status change -> session(user badges)++ -> set badges -> remove on profile visit
 
 
 

@@ -43,7 +43,7 @@
     </td>
 
     <td>
-      <v-chip v-once v-if="!order.viewed_admin">
+      <v-chip v-once :style="{ 'opacity': order.viewed_admin ? 0 : 1 }">
         Новый
       </v-chip>
     </td>

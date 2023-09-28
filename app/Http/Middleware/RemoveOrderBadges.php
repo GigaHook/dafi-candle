@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\BadgeService;
+use App\Services\OrderService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,11 +17,7 @@ class RemoveOrderBadges
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
-        
-        (new BadgeService)->unsetOrderBadges();
-
-        //TODO мидлвары неработают, придумать как очищать беджи
-        
+        (new OrderService)->viewOrders();
         return $response;
     }
 }

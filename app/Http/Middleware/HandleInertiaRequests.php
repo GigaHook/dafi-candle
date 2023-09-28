@@ -37,6 +37,7 @@ class HandleInertiaRequests extends Middleware
             'types'  => Type::all(),
             'toast'  => session('toast'),
             'badges' => session('badges'),
+            'cart'   => cartService()->getCart(),
             'ziggy'  => function() use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
                     'location' => $request->url(),

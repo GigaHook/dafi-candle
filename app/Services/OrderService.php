@@ -73,6 +73,6 @@ class OrderService
     
     public function checkForNewOrders(): bool 
     {
-        return Order::where('viewed_admin', false)->get()->isEmpty();
+        return !Order::where('viewed_admin', false)->get()->isEmpty();
     }
 }
