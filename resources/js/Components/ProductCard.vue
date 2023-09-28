@@ -44,7 +44,7 @@
       </v-img>
 
       <div class="px-4 py-1 position-relative" style="min-height: 68px !important;">
-        <v-slide-x-reverse-transition class="position-absolute right-0 ma-1">
+        <v-slide-x-reverse-transition class="position-absolute right-0 ma-2">
           <v-icon
             v-if="$page.props.cart.items.find(item => item.id == product.id)"
             icon="mdi-cart-check"
