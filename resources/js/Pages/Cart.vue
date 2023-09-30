@@ -13,12 +13,6 @@
               :product="product"
               :last="product == $page.props.cart.items[$page.props.cart.items.length - 1]"
             />
-            
-            <v-divider class="my-2"/>
-
-            <BtnSecondary @click="$router.get(route('cart.clear'))">
-              Очистить корзину
-            </BtnSecondary>
 
           </v-scroll-x-transition>
         </v-card>
@@ -26,28 +20,37 @@
 
       <v-col cols="12" sm="12" md="4" lg="3" order="1" order-md="2">
         <v-card elevation="3">
-          <v-row class="px-4 pt-3 mb-3">
+          <v-row class="px-4 pt-3 mb-1">
 
             <v-col cols="12" sm="6" md="12">
               Всего товаров {{ $page.props.cart.totalQuantity }}
               <div class="text-h5">
                 Итого {{ $page.props.cart.totalPrice }}
                 <v-icon icon="mdi-currency-rub" size="24" class="ms-n1 mb-2"/>
+
+                <v-btn icon>
+                  <v-icon icon="mdi-cart-remove" size="24"/>
+                </v-btn>
               </div>
 
               <BtnPrimary
                 @click="$router.get(route('orders.create'))"
                 :disabled="!$page.props.user"
-                class="mt-5 w-100"
+                class="w-100 mt-2"
               >
                 Заказать
               </BtnPrimary>
+
+              <v-btn @click="dialog = true">
+                modal
+              </v-btn>
+
+
             </v-col>
 
-            <v-col cols="12" sm="6" md="12">
+            <v-col v-if="!$page.props.user" cols="12" sm="6" md="12">
               <v-alert
-                v-if="!$page.props.user"
-                class="h-100 mt-2"
+                class="h-100"
                 type="info"
                 variant="outlined"
                 color="primary"
@@ -85,6 +88,7 @@ import { defineComponent } from 'vue'
 import CartItemCard from '../Components/CartItemCard.vue'
 import AppLayout from '../Layouts/AppLayout.vue'
 import { useDisplay } from 'vuetify'
+import Modal from '@/Components/Modal.vue';
 
 const display = useDisplay()
 
@@ -93,7 +97,8 @@ defineOptions({
 })
 
 defineComponent({
-  CartItemCard: CartItemCard
+  CartItemCard: CartItemCard,
+  Modal: Modal,
 })
 
 </script>

@@ -6,7 +6,6 @@ use App\Http\Requests\OrderStoreRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use App\Models\Order;
 use App\Services\BadgeService;
-use App\Services\Cart\AuthCartService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,13 +14,13 @@ class OrderController extends Controller
 {
     public function __construct(
         private $orderService = new OrderService,
-        private $cartService = new AuthCartService,
         private $badgeService = new BadgeService,
     ) {}
 
     public function index(): \Inertia\Response 
     {   
         $this->badgeService->removeOrdersBadges();
+
         return Inertia::render('Orders/OrdersIndex', [
             'orders' => $this->orderService->getOrders()
         ]);
