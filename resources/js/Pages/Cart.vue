@@ -5,7 +5,6 @@
 
       <v-col cols="12" sm="12" md="8" lg="8" order="2" order-md="1">
         <v-card class="pa-4 pb-2" elevation="3">
-          <v-scroll-x-transition group>
 
             <CartItemCard
               v-for="product in $page.props.cart.items"
@@ -14,7 +13,6 @@
               :last="product == $page.props.cart.items[$page.props.cart.items.length - 1]"
             />
 
-          </v-scroll-x-transition>
         </v-card>
       </v-col>
 
@@ -41,11 +39,18 @@
                 Заказать
               </BtnPrimary>
 
-              <v-btn @click="dialog = true">
-                modal
+              <v-btn>
+                Очистить корзину
+                <Modal
+                  :confirmAction="() => $router.get(route('cart.clear'))"
+                  :confirmText="'Да'"
+                  :denyText="'Отмена'"
+                >
+                  <template #title>
+                    Удалить все предметы из корзины?
+                  </template>
+                </Modal>
               </v-btn>
-
-
             </v-col>
 
             <v-col v-if="!$page.props.user" cols="12" sm="6" md="12">
@@ -62,7 +67,6 @@
           </v-row>
         </v-card>
       </v-col>
-
     </v-row>
 
     <v-row v-else class="justify-center">
@@ -79,7 +83,6 @@
         </v-card>
       </v-col>
     </v-row>
-
   </v-container>
 </template>
 
