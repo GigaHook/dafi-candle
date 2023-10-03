@@ -15,7 +15,10 @@ class OrderController extends Controller
     public function __construct(
         private $orderService = new OrderService,
         private $badgeService = new BadgeService,
-    ) {}
+    ) {
+        $this->middleware('admin')->only(['index']);
+        $this->middleware('badges')->only(['index']);
+    }
 
     public function index(): \Inertia\Response 
     {   

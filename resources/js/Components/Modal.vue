@@ -23,21 +23,19 @@
           </v-card-text>
 
           <div class="d-flex">
-
             <BtnSecondary
-              v-if="denyText"
-              @click="handleDeny"
+              v-if="!noDeny"
+              @click="handle('deny')"
               class="ms-2"
             >
-            {{ denyText ?? 'Отмена' }}
+              {{ denyText }}
             </BtnSecondary>
   
             <v-spacer/>
   
-            <BtnPrimary @click="handleConfirm" class="me-2">
-              {{ confirmText ?? 'Ок' }}
+            <BtnPrimary @click="handle('confirm')" class="me-2">
+              {{ confirmText }}
             </BtnPrimary>
-
           </div>
 
         </v-card>
@@ -51,34 +49,31 @@ import { ref } from 'vue'
 
 const dialog = ref(false)
 
+const emit = defineEmits('confirm', 'deny')
+
 const props = defineProps({
-  confirmAction: {
-    type: Function,
+  noDeny: {
+    type: Boolean,
     required: false,
+    default: false,
   },
   confirmText: {
     type: String,
     required: false,
-  },
-  denyAction: {
-    type: Function,
-    required: false,
+    default: 'Ок',
   },
   denyText: {
     type: String,
     required: false,
+    default: 'Отмена',
   }
 })
 
-function handleConfirm() {
-  props.confirmAction?.()
+function handle(option) {
+  emit(option)
   dialog.value = false
 }
 
-function handleDeny() {
-  props.denyAction?.()
-  dialog.value = false
-}
 
 </script>
 

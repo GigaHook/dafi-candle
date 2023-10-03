@@ -188,8 +188,21 @@
           </v-window>
 
           <div class="d-flex justify-space-between align-center pt-1">
-            <BtnPrimary @click="tab == 0 ? cdekSubmit() : postSubmit()" :loading="loading">
+            <BtnPrimary :loading="loading">
               Оформить заказ
+              <Modal 
+                @confirm="tab == 0 ? cdekSubmit() : postSubmit()"
+                :confirm-text="'Оформить'"
+              >
+                <template #title>
+                  Подтверждение
+                </template>
+
+                <template #text>
+                  Оформить заказ?
+                </template>
+              </Modal>
+              <!--я тут нагадил-->
             </BtnPrimary>
             
             <BtnSecondary @click="$router.get(route('cart.index'))" :disabled="loading">
@@ -206,6 +219,11 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useForm, usePage } from '@inertiajs/vue3'
+import Modal from '@/Components/Modal.vue'
+
+defineComponent({
+  Modal: Modal,
+})
 
 const cart = defineProps({
   cart: Object
@@ -283,6 +301,7 @@ onMounted(() => {
 
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
+import { defineComponent } from 'vue';
 
 export default {
   layout: AppLayout

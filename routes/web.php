@@ -38,11 +38,8 @@ Route::middleware('auth')->group(function() {
     Route::get('profile', function() {
         return Inertia::render('Profile');
     })->name('profile');
-
-    Route::resource('orders', OrderController::class)
-         ->middleware('admin')->only(["index"])
-         ->middleware('badges')->only(["index"]);
          
+    Route::resource('orders', OrderController::class);
     Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
     Route::post('/badges', BadgeController::class)->name('badges');
 });
