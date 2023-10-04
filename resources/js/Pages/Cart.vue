@@ -42,14 +42,10 @@
               <v-btn>
                 Очистить корзину
                 <Modal
-                  :confirmAction="() => $router.get(route('cart.clear'))"
-                  :confirmText="'Да'"
-                  :denyText="'Отмена'"
-                >
-                  <template #title>
-                    Удалить все предметы из корзины?
-                  </template>
-                </Modal>
+                  @confirm="$router.get(route('cart.clear'))"
+                  :title="'Удалить все предметы из корзины?'"
+                  :confirm-text="'Удалить'"
+                />
               </v-btn>
             </v-col>
 
@@ -60,7 +56,10 @@
                 variant="outlined"
                 color="primary"
               >
-                Сначала нужно зарегистрироваться или войти в аккаунт
+                Чтобы оформить заказ, нужно зарегистрироваться или войти в аккаунт
+                <BtnPrimary @click="$router.get(route('login'))" class="mt-2">
+                  Войти
+                </BtnPrimary>
               </v-alert>
             </v-col>
 

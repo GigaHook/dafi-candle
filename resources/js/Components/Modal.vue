@@ -15,11 +15,11 @@
           />
 
           <v-card-title>
-            <slot name="title"/>
+            {{ title }}
           </v-card-title>
 
           <v-card-text class="text-body-1">
-            <slot name="text"/>
+            {{ text }}
           </v-card-text>
 
           <div class="d-flex">
@@ -66,7 +66,16 @@ const props = defineProps({
     type: String,
     required: false,
     default: 'Отмена',
-  }
+  },
+  title: {
+    type: String,
+    required: false,
+    default: 'Подтверждение',
+  },
+  text: {
+    type: String,
+    required: false,
+  },
 })
 
 function handle(option) {
