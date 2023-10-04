@@ -1,20 +1,17 @@
 <template>
   <v-navigation-drawer location="left" expand-on-hover rail>
     <v-list>
-
       <v-list-item class="text-h6">
         Управление
         <template #prepend>
           <v-icon icon="mdi-cog" class="text-h5"/>
         </template>
       </v-list-item>
-
     </v-list>
 
     <v-divider/>
 
     <v-list nav density="compact">
-
       <AdminSidebarItem
         icon="mdi-plus-box"
         title="Добавить товар"
@@ -33,7 +30,6 @@
         title="Создать заказ"
         @click="$router.get(route('orders.create'))"
       />
-
     </v-list>
   </v-navigation-drawer>
 </template>

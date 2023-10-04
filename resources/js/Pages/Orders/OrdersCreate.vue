@@ -193,15 +193,7 @@
               <Modal 
                 @confirm="tab == 0 ? cdekSubmit() : postSubmit()"
                 :confirm-text="'Оформить'"
-              >
-                <template #title>
-                  Подтверждение
-                </template>
-
-                <template #text>
-                  Оформить заказ?
-                </template>
-              </Modal>
+              />
               <!--я тут нагадил-->
             </BtnPrimary>
             

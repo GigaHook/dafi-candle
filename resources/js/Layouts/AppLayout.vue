@@ -2,7 +2,9 @@
   <v-app>
     <v-layout>
       
-      <NavBar/>
+      <NavBarMobile v-if="display.mobile.value"/>
+
+      <NavBarDesktop v-else/>
 
       <AdminSidebar v-if="$page.props.user?.is_admin"/>
 
@@ -16,7 +18,8 @@
 
 <script setup>
 import AdminSidebar from '@/Components/AdminSidebar.vue'
-import NavBar from '@/Components/NavBar.vue'
+import NavBarDesktop from '@/Components/NavBarDesktop.vue'
+import NavBarMobile from '@/Components/NavBarMobile.vue'
 
 import { defineComponent, onMounted } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
@@ -24,7 +27,8 @@ import { useToast, TYPE } from 'vue-toastification'
 import { useDisplay } from 'vuetify'
 
 defineComponent({
-  NavBar,
+  NavBarDesktop,
+  NavBarMobile,
   AdminSidebar,
 })
 

@@ -5,7 +5,7 @@
     scrim="black"
   >
     <v-row class="justify-center">
-      <v-col lg="4">
+      <v-col cols="10" sm="8" md="6" lg="4" xl="3">
         <v-card class="position-relative pb-3 px-1" style="overflow: visible;">
           <v-btn
             @click="dialog = false"
@@ -14,7 +14,7 @@
             size="36"
           />
 
-          <v-card-title>
+          <v-card-title class="text-wrap">
             {{ title }}
           </v-card-title>
 
@@ -46,8 +46,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useDisplay } from 'vuetify'
 
 const dialog = ref(false)
+const display = useDisplay()
 
 const emit = defineEmits('confirm', 'deny')
 

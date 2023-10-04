@@ -24,10 +24,20 @@
               Всего товаров {{ $page.props.cart.totalQuantity }}
               <div class="text-h5">
                 Итого {{ $page.props.cart.totalPrice }}
-                <v-icon icon="mdi-currency-rub" size="24" class="ms-n1 mb-2"/>
+                <v-icon icon="mdi-currency-rub" size="24" class="ms-n1 mb-1"/>
 
-                <v-btn icon>
+                <v-btn
+                  icon
+                  variant="plain"
+                  class="position-absolute"
+                  :class="display.sm.value && !$page.props.user ? 'bottom-2 left-2' : 'top-2 right-2'"
+                >
                   <v-icon icon="mdi-cart-remove" size="24"/>
+                  <Modal
+                    @confirm="$router.get(route('cart.clear'))"
+                    :title="'Удалить все предметы из корзины?'"
+                    :confirm-text="'Удалить'"
+                  />
                 </v-btn>
               </div>
 
@@ -38,15 +48,6 @@
               >
                 Заказать
               </BtnPrimary>
-
-              <v-btn>
-                Очистить корзину
-                <Modal
-                  @confirm="$router.get(route('cart.clear'))"
-                  :title="'Удалить все предметы из корзины?'"
-                  :confirm-text="'Удалить'"
-                />
-              </v-btn>
             </v-col>
 
             <v-col v-if="!$page.props.user" cols="12" sm="6" md="12">
@@ -55,8 +56,9 @@
                 type="info"
                 variant="outlined"
                 color="primary"
+                :min-height="display.sm.value && '150px'"
               >
-                Чтобы оформить заказ, нужно зарегистрироваться или войти в аккаунт
+                Чтобы оформить заказ, нужно зарегистрироваться или войти в аккаунт. <br>
                 <BtnPrimary @click="$router.get(route('login'))" class="mt-2">
                   Войти
                 </BtnPrimary>
