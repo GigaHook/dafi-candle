@@ -64,11 +64,8 @@ class OrderService
 
     public function viewOrders(): void
     {
-        if (auth()->user()?->is_admin) {
-            Order::where('viewed_admin', false)->update(['viewed_admin' => true]);
-        } else {
-            Order::where('viewed_user', false)->update(['viewed_user' => true]);
-        }
+        $role = auth()->user()?->is_admin ? 'viewed_admin' : 'viewed_user';
+        Order::where($role, false)->update([$role => true]);
     }
     
     public function checkForNewOrders(): bool 

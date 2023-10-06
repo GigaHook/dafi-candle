@@ -44,7 +44,12 @@ class BadgeService
     {
         $items = cartService()->getCart()['items'];
         $badges = session()->pull('badges');
-        $badges['cart'] = collect($items)->where('viewed', false)->count();
+        $badges['cart'] = 0;
+
+        foreach ($items as $item) {
+            $badges['cart'] += $item->quantity;
+        }
+        
         session(['badges' => $badges]);
     }
 

@@ -2,7 +2,7 @@
   <v-app>
     <v-layout>
       
-      <NavBarMobile v-if="display.mobile.value"/>
+      <NavBarMobile v-if="display.smAndDown.value"/>
 
       <NavBarDesktop v-else/>
 
@@ -36,15 +36,21 @@ const page = usePage()
 const toast = useToast()
 const display = useDisplay()
 
+
+function checkForNewOrders() {
+  router.post(route('badges'), {
+    location: page.url
+  }, {
+    preserveState: true,
+    preserveScroll: true,
+  })
+}
+
 onMounted(() => {
   if (page.props.user?.is_admin) {
+    checkForNewOrders()
     setInterval(() => {
-      router.post(route('badges'), {
-        location: page.url
-      }, {
-        preserveState: true,
-        preserveScroll: true,
-      })
+      checkForNewOrders()
     }, 60000)
   }
 })
@@ -59,6 +65,7 @@ router.on('finish', () => {
       hideProgressBar: true,
     })
   }
+  console.log(page.props.badges.cart)
 })
 
 </script>

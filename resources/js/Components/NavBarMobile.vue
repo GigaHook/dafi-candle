@@ -2,22 +2,71 @@
   <v-app-bar elevation="3">
     <span
       class="dafi-en me-auto ps-2"
-      style="color:white; cursor: pointer; font-size: 50px; min-width:234px"
-      @click="$router.get(route('home'))"
+      style="color:white; cursor: pointer; font-size: 40px; min-width:234px"
+      @click="handleClick('home')"
     >
       Dafi Candle
     </span>
+
+    <v-spacer/>
+
+    <v-app-bar-nav-icon @click="drawer = !drawer"/>
+
   </v-app-bar>
 
-  <v-navigation-drawer>
+  <v-navigation-drawer
+    location="right"
+    temporary
+    v-model="drawer"
+  >
+    <v-list class="text-body-1">
+      <v-list-item
+        :active="$page.url.includes('/products')"
+        @click="handleClick('products.index')"
+      >
+        Каталог
+      </v-list-item>
     
+      <v-list-item
+        :active="$page.url.includes('/cart')"
+        @click="handleClick('cart.index')"
+      >
+        Корзина
+      </v-list-item>
+        
+      <v-list-item
+        :active="$page.url.includes('/about')"
+      >
+        О нас
+      </v-list-item>
+    
+      <v-list-item
+        v-if="$page.props.user"
+        :active="$page.url.includes('/profile')"
+        @click="handleClick('profile')"
+      >
+        Профиль
+      </v-list-item>
+    
+      <v-list-item
+        v-else
+        :active="$page.url.includes('/login')"
+        @click="handleClick('login')"
+      >
+        Войти
+      </v-list-item>
+    </v-list>
   </v-navigation-drawer>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { router } from '@inertiajs/vue3'
 
+const drawer = ref(false)
+
+function handleClick(url) {
+  router.get(route(url))
+  drawer.value = false
+}
 </script>
-
-<style scoped>
-
-</style>

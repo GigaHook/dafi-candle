@@ -58,7 +58,7 @@
                 color="primary"
                 :min-height="display.sm.value && '150px'"
               >
-                Чтобы оформить заказ, нужно зарегистрироваться или войти в аккаунт. <br>
+                Чтобы оформить заказ, нужно зарегистрироваться или войти в аккаунт.<br>
                 <BtnPrimary @click="$router.get(route('login'))" class="mt-2">
                   Войти
                 </BtnPrimary>

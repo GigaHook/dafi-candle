@@ -1,5 +1,10 @@
 <template>
-  <v-navigation-drawer location="left" expand-on-hover rail>
+  <v-navigation-drawer
+    location="left"
+    rail
+    expand-on-hover
+    permanent
+  >
     <v-list>
       <v-list-item class="text-h6">
         Управление
@@ -25,18 +30,15 @@
         :badge="Number($page.url !== '/orders' && $page.props.badges.ordersAdmin)"
       />
 
-      <AdminSidebarItem
-        icon="mdi-notebook-plus"
-        title="Создать заказ"
-        @click="$router.get(route('orders.create'))"
-      />
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script setup>
-import { defineComponent } from 'vue'
-import AdminSidebarItem from './AdminSidebarItem.vue'
+import { defineComponent, ref } from 'vue'
+import AdminSidebarItem from '@/Components/AdminSidebarItem.vue'
+
+const drawer = true
 
 defineComponent({
   AdminSidebarItem

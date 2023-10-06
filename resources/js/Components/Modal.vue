@@ -46,10 +46,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useDisplay } from 'vuetify'
 
 const dialog = ref(false)
-const display = useDisplay()
 
 const emit = defineEmits('confirm', 'deny')
 
@@ -84,7 +82,6 @@ function handle(option) {
   emit(option)
   dialog.value = false
 }
-
 
 </script>
 

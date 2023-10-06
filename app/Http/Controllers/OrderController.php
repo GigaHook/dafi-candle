@@ -17,7 +17,7 @@ class OrderController extends Controller
         private $badgeService = new BadgeService,
     ) {
         $this->middleware('admin')->only(['index']);
-        $this->middleware('badges')->only(['index']);
+        $this->middleware('badges.orders')->only(['index']);
     }
 
     public function index(): \Inertia\Response 

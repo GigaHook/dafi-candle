@@ -16,6 +16,7 @@
     </NavItem>
 
     <NavItem
+      :badge="$page.props.badges.cart"
       :active="$page.url.includes('/cart')"
       @click="$router.get(route('cart.index'))"
     >

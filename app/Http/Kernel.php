@@ -67,6 +67,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin' => \App\Http\Middleware\AdminGuard::class,
-        'badges' => \App\Http\Middleware\RemoveOrderBadges::class,
+        'badges.orders' => \App\Http\Middleware\RemoveOrderBadges::class,
     ];
 }
