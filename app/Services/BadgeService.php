@@ -2,12 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\CartItem;
 use App\Models\Order;
-use App\Services\Cart\AuthCartService;
-use App\Services\Cart\CartService;
-use App\Services\Cart\GuestCartService;
-use Illuminate\Http\Request;
 
 /**
  * Управление иконками уведомлений внутри сессии
@@ -37,23 +32,6 @@ class BadgeService
     }
 
     /**
-     * Устанавливаем беджи для корзины
-     * @return void
-     */
-    public function setCartBadges(): void 
-    {
-        $items = cartService()->getCart()['items'];
-        $badges = session()->pull('badges');
-        $badges['cart'] = 0;
-
-        foreach ($items as $item) {
-            $badges['cart'] += $item->quantity;
-        }
-        
-        session(['badges' => $badges]);
-    }
-
-    /**
      * Убираем беджи заказов
      * @return void
      */
@@ -62,17 +40,6 @@ class BadgeService
         $badges = session()->pull('badges');
         $badges['ordersAdmin'] = 0;
         $badges['ordersUser'] = 0;
-        session(['badges' => $badges]);
-    }
-
-    /**
-     * Убираем беджи корзины
-     * @return void
-     */
-    public function removeCartBadges(): void 
-    {
-        $badges = session()->pull('badges');
-        $badges['cart'] = 0;
         session(['badges' => $badges]);
     }
 }

@@ -16,8 +16,8 @@
     </NavItem>
 
     <NavItem
-      :badge="$page.props.badges.cart"
       :active="$page.url.includes('/cart')"
+      :badge="cartBadges()"
       @click="$router.get(route('cart.index'))"
     >
       корзина
@@ -50,11 +50,19 @@
 <script setup>
 import NavItem from './NavItem.vue'
 import { defineComponent } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 
+const page = usePage()
 
 defineComponent({
   NavItem,
 })
+
+function cartBadges() {
+  let badges = 0
+  page.props.cart.items.forEach(item => badges += item.quantity)
+  return badges
+}
 </script>
 
 <style scoped>

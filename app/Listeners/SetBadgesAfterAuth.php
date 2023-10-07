@@ -14,8 +14,6 @@ class SetBadgesAfterAuth
      */
     public function handle(): void
     {
-        $badgeService = new BadgeService;
-        $badgeService->setOrdersBadges();
-        $badgeService->setCartBadges();
+        (new BadgeService)->setOrdersBadges();
     }
 }

@@ -36,7 +36,6 @@ const page = usePage()
 const toast = useToast()
 const display = useDisplay()
 
-
 function checkForNewOrders() {
   router.post(route('badges'), {
     location: page.url
@@ -65,7 +64,6 @@ router.on('finish', () => {
       hideProgressBar: true,
     })
   }
-  console.log(page.props.badges.cart)
 })
 
 </script>

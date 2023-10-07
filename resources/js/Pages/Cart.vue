@@ -5,14 +5,12 @@
 
       <v-col cols="12" sm="12" md="8" lg="8" order="2" order-md="1">
         <v-card class="pa-4 pb-2" elevation="3">
-
-            <CartItemCard
-              v-for="product in $page.props.cart.items"
-              :key="product.id"
-              :product="product"
-              :last="product == $page.props.cart.items[$page.props.cart.items.length - 1]"
-            />
-
+          <CartItemCard
+            v-for="product in $page.props.cart.items"
+            :key="product.id"
+            :product="product"
+            :last="product == $page.props.cart.items[$page.props.cart.items.length - 1]"
+          />
         </v-card>
       </v-col>
 
@@ -88,11 +86,12 @@
 </template>
 
 <script setup>
-import { defineComponent } from 'vue'
-import CartItemCard from '../Components/CartItemCard.vue'
 import AppLayout from '../Layouts/AppLayout.vue'
+import CartItemCard from '../Components/CartItemCard.vue'
+import Modal from '@/Components/Modal.vue'
+
+import { defineComponent } from 'vue'
 import { useDisplay } from 'vuetify'
-import Modal from '@/Components/Modal.vue';
 
 const display = useDisplay()
 

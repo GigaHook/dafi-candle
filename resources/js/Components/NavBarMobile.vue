@@ -25,6 +25,9 @@
         @click="handleClick('products.index')"
       >
         Каталог
+        <template #prepend>
+          <v-icon icon="mdi-shopping" class="me-3"/>
+        </template>
       </v-list-item>
     
       <v-list-item
@@ -32,12 +35,18 @@
         @click="handleClick('cart.index')"
       >
         Корзина
+        <template #prepend>
+          <v-icon icon="mdi-cart" class="me-3"/>
+        </template>
       </v-list-item>
         
       <v-list-item
         :active="$page.url.includes('/about')"
       >
         О нас
+        <template #prepend>
+          <v-icon icon="mdi-information" class="me-3"/>
+        </template>
       </v-list-item>
     
       <v-list-item
@@ -46,6 +55,9 @@
         @click="handleClick('profile')"
       >
         Профиль
+        <template #prepend>
+          <v-icon icon="mdi-account" class="me-3"/>
+        </template>
       </v-list-item>
     
       <v-list-item
