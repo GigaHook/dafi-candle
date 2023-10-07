@@ -1,8 +1,8 @@
 <template>
   <Head :title="product.name"/>
   <v-container>
-    
     <v-row class="justify-center">
+      
       <v-col
         cols="12"
         offset-xl="4"
@@ -34,46 +34,27 @@
       <v-col xl="5" lg="6" md="6" sm="6" cols="12">
         <v-card class="px-4 py-2">  
           <h2 class="text-h5">Описание</h2>
-          <p class="mb-4">{{ product.description }}</p>
-          <p class="mb-4">
-            {{ product.type.name }}
-            <span v-if="product.type.name != 'Саше'">свеча</span>
-          </p>
-          <div
+          {{ product.description }} <br><br>
+          {{ product.type.name }}
+          <span v-if="product.type.name != 'Саше'">свеча</span><br><br>
+          <ListRow
             v-for="tag in tags"
-            class="d-flex align-center"
-            style="white-space: nowrap;"
-          >
-            {{ tag.name }}
-            <v-divider class="mx-2"/>
-            {{ tag.value ?? 'Да' }}
-          </div>
+            :left="tag.name"
+            :right="tag.value"
+          />
         </v-card>
       </v-col>
-      
+
     </v-row>
   </v-container>
 </template>
 
-<script>
+<script setup>
 import AppLayout from '../../Layouts/AppLayout.vue'
-export default {
-  layout: AppLayout,
-  
-  props: {
-    product: Object,
-    tags: Array,
-  },
-  data() {
-    return {
-      
-    }
-  },
-}
-</script>
+import ListRow from '@/Components/ListRow.vue'
+import { defineComponent } from 'vue'
 
-<style scoped>
-h1{
-  margin: 0;
-}
-</style>
+defineOptions({ layout: AppLayout })
+defineProps({ product: Object, tags: Array })
+defineComponent({ ListRow })
+</script>

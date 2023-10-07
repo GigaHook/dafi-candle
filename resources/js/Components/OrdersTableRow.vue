@@ -1,6 +1,6 @@
 <template>
   <tr>
-
+    
     <td>{{ order.id }}</td>
     
     <td>
@@ -8,38 +8,17 @@
     </td>
 
     <td>
-      {{ createdAt[0] }} <br>
-      {{ orderTime() }}
+      {{ creationDate }}<br>
+      {{ creationTime }}
     </td>
     
     <td>
-      {{ order.price }} <v-icon icon="mdi-currency-rub" size="18" class="ms-n1 mb-1"/>
+      {{ order.price }} 
+      <v-icon icon="mdi-currency-rub" size="18" class="ms-n1 mb-1"/>
     </td>
 
     <td>
-      <v-select
-        variant="solo"
-        color="yellow"
-        density="compact"
-        hide-details="auto"
-        flat
-        :items="['В работе', 'Отправлен', 'Отменён']"
-        v-model="status"
-        class="ms-n4"
-        style="width:180px !important"
-        @update:model-value="updateStatus"
-        :readonly="loading"
-      >
-        <template #chip="{ item }">
-          <v-chip
-            class="text-body-1 pa-4 rounded"
-            :color="defineChipColor(item.raw)"
-            variant="elevated"
-          >
-            {{ item.raw }}
-          </v-chip>
-        </template>
-      </v-select>
+      <OrdersSelectStatus :order="order" class="ms-n4"/>
     </td>
 
     <td>
@@ -61,49 +40,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { router } from '@inertiajs/vue3'
+import OrdersSelectStatus from './OrdersSelectStatus.vue'
+import { defineComponent } from 'vue'
+import { useOrder } from '@/Composables/useOrder'
 
-const { order } = defineProps({
-  order: Object
-})
+defineComponent({ OrdersSelectStatus })
 
-let createdAt = order.created_at.split('T')
-
-function orderTime() {
-  let fullTime = createdAt[1].split('.')[0].split(':')
-  return `${fullTime[0]}:${fullTime[1]}`
-}
-
-const status = ref(order.status)
-const loading = ref(false)
-
-function updateStatus() {
-  router.post(route('orders.status', { id: order.id }), {
-    status: status.value
-  }, {
-    preserveState: true,
-    preserveScroll: true,
-    onStart: () => loading.value = true,
-    onFinish: () => loading.value = false,
-  })
-}
-
-function defineChipColor(chip) {
-  switch (chip) {
-    case 'В работе':
-      return 'blue-lighten-1'
-    
-    case 'Отправлен':
-      return 'success'
-
-    default:
-      return 'grey-darken-3'
-  }
-}
+const { order } = defineProps({ order: Object })
+const { creationDate, creationTime } = useOrder(order)
 
 </script>
-
-<style scoped>
-
-</style>

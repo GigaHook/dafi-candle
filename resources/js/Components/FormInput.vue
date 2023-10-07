@@ -4,7 +4,6 @@
     variant="outlined"
     density="compact"
     class="mb-3"
-    hide-details="auto"
   />
 </template>
 <script>

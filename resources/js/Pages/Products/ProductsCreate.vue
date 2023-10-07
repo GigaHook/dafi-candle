@@ -26,7 +26,6 @@
               variant="outlined"
               color="yellow"
               class="mb-3"
-              hide-details="auto"
             />
             <v-file-input
               name="image"
@@ -41,8 +40,12 @@
               prepend-icon
               :error-messages="errors.image"
               @update:model-value="errors = {}"
-              hide-details="auto"
-            />
+            >
+              <template #append-inner>
+                <v-divider vertical class="me-3"/>
+                <v-icon icon="mdi-image-outline"/>
+              </template>
+            </v-file-input>
             <v-select
               name="type"
               label="Тип"
@@ -53,7 +56,7 @@
               color="yellow"
               density="compact"
               class="mb-3"
-              hide-details="auto"
+              menu-icon="mdi-chevron-down"
             />
             <FormInput
               name="price"

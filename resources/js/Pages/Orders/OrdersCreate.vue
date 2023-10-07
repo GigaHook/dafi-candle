@@ -40,7 +40,7 @@
                     <FormInput
                       v-model="cdekFormData.house_number"
                       :rules="[rules.required, rules.max]"
-                      label="Дом, строение"
+                      label="Дом"
                       type="text"
                     />
                   </v-col>
@@ -58,7 +58,7 @@
                     <FormInput
                       v-model="cdekFormData.flat_number"
                       :rules="[rules.max]"
-                      label="Квартира, помещение"
+                      label="Квартира"
                       type="text"
                     />
                   </v-col>

@@ -50,6 +50,7 @@
               color="yellow"
               density="compact"
               class="mb-3"
+              menu-icon="mdi-chevron-down"
             />
             <FormInput
               name="price"

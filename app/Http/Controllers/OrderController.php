@@ -42,10 +42,10 @@ class OrderController extends Controller
     public function show(Order $order): \Inertia\Response 
     {
         return auth()->user()->is_admin
-            ? Inertia::render('Orders/OrdersAdminShow', [
+            ? Inertia::render('Orders/OrdersShowAdmin', [
                 "order" => $order->load("products")->load("adress")
             ])
-            : Inertia::render('Orders/OrdersShow', [
+            : Inertia::render('Orders/OrdersShowUser', [
                 "order" => $order->load("products")->load("adress")
             ]);
     }
