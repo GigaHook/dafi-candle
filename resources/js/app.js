@@ -27,6 +27,7 @@ import { router } from '@inertiajs/vue3'
 import BtnPrimary from './Components/BtnPrimary.vue'
 import BtnSecondary from './Components/BtnSecondary.vue'
 import FormInput from './Components/FormInput.vue'
+import Modal from './Components/Modal.vue'
 
 const mainTheme = {
     dark: false,
@@ -64,6 +65,7 @@ createInertiaApp({
         .component('BtnPrimary', BtnPrimary)
         .component('BtnSecondary', BtnSecondary)
         .component('FormInput', FormInput)
+        .component('Modal', Modal)
 
         app.config.globalProperties.$router = router
 

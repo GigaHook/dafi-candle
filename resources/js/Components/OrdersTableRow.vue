@@ -11,7 +11,7 @@
       {{ creationDate }}<br>
       {{ creationTime }}
     </td>
-    
+
     <td>
       {{ order.price }} 
       <v-icon icon="mdi-currency-rub" size="18" class="ms-n1 mb-1"/>
@@ -27,13 +27,27 @@
       </v-chip>
     </td>
 
-    <td>
+    <td class="px-0">
       <BtnSecondary
         @click="$router.get(route('orders.show', order.id))"
         class="text-button"
       >
         Подробнее
       </BtnSecondary>
+    </td>
+
+    <td class="px-0">
+      
+      <v-btn
+        variant="plain"
+        icon
+      >
+        <v-icon icon="mdi-delete-outline"/>
+        <Modal
+          @confirm="$router.delete(route('orders.destroy', order.id))"
+          :text="'Удалить заказ?'"
+        />
+      </v-btn>
     </td>
 
   </tr>

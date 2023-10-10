@@ -59,7 +59,11 @@ class OrderService
 
     public function deleteOrder(Order $order): void
     {
-        //
+        foreach ($order->products as $product) {
+            $product->orderItem->delete();
+        }
+
+        $order->delete();
     }
 
     public function viewOrders(): void
