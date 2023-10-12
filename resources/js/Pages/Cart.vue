@@ -4,12 +4,12 @@
     <v-row class="justify-center" v-if="$page.props.cart.items.length">
 
       <v-col cols="12" sm="12" md="8" lg="8" order="2" order-md="1">
-        <v-card class="pa-4 pb-2" elevation="3">
+        <v-card class="pa-4" elevation="3">
           <CartItemCard
             v-for="product in $page.props.cart.items"
             :key="product.id"
             :product="product"
-            :last="product == $page.props.cart.items[$page.props.cart.items.length - 1]"
+            :last="product.id == $page.props.cart.items.at(-1).id"
           />
         </v-card>
       </v-col>
@@ -95,17 +95,6 @@ import { useDisplay } from 'vuetify'
 
 const display = useDisplay()
 
-defineOptions({
-  layout: AppLayout
-})
-
-defineComponent({
-  CartItemCard: CartItemCard,
-  Modal: Modal,
-})
-
+defineOptions({ layout: AppLayout })
+defineComponent({ CartItemCard: CartItemCard, Modal: Modal })
 </script>
-
-<style scoped>
-
-</style>

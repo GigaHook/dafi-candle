@@ -1,10 +1,10 @@
 <template>
   <v-row dense>
-    <v-col cols="12" sm="4" md="3">
+    <v-col cols="3">
       <v-img
         @mouseover="hover = true"
         @mouseleave="hover = false"  
-        :src="`storage/upload/${product.image}`"
+        :src="`../storage/upload/${product.image}`"
         class="w-100 rounded"
         style="aspect-ratio: 1 / 1;"
         cover
@@ -21,8 +21,8 @@
         </v-overlay>
       </v-img>
     </v-col>
-    
-    <v-col cols="12" sm="6" md="6">
+
+    <v-col cols="6">
       <div
         @mouseover="hover = true"
         @mouseleave="hover = false" 
@@ -36,6 +36,7 @@
       <div class="text-subtitle-2">
         {{ product.price }} 
         <v-icon icon="mdi-currency-rub" size="16" class="ms-n1 mb-1"/>
+        x{{ product.order_item.quantity }}
       </div>
 
       <v-banner
@@ -47,46 +48,21 @@
         :text="product.description"
       />
     </v-col>
-  
-    <v-col
-      cols="6" md="2"
-      :class="display.md.value && 'ms-n10'"
-    >
-      <CartItemControls :product="product"/>
-    </v-col>
-    
-    <v-spacer v-if="display.md"/>
 
-    <v-col
-      cols="6" md="1"
-      class="d-flex flex-column justify-space-between align-end"
-    >
-      <div class="text-no-wrap">
-        {{ product.price * product.quantity }}
-        <v-icon icon="mdi-currency-rub" size="16" class="ms-n1 mb-1"/>
-      </div>
-      <v-btn
-        variant="plain"
-        icon="mdi-delete-outline"
-        @click="$router.delete(route('cart.destroy', product.id), { preserveScroll: true })"
-      />
+    <v-col class="text-right">
+      {{ product.price * product.order_item.quantity }}
+      <v-icon icon="mdi-currency-rub" size="16" class="ms-n1 mb-1"/><br>
     </v-col>
 
     <v-col v-if="!last" cols="12">
       <v-divider class="my-2"/>
     </v-col>
-
   </v-row>
 </template>
 
 <script setup>
-import CartItemControls from './CartItemControls.vue'
-import { ref, defineComponent } from 'vue'
-import { useDisplay } from 'vuetify'
+import { ref } from 'vue'
 
-const display = useDisplay()
+const { product } = defineProps({ product: Object, last: Boolean })
 const hover = ref(false)
-
-defineComponent({ CartItemControls: CartItemControls })
-defineProps({ product: Object, last: Boolean })
 </script>
