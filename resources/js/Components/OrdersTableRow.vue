@@ -45,7 +45,8 @@
         <v-icon icon="mdi-delete-outline"/>
         <Modal
           @confirm="$router.delete(route('orders.destroy', order.id))"
-          :text="'Удалить заказ?'"
+          title="Подтверждение"
+          text="Удалить заказ?"
         />
       </v-btn>
     </td>
@@ -62,5 +63,4 @@ defineComponent({ OrdersSelectStatus })
 
 const { order } = defineProps({ order: Object })
 const { creationDate, creationTime } = useOrder(order)
-
 </script>

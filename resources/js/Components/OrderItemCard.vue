@@ -49,9 +49,37 @@
       />
     </v-col>
 
-    <v-col class="text-right">
-      {{ product.price * product.order_item.quantity }}
-      <v-icon icon="mdi-currency-rub" size="16" class="ms-n1 mb-1"/><br>
+    <v-col class="text-right d-flex flex-column justify-space-between">
+      <div>
+        {{ product.price * product.order_item.quantity }}
+        <v-icon icon="mdi-currency-rub" size="16" class="ms-n1 mb-1"/><br>
+      </div>
+
+      <div>
+        <v-btn
+          icon
+          variant="plain"
+          @click="$router.post(route('orderItems.store', order.order_item))"
+        >
+          <v-icon icon="mdi-minus"/>
+        </v-btn>
+
+        x{{ product.order_item.quantity }}
+
+        <v-btn
+          icon
+          variant="plain"
+        >
+          <v-icon icon="mdi-plus"/>
+        </v-btn>
+
+        <v-btn
+          icon
+          variant="plain"
+        >
+          <v-icon icon="mdi-delete-outline"/>
+        </v-btn>
+      </div>
     </v-col>
 
     <v-col v-if="!last" cols="12">

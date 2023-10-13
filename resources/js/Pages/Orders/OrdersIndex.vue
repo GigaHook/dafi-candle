@@ -44,12 +44,11 @@
 </template>
 
 <script setup>
-import { defineComponent, } from 'vue'
 import OrdersTableRow from '@/Components/OrdersTableRow.vue'
 import AppLayout from '@/Layouts/AppLayout.vue'
+import { defineComponent, } from 'vue'
 
 defineOptions({ layout: AppLayout })
 defineComponent({ OrdersTableRow: OrdersTableRow })
 defineProps({ orders: Array })
-
 </script>

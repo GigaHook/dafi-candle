@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -42,6 +43,8 @@ Route::middleware('auth')->group(function() {
     Route::resource('orders', OrderController::class);
     Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
     Route::post('/badges', BadgeController::class)->name('badges');
+
+    Route::resource('orderItems', OrderItemController::class)->middleware('admin');
 });
 
 Route::resource('products', ProductController::class);

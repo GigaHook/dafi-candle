@@ -25,7 +25,7 @@
             Купить
           </BtnPrimary>
 
-          <BtnSecondary @click="$router.get(route('products.index'))">
+          <BtnSecondary @click="window.history.back()">
             Назад
           </BtnSecondary>
         </div>
