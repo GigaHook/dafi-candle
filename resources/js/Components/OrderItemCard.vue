@@ -59,7 +59,6 @@
         <v-btn
           icon
           variant="plain"
-          @click="$router.post(route('orderItems.store', order.order_item))"
         >
           <v-icon icon="mdi-minus"/>
         </v-btn>
@@ -69,6 +68,12 @@
         <v-btn
           icon
           variant="plain"
+          @click="$router.post(route('orderitems.store', orderId), {
+            productId: product.id
+          }, {
+            preserveState: true,
+            preserveScroll: true,
+          })"
         >
           <v-icon icon="mdi-plus"/>
         </v-btn>
@@ -91,6 +96,11 @@
 <script setup>
 import { ref } from 'vue'
 
-const { product } = defineProps({ product: Object, last: Boolean })
+const { product } = defineProps({ 
+  product: Object,
+  orderId: Number,
+  last: Boolean
+})
+
 const hover = ref(false)
 </script>

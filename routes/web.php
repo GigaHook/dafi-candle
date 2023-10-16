@@ -43,12 +43,15 @@ Route::middleware('auth')->group(function() {
     Route::resource('orders', OrderController::class);
     Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
     Route::post('/badges', BadgeController::class)->name('badges');
+});
 
-    Route::resource('orderItems', OrderItemController::class)->middleware('admin');
+Route::middleware(['auth', 'admin'])->group(function() {
+    Route::post('orderitems/{order}', [OrderItemController::class, 'store'])->name('orderitems.store');
+    Route::patch('orderitems/{order}', [OrderItemController::class, 'update'])->name('orderitems.update');
+    Route::delete('orderitems/{order}', [OrderItemController::class, 'destroy'])->name('orderitems.destroy');
 });
 
 Route::resource('products', ProductController::class);
-
 Route::resource('cart', CartItemController::class)->except(['show', 'create', 'edit']);
 Route::get('cart/clear', [CartItemController::class, 'clear'])->name('cart.clear');
 

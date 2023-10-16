@@ -2,25 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrderItem;
-use Illuminate\Http\Request;
+use App\Models\Order;
+use App\Services\OrderItemService;
 
 class OrderItemController extends Controller
 {
-    public function store(OrderItem $orderItem): void
+    public function __construct(
+        private OrderItemService $orderItemService,
+    ) {}
+    
+    public function store(Order $orderItem, int $productId): void
     {
-        $orderItem->quantity++;
-        $orderItem->save();
+        $this->orderItemService->increase($orderItem, $productId);
     }
 
-    public function update(OrderItem $orderItem): void
+    public function update(Order $orderItem, int $productId): void
     {
-        $orderItem->quantity--;
-        $orderItem->save();
+        $this->orderItemService->decrease($orderItem, $productId);
     }
 
-    public function destroy(OrderItem $orderItem): void
+    public function destroy(Order $orderItem, int $productId): void
     {
-        $orderItem->delete();
+        $this->orderItemService->delete($orderItem, $productId);
     }
 }
