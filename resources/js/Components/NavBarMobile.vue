@@ -9,7 +9,6 @@
     </span>
 
     <v-spacer/>
-
     <v-btn @click="drawer = !drawer" icon="mdi-menu"/>
   </v-app-bar>
 
@@ -22,7 +21,7 @@
       <v-list-item
         :active="$page.url === '/products'"
         @click="handleClick('products.index')"
-        icon="mdi-shopping"
+        prepend-icon="mdi-shopping"
       >
         Каталог
       </v-list-item>
@@ -30,14 +29,14 @@
       <v-list-item
         :active="$page.url.includes('/cart')"
         @click="handleClick('cart.index')"
-        icon="mdi-cart"
+        prepend-icon="mdi-cart"
       >
         Корзина
       </v-list-item>
         
       <v-list-item
         :active="$page.url.includes('/about')"
-        icon="mdi-information"
+        prepend-icon="mdi-information"
       >
         О нас
       </v-list-item>
@@ -46,7 +45,7 @@
         v-if="$page.props.user"
         :active="$page.url.includes('/profile')"
         @click="handleClick('profile')"
-        icon="mdi-account" 
+        prepend-icon="mdi-account" 
       >
         Профиль
       </v-list-item>
@@ -55,17 +54,18 @@
         v-else
         :active="$page.url.includes('/login')"
         @click="handleClick('login')"
-        icon="mdi-notebook-multiple"
+        prepend-icon="mdi-profile"
       >
         Войти
       </v-list-item>
 
       <template v-if="$page.props.user?.is_admin">
+        <v-divider/>
 
-        
         <v-list-item
           :active="$page.url.includes('/orders')"
           @click="handleClick('orders.index')"
+          prepend-icon="mdi-notebook-multiple"
         >
           Заказы
         </v-list-item>
@@ -73,7 +73,7 @@
         <v-list-item
           :active="$page.url.includes('/products/create')"
           @click="handleClick('products.create')"
-          icon="mdi-plus-box"
+          prepend-icon="mdi-plus-box"
         >
           Добавить товар
         </v-list-item>

@@ -67,7 +67,7 @@ createInertiaApp({
         .component('FormInput', FormInput)
         .component('Modal', Modal)
 
-        app.config.globalProperties.$router = () => router
+        app.config.globalProperties.$router = router
 
         app.mount(el)
 
