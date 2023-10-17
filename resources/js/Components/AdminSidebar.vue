@@ -1,9 +1,9 @@
 <template>
   <v-navigation-drawer
     location="left"
-    rail
-    expand-on-hover
-    permanent
+    :rail="display.mdAndUp.value"
+    :expand-on-hover="display.mdAndUp.value"
+    :permanent="display.mdAndUp.value"
   >
     <v-list>
       <v-list-item class="text-h6">
@@ -29,23 +29,16 @@
         @click="$router.get(route('orders.index'))"
         :badge="Number($page.url !== '/orders' && $page.props.badges.ordersAdmin)"
       />
-
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script setup>
-import { defineComponent, ref } from 'vue'
 import AdminSidebarItem from '@/Components/AdminSidebarItem.vue'
+import { defineComponent } from 'vue'
+import { useDisplay } from 'vuetify/lib/framework.mjs'
 
-const drawer = true
+const display = useDisplay()
 
-defineComponent({
-  AdminSidebarItem
-})
-
+defineComponent({ AdminSidebarItem })
 </script>
-
-<style scoped>
-
-</style>

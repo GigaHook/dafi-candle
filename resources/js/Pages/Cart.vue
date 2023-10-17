@@ -17,7 +17,6 @@
       <v-col cols="12" sm="12" md="4" lg="3" order="1" order-md="2">
         <v-card elevation="3">
           <v-row class="px-4 pt-3 mb-1">
-
             <v-col cols="12" sm="6" md="12">
               Всего товаров {{ $page.props.cart.totalQuantity }}
               <div class="text-h5">

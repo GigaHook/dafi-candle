@@ -17,7 +17,7 @@
 
     <NavItem
       :active="$page.url.includes('/cart')"
-      :badge="cartBadges()"
+      :badge="getCartBadge()"
       @click="$router.get(route('cart.index'))"
     >
       корзина
@@ -45,6 +45,7 @@
       войти
     </NavItem>
   </v-app-bar>
+  
 </template>
 
 <script setup>
@@ -52,13 +53,11 @@ import NavItem from './NavItem.vue'
 import { defineComponent } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 
+defineComponent({ NavItem })
+
 const page = usePage()
 
-defineComponent({
-  NavItem,
-})
-
-function cartBadges() {
+function getCartBadge() {
   let badges = 0
   page.props.cart.items.forEach(item => badges += item.quantity)
   return badges

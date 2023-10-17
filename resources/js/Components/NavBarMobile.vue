@@ -10,8 +10,7 @@
 
     <v-spacer/>
 
-    <v-app-bar-nav-icon @click="drawer = !drawer"/>
-
+    <v-btn @click="drawer = !drawer" icon="mdi-menu"/>
   </v-app-bar>
 
   <v-navigation-drawer
@@ -21,58 +20,71 @@
   >
     <v-list class="text-body-1">
       <v-list-item
-        :active="$page.url.includes('/products')"
+        :active="$page.url === '/products'"
         @click="handleClick('products.index')"
+        icon="mdi-shopping"
       >
         Каталог
-        <template #prepend>
-          <v-icon icon="mdi-shopping" class="me-3"/>
-        </template>
       </v-list-item>
     
       <v-list-item
         :active="$page.url.includes('/cart')"
         @click="handleClick('cart.index')"
+        icon="mdi-cart"
       >
         Корзина
-        <template #prepend>
-          <v-icon icon="mdi-cart" class="me-3"/>
-        </template>
       </v-list-item>
         
       <v-list-item
         :active="$page.url.includes('/about')"
+        icon="mdi-information"
       >
         О нас
-        <template #prepend>
-          <v-icon icon="mdi-information" class="me-3"/>
-        </template>
       </v-list-item>
     
       <v-list-item
         v-if="$page.props.user"
         :active="$page.url.includes('/profile')"
         @click="handleClick('profile')"
+        icon="mdi-account" 
       >
         Профиль
-        <template #prepend>
-          <v-icon icon="mdi-account" class="me-3"/>
-        </template>
       </v-list-item>
     
       <v-list-item
         v-else
         :active="$page.url.includes('/login')"
         @click="handleClick('login')"
+        icon="mdi-notebook-multiple"
       >
         Войти
       </v-list-item>
+
+      <template v-if="$page.props.user?.is_admin">
+
+        
+        <v-list-item
+          :active="$page.url.includes('/orders')"
+          @click="handleClick('orders.index')"
+        >
+          Заказы
+        </v-list-item>
+
+        <v-list-item
+          :active="$page.url.includes('/products/create')"
+          @click="handleClick('products.create')"
+          icon="mdi-plus-box"
+        >
+          Добавить товар
+        </v-list-item>
+      </template>
+
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, defineComponent } from 'vue'
 import { router } from '@inertiajs/vue3'
 
 const drawer = ref(false)

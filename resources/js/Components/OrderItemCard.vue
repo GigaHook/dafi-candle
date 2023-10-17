@@ -1,6 +1,6 @@
 <template>
   <v-row dense>
-    <v-col cols="3">
+    <v-col md="3" cols="12">
       <v-img
         @mouseover="hover = true"
         @mouseleave="hover = false"  
@@ -49,7 +49,11 @@
       />
     </v-col>
 
-    <v-col class="text-right d-flex flex-column justify-space-between">
+    <v-col
+      v-if="editable"
+      cols="12"
+      class="text-right d-flex flex-column justify-space-between"
+    >
       <div>
         {{ product.price * product.order_item.quantity }}
         <v-icon icon="mdi-currency-rub" size="16" class="ms-n1 mb-1"/><br>
@@ -91,6 +95,14 @@
 <script setup>
 import { ref } from 'vue'
 
-const { product } = defineProps({ product: Object, last: Boolean })
+const { product } = defineProps({
+  product: Object,
+  last: Boolean,
+  editable: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+})
 const hover = ref(false)
 </script>

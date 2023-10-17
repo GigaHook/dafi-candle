@@ -1,17 +1,18 @@
 <template>
   <v-app>
     <v-layout>
-      
+
       <NavBarMobile v-if="display.smAndDown.value"/>
 
-      <NavBarDesktop v-else/>
-
-      <AdminSidebar v-if="$page.props.user?.is_admin"/>
+      <template v-else>
+        <NavBarDesktop/>
+        <AdminSidebar v-if="$page.props.user?.is_admin"/>
+      </template>
 
       <v-main>
         <slot />
       </v-main>
-      
+
     </v-layout>
   </v-app>
 </template>
@@ -21,7 +22,7 @@ import AdminSidebar from '@/Components/AdminSidebar.vue'
 import NavBarDesktop from '@/Components/NavBarDesktop.vue'
 import NavBarMobile from '@/Components/NavBarMobile.vue'
 
-import { defineComponent, onMounted } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
 import { useToast, TYPE } from 'vue-toastification'
 import { useDisplay } from 'vuetify'
@@ -35,6 +36,7 @@ defineComponent({
 const page = usePage()
 const toast = useToast()
 const display = useDisplay()
+const adminSidebar = ref(false)
 
 function checkForNewOrders() {
   router.post(route('badges'), {
@@ -65,7 +67,6 @@ router.on('finish', () => {
     })
   }
 })
-
 </script>
 
 <style>
