@@ -4,13 +4,16 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class OrderItemService
 {
     private function getOrderItem(Order $order, int $productId): OrderItem 
     {
-        dd($order);
-        return $order->products->where('product_id', $productId)->orderItem;
+        return OrderItem::where([
+            'product_id' => $productId,
+            'order_id' => $order->id,
+        ])->first();
     }
 
     public function increase(Order $order, int $productId): void

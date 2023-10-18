@@ -13,7 +13,8 @@
       <v-badge
         v-if="badge"
         :content="badge"
-        class="position-absolute mb-6 ms-1"
+        max="9"
+        floating
         color="red"
       />
     </template>
@@ -22,12 +23,7 @@
 </template>
 
 <script setup>
-
-defineProps({
-  active: Boolean,
-  badge: Number,
-})
-
+defineProps({ active: Boolean, badge: Number, })
 </script>
 
 <style scoped>

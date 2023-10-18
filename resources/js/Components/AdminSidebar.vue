@@ -1,9 +1,9 @@
 <template>
   <v-navigation-drawer
     location="left"
-    :rail="display.mdAndUp.value"
-    :expand-on-hover="display.mdAndUp.value"
-    :permanent="display.mdAndUp.value"
+    rail
+    expand-on-hover
+    permanent
   >
     <v-list>
       <v-list-item class="text-h6">

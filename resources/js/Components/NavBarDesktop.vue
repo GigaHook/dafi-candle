@@ -8,52 +8,53 @@
       Dafi Candle
     </span>
 
-    <NavItem
+    <NavItemDesktop
       :active="$page.url.includes('/products')"
       @click="$router.get(route('products.index'))"
+      text="asd"
     >
       каталог
-    </NavItem>
+    </NavItemDesktop>
 
-    <NavItem
+    <NavItemDesktop
       :active="$page.url.includes('/cart')"
       :badge="getCartBadge()"
       @click="$router.get(route('cart.index'))"
     >
       корзина
-    </NavItem>
+    </NavItemDesktop>
       
-    <NavItem
+    <NavItemDesktop
       :active="$page.url.includes('/about')"
+      @click="$router.get(route('about'))"
     >
       о нас
-    </NavItem>
+    </NavItemDesktop>
 
-    <NavItem
+    <NavItemDesktop
       v-if="$page.props.user"
       :active="$page.url.includes('/profile')"
       @click="$router.get(route('profile'))"
     >
       профиль
-    </NavItem>
+    </NavItemDesktop>
 
-    <NavItem
+    <NavItemDesktop
       v-else
       :active="$page.url.includes('/login')"
       @click="$router.get(route('login'))"
     >
       войти
-    </NavItem>
+    </NavItemDesktop>
   </v-app-bar>
-  
 </template>
 
 <script setup>
-import NavItem from './NavItem.vue'
+import NavItemDesktop from './NavItemDesktop.vue'
 import { defineComponent } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 
-defineComponent({ NavItem })
+defineComponent({ NavItemDesktop })
 
 const page = usePage()
 
@@ -63,7 +64,3 @@ function getCartBadge() {
   return badges
 }
 </script>
-
-<style scoped>
-
-</style>

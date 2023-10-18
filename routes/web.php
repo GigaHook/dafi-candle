@@ -36,19 +36,26 @@ Route::middleware('guest')->group(function() {
 
 Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-    Route::get('profile', function() {
-        return Inertia::render('Profile');
-    })->name('profile');
+    Route::inertia('profile', 'Profile');
+    //Route::inertia('about', 'about');
+    
          
-    Route::resource('orders', OrderController::class);
+    Route::resource('orders', OrderController::class); //+ещё мидлвары в контроллере
     Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+
     Route::post('/badges', BadgeController::class)->name('badges');
 });
 
 Route::middleware(['auth', 'admin'])->group(function() {
-    Route::post('orderitems/{order}', [OrderItemController::class, 'store'])->name('orderitems.store');
-    Route::patch('orderitems/{order}', [OrderItemController::class, 'update'])->name('orderitems.update');
-    Route::delete('orderitems/{order}', [OrderItemController::class, 'destroy'])->name('orderitems.destroy');
+    Route::post('orders/{order}/orderitems/{orderitem}', [OrderItemController::class, 'store'])
+        ->name('orderitems.store');
+
+    Route::patch('orders/{order}/orderitems/{orderitem}', [OrderItemController::class, 'update'])
+        ->name('orderitems.update');
+
+    Route::delete('orders/{order}/orderitems/{orderitem}', [OrderItemController::class, 'destroy'])
+        ->name('orderitems.destroy');
+
 });
 
 Route::resource('products', ProductController::class);

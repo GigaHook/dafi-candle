@@ -11,18 +11,18 @@ class OrderItemController extends Controller
         private OrderItemService $orderItemService,
     ) {}
     
-    public function store(Order $orderItem, int $productId): void
+    public function store(Order $order, int $productId): void
     {
-        $this->orderItemService->increase($orderItem, $productId);
+        $this->orderItemService->increase($order, $productId);
     }
 
-    public function update(Order $orderItem, int $productId): void
+    public function update(Order $order, int $productId): void
     {
-        $this->orderItemService->decrease($orderItem, $productId);
+        $this->orderItemService->decrease($order, $productId);
     }
 
-    public function destroy(Order $orderItem, int $productId): void
+    public function destroy(Order $order, int $productId): void
     {
-        $this->orderItemService->delete($orderItem, $productId);
+        $this->orderItemService->delete($order, $productId);
     }
 }

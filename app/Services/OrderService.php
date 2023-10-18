@@ -28,6 +28,7 @@ class OrderService
         DB::transaction(function() use($data) {
             $adress = $this->adressService->createAdress($data);
 
+            //TODO: пересчитать стоимость после изменения содержания заказа
             $order = Order::create([
                 'user_id' => auth()->id(),
                 'adress_id' => $adress->id,

@@ -98,6 +98,7 @@
             :key="product.id"
             :product="product"
             :orderId="order.id"
+            :editable="true"
             :last="product.id == order.products.at(-1).id"
           />
         </v-card>
@@ -126,11 +127,13 @@ import { useOrder } from '@/Composables/useOrder'
 import { useDisplay } from 'vuetify'
 
 defineOptions({ layout: AppLayout })
-defineComponent({ OrdersSelectStatus, ListRow, OrderItemCard })
+defineComponent({
+  OrdersSelectStatus,
+  ListRow,
+  OrderItemCard 
+})
 
 const { order } = defineProps({ order: Object })
 const { creationDate, creationTime } = useOrder(order)
 const display = useDisplay()
-
-
 </script>

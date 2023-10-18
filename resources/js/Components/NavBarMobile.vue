@@ -9,7 +9,19 @@
     </span>
 
     <v-spacer/>
-    <v-btn @click="drawer = !drawer" icon="mdi-menu"/>
+
+    <!--TODO: добавить уведомления пользователя-->
+    <v-btn @click="drawer = !drawer" icon>
+      <v-badge
+        v-if="$page.props.badges.ordersAdmin"
+        :content="$page.props.badges.ordersAdmin"
+        dot
+        color="red"
+      >
+        <v-icon icon="mdi-menu"/>
+      </v-badge>
+      <v-icon v-else icon="mdi-menu"/>
+    </v-btn>
   </v-app-bar>
 
   <v-navigation-drawer
@@ -19,7 +31,7 @@
   >
     <v-list class="text-body-1">
       <v-list-item
-        :active="$page.url === '/products'"
+        :active="$page.url == '/products'"
         @click="handleClick('products.index')"
         prepend-icon="mdi-shopping"
       >
@@ -32,13 +44,13 @@
         prepend-icon="mdi-cart"
       >
         Корзина
-      </v-list-item>
-        
-      <v-list-item
-        :active="$page.url.includes('/about')"
-        prepend-icon="mdi-information"
-      >
-        О нас
+        <template #append>
+          <v-badge
+            inline
+            color="red"
+            :content="getCartBadge()"
+          />
+        </template>
       </v-list-item>
     
       <v-list-item
@@ -59,6 +71,14 @@
         Войти
       </v-list-item>
 
+      <v-list-item
+        :active="$page.url.includes('/about')"
+        @click="$router.get(route('about'))"
+        prepend-icon="mdi-information"
+      >
+        О нас
+      </v-list-item>
+
       <template v-if="$page.props.user?.is_admin">
         <v-divider/>
 
@@ -68,6 +88,14 @@
           prepend-icon="mdi-notebook-multiple"
         >
           Заказы
+          <template #append>
+            <v-badge
+              v-if="$page.url !== '/orders' && $page.props.badges.ordersAdmin"
+              inline
+              color="red"
+              :content="$page.props.badges.ordersAdmin"
+            />
+          </template>
         </v-list-item>
 
         <v-list-item
@@ -84,13 +112,20 @@
 </template>
 
 <script setup>
-import { ref, defineComponent } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { ref } from 'vue'
+import { router, usePage } from '@inertiajs/vue3'
 
 const drawer = ref(false)
+const page = usePage()
 
 function handleClick(url) {
   router.get(route(url))
   drawer.value = false
+}
+
+function getCartBadge() {
+  let badges = 0
+  page.props.cart.items.forEach(item => badges += item.quantity)
+  return badges
 }
 </script>

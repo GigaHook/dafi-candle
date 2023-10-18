@@ -22,7 +22,7 @@
       </v-img>
     </v-col>
 
-    <v-col cols="6">
+    <v-col cols="5">
       <div
         @mouseover="hover = true"
         @mouseleave="hover = false" 
@@ -51,7 +51,7 @@
 
     <v-col
       v-if="editable"
-      cols="12"
+      cols="4"
       class="text-right d-flex flex-column justify-space-between"
     >
       <div>
@@ -63,6 +63,7 @@
         <v-btn
           icon
           variant="plain"
+          @click="decrease"
         >
           <v-icon icon="mdi-minus"/>
         </v-btn>
@@ -72,12 +73,7 @@
         <v-btn
           icon
           variant="plain"
-          @click="$router.post(route('orderitems.store', orderId), {
-            productId: product.id
-          }, {
-            preserveState: true,
-            preserveScroll: true,
-          })"
+          @click="increase"
         >
           <v-icon icon="mdi-plus"/>
         </v-btn>
@@ -85,6 +81,7 @@
         <v-btn
           icon
           variant="plain"
+          @click="remove"
         >
           <v-icon icon="mdi-delete-outline"/>
         </v-btn>
@@ -99,8 +96,9 @@
 
 <script setup>
 import { ref } from 'vue'
+import { router } from '@inertiajs/vue3'
 
-const { product } = defineProps({
+const { product, orderId } = defineProps({
   product: Object,
   last: Boolean,
   editable: {
@@ -112,4 +110,29 @@ const { product } = defineProps({
 })
 
 const hover = ref(false)
+
+function increase() {
+  router.post(route('orderitems.store', [orderId, product.id]), {}, {
+    preserveState: true,
+    preserveScroll: true,
+  })
+}
+
+function decrease() {
+  router.post(route('orderitems.store', [orderId, product.id]), {
+    _method: 'patch'
+  }, {
+    preserveState: true,
+    preserveScroll: true,
+  })
+}
+
+function remove() {
+  router.post(route('orderitems.store', [orderId, product.id]), {
+    _method: 'delete'
+  }, {
+    preserveState: true,
+    preserveScroll: true,
+  })
+}
 </script>

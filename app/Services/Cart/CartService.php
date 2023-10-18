@@ -42,5 +42,4 @@ interface CartService
      *
      * @return void
      */
-    public function removeBadges(): void;
 }
