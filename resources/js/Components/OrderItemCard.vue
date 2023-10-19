@@ -63,7 +63,7 @@
         <v-btn
           icon
           variant="plain"
-          @click="decrease"
+          @click="action('patch')"
         >
           <v-icon icon="mdi-minus"/>
         </v-btn>
@@ -73,7 +73,7 @@
         <v-btn
           icon
           variant="plain"
-          @click="increase"
+          @click="action('post')"
         >
           <v-icon icon="mdi-plus"/>
         </v-btn>
@@ -81,7 +81,7 @@
         <v-btn
           icon
           variant="plain"
-          @click="remove"
+          @click="action('delete')"
         >
           <v-icon icon="mdi-delete-outline"/>
         </v-btn>
@@ -111,25 +111,9 @@ const { product, orderId } = defineProps({
 
 const hover = ref(false)
 
-function increase() {
-  router.post(route('orderitems.store', [orderId, product.id]), {}, {
-    preserveState: true,
-    preserveScroll: true,
-  })
-}
-
-function decrease() {
+function action(method) {
   router.post(route('orderitems.store', [orderId, product.id]), {
-    _method: 'patch'
-  }, {
-    preserveState: true,
-    preserveScroll: true,
-  })
-}
-
-function remove() {
-  router.post(route('orderitems.store', [orderId, product.id]), {
-    _method: 'delete'
+    _method: method
   }, {
     preserveState: true,
     preserveScroll: true,
