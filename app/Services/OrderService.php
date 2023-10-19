@@ -73,4 +73,16 @@ class OrderService
     {
         return !Order::where('viewed_admin', false)->get()->isEmpty();
     }
+
+    public function recalculatePrice(Order $order): void 
+    {
+        $price = 0;
+
+        foreach ($order->products as $product) {
+            $price += $product->orderItem->quantity * $product->price;
+        }
+
+        $order->price = $price;
+        $order->save();
+    }
 }

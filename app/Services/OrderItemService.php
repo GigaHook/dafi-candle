@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\OrderContentsUpdated;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -21,6 +22,8 @@ class OrderItemService
         $orderItem = $this->getOrderItem($order, $productId);
         $orderItem->quantity++;
         $orderItem->save();
+        
+        event(new OrderContentsUpdated($order));
     }
 
     public function decrease(Order $order, int $productId): void
@@ -33,10 +36,14 @@ class OrderItemService
         } else {
             $orderItem->delete();
         }
+
+        event(new OrderContentsUpdated($order));
     }
 
     public function delete(Order $order, int $productId): void
     {
         $this->getOrderItem($order, $productId)->delete();
+
+        event(new OrderContentsUpdated($order));
     }
 }

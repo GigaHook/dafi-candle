@@ -15,29 +15,29 @@
         Dafi Candle
       </span>
       
-      <NavItem @click="scrollTo('about')">
+      <NavItemDesktop @click="scrollTo('about')">
         О нас
-      </NavItem>
+      </NavItemDesktop>
 
-      <NavItem @click="scrollTo('candles')">
+      <NavItemDesktop @click="scrollTo('candles')">
         Свечи
-      </NavItem>
+      </NavItemDesktop>
 
-      <NavItem @click="scrollTo('flavors')">
+      <NavItemDesktop @click="scrollTo('flavors')">
         Ароматы
-      </NavItem>
+      </NavItemDesktop>
 
-      <NavItem @click="scrollTo('sachet')">
+      <NavItemDesktop @click="scrollTo('sachet')">
         Саше&#x301;
-      </NavItem>
+      </NavItemDesktop>
 
-      <NavItem @click="scrollTo('pricing')">
+      <NavItemDesktop @click="scrollTo('pricing')">
         Прайс-лист
-      </NavItem>
+      </NavItemDesktop>
 
       <div class="nav-divider"></div> 
 
-      <NavItem @click="$router.get(route('products.index'))" icon>
+      <NavItemDesktop @click="$router.get(route('products.index'))" icon>
         <v-icon icon="mdi-shopping"/>
         <v-tooltip
           activator="parent"
@@ -46,9 +46,9 @@
         >
           Каталог
         </v-tooltip>
-      </NavItem>
+      </NavItemDesktop>
 
-      <NavItem icon>
+      <NavItemDesktop icon>
         <v-icon icon="mdi-cart"/>
         <v-tooltip
           activator="parent"
@@ -57,9 +57,9 @@
         >
           Корзина
         </v-tooltip>
-      </NavItem>
+      </NavItemDesktop>
 
-      <NavItem
+      <NavItemDesktop
         v-if="!!$page.props.user"
         @click="$router.get('/profile')"
         icon
@@ -72,9 +72,9 @@
         >
           Профиль
         </v-tooltip>
-      </NavItem>
+      </NavItemDesktop>
 
-      <NavItem
+      <NavItemDesktop
         v-else
         @click="$router.get('/login')"
         icon
@@ -87,7 +87,7 @@
         >
           Войти
         </v-tooltip>
-      </NavItem>
+      </NavItemDesktop>
 
     </v-app-bar>
 
@@ -326,13 +326,13 @@
 
 <script>
 import { Link, Head } from '@inertiajs/vue3'
-import NavItem from '../Components/NavItem.vue'
+import NavItemDesktop from '../Components/NavItemDesktop.vue'
 
 export default {
   components: {
     Link,
     Head,
-    NavItem,
+    NavItemDesktop,
   },
 
   data() {
