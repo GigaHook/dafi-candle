@@ -23,9 +23,7 @@ use App\Http\Controllers\OrderController;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Home');
-})->name('home');
+Route::inertia('home', 'Home')->name('home');
 
 Route::middleware('guest')->group(function() {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
@@ -35,8 +33,8 @@ Route::middleware('guest')->group(function() {
 });
 
 Route::middleware('auth')->group(function() {
-    Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-    Route::inertia('profile', 'Profile');
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::inertia('profile', 'Profile')->name('profile');
     //Route::inertia('about', 'about');
     
          

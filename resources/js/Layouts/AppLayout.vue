@@ -38,9 +38,7 @@ const toast = useToast()
 const display = useDisplay()
 
 function checkForNewOrders() {
-  router.post(route('badges'), {
-    location: page.url
-  }, {
+  router.post(route('badges'), {}, {
     preserveState: true,
     preserveScroll: true,
   })
@@ -94,5 +92,4 @@ router.on('finish', () => {
 .Vue-Toastification__toast.main-toast .Vue-Toastification__icon {
   color: rgb(var(--v-theme-primary));
 }
-
 </style>

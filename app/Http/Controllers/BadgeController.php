@@ -13,7 +13,7 @@ class BadgeController extends Controller
      */
     public function __invoke(Request $request)
     {
-        if ((new OrderService)->checkForNewOrders() && $request->location != '/orders') {
+        if ((new OrderService)->checkForNewOrders() && $request->path() != 'orders') {
             (new BadgeService)->setOrdersBadges();
         }
     }

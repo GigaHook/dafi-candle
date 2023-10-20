@@ -8,7 +8,7 @@
         Имя: {{ $page.props.user.name }} <br>
         Почта: {{ $page.props.user.email }} <br>
         Телефон: {{ $page.props.user.tel }} <br>
-        <BtnPrimary @click="$router.get('/logout')">
+        <BtnPrimary @click="$router.post('/logout')">
           Выйти
         </BtnPrimary>
       </v-col>

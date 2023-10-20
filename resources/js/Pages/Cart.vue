@@ -87,7 +87,6 @@
 <script setup>
 import AppLayout from '../Layouts/AppLayout.vue'
 import CartItemCard from '../Components/CartItemCard.vue'
-import Modal from '@/Components/Modal.vue'
 
 import { defineComponent } from 'vue'
 import { useDisplay } from 'vuetify'
@@ -95,5 +94,5 @@ import { useDisplay } from 'vuetify'
 const display = useDisplay()
 
 defineOptions({ layout: AppLayout })
-defineComponent({ CartItemCard: CartItemCard, Modal: Modal })
+defineComponent({ CartItemCard })
 </script>

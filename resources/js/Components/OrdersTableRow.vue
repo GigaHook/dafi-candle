@@ -1,7 +1,8 @@
 <template>
   <tr>
-    
-    <td>{{ order.id }}</td>
+    <td>
+      {{ order.id }}
+    </td>
     
     <td>
       {{ `${order.adress.name} ${order.adress.lastname} ${order.adress.patronymic}` }}
@@ -37,7 +38,6 @@
     </td>
 
     <td class="px-0">
-      
       <v-btn
         variant="plain"
         icon
@@ -50,7 +50,6 @@
         />
       </v-btn>
     </td>
-
   </tr>
 </template>
 

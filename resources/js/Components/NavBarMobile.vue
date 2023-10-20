@@ -13,13 +13,14 @@
     <!--TODO: добавить уведомления пользователя-->
     <v-btn @click="drawer = !drawer" icon>
       <v-badge
-        v-if="$page.props.badges.ordersAdmin"
+        v-if="getBadges()"
         :content="$page.props.badges.ordersAdmin"
         dot
         color="red"
       >
         <v-icon icon="mdi-menu"/>
       </v-badge>
+
       <v-icon v-else icon="mdi-menu"/>
     </v-btn>
   </v-app-bar>
@@ -46,6 +47,7 @@
         Корзина
         <template #append>
           <v-badge
+            v-if="getCartBadge()"
             inline
             color="red"
             :content="getCartBadge()"
@@ -66,7 +68,7 @@
         v-else
         :active="$page.url.includes('/login')"
         @click="handleClick('login')"
-        prepend-icon="mdi-profile"
+        prepend-icon="mdi-account"
       >
         Войти
       </v-list-item>
@@ -121,6 +123,11 @@ const page = usePage()
 function handleClick(url) {
   router.get(route(url))
   drawer.value = false
+}
+
+//добавлять маленькую точку в бургере или нет
+function getBadges() {
+  return getCartBadge() || (page.props.badges.ordersAdmin && page.url !== '/orders')
 }
 
 function getCartBadge() {
