@@ -23,7 +23,7 @@ use App\Http\Controllers\OrderController;
 |
 */
 
-Route::inertia('home', 'Home')->name('home');
+Route::inertia('/', 'Home')->name('home');
 
 Route::middleware('guest')->group(function() {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');

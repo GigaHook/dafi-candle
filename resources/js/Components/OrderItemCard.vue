@@ -1,6 +1,6 @@
 <template>
   <v-row dense>
-    <v-col md="3" cols="12">
+    <v-col md="3" sm="4" cols="12">
       <v-img
         @mouseover="hover = true"
         @mouseleave="hover = false"  
@@ -63,7 +63,7 @@
         <v-btn
           icon
           variant="plain"
-          @click="action('patch')"
+          @click="handle('patch')"
         >
           <v-icon icon="mdi-minus"/>
         </v-btn>
@@ -73,7 +73,7 @@
         <v-btn
           icon
           variant="plain"
-          @click="action('post')"
+          @click="handle('post')"
         >
           <v-icon icon="mdi-plus"/>
         </v-btn>
@@ -81,9 +81,12 @@
         <v-btn
           icon
           variant="plain"
-          @click="action('delete')"
         >
           <v-icon icon="mdi-delete-outline"/>
+          <Modal
+            text="Удалить предмет заказа?"
+            @confirm="handle('delete')"
+          />
         </v-btn>
       </div>
     </v-col>
@@ -111,7 +114,7 @@ const { product, orderId } = defineProps({
 
 const hover = ref(false)
 
-function action(method) {
+function handle(method) {
   router.post(route('orderitems.store', [orderId, product.id]), {
     _method: method
   }, {

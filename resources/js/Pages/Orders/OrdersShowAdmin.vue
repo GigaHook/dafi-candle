@@ -101,6 +101,33 @@
             :editable="true"
             :last="product.id == order.products.at(-1).id"
           />
+          
+          <BtnPrimary
+            class="mt-4"
+          >
+            Добавить
+            <v-icon
+              icon="mdi-cart-arrow-up"
+              class="ms-1 me-n2"
+              size="24"
+            />
+          </BtnPrimary>
+
+          <v-tooltip
+            open-delay="500"
+            text="Добавляет все товары из корзины в заказ"
+          >
+            <template #activator="{ props }">
+              <v-icon
+                v-bind="props"
+                icon="mdi-information-outline"
+                color="grey"
+                class="ms-2 mt-4"
+                size="32"
+              />
+            </template>
+          </v-tooltip>
+
         </v-card>
         
         <BtnSecondary
