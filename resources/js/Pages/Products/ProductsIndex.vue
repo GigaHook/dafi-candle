@@ -9,11 +9,13 @@
       color="primary"
       density="compact"
       style="max-width: 450px;"
-      class="mt-5 ms-3"
+      class="mt-6 ms-3"
       placeholder="Поиск"
-      appendInnerIcon="mdi-magnify"
+      append-inner-icon="mdi-magnify"
       clearable
       v-model="searchText"
+      :loading="searching"
+      @click:append-inner="search"
     />
   </v-toolbar>
 
@@ -147,6 +149,7 @@ const page = usePage()
 const loading = ref(false)
 const selectedTypes = ref(page.props.types.map(type => type.id))
 const searchText = ref()
+const searching = ref(false)
 const select = reactive(items[3]) //sortModelValue
 
 const requestData = computed(() => {
@@ -164,5 +167,4 @@ function update(link) {
 function toPage(pageNumber) {
   router.get(products.links[pageNumber].ulr, requestData.value, requestOptions)
 }
-
 </script>
