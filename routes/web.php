@@ -25,6 +25,7 @@ use App\Http\Controllers\OrderController;
 
 Route::inertia('/', 'Home')->name('home');
 
+//crud users
 Route::middleware('guest')->group(function() {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('user.auth');
@@ -36,14 +37,13 @@ Route::middleware('auth')->group(function() {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     Route::inertia('profile', 'Profile')->name('profile');
     //Route::inertia('about', 'about');
-    
-         
+
+    //заказы
     Route::resource('orders', OrderController::class); //+ещё мидлвары в контроллере
     Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
-
-    Route::post('/badges', BadgeController::class)->name('badges');
 });
 
+//изменение заказа
 Route::middleware(['auth', 'admin'])->group(function() {
     Route::post('orders/{order}/orderitems/{orderitem}', [OrderItemController::class, 'store'])
         ->name('orderitems.store');
@@ -56,9 +56,15 @@ Route::middleware(['auth', 'admin'])->group(function() {
 
 });
 
+//crud продукты
 Route::resource('products', ProductController::class);
+
+//корзина
 Route::resource('cart', CartItemController::class)->except(['show', 'create', 'edit']);
 Route::get('cart/clear', [CartItemController::class, 'clear'])->name('cart.clear');
+
+//уведомления о заказах
+Route::post('/badges', BadgeController::class)->name('badges');
 
 
 

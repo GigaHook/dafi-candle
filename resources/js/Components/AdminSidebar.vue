@@ -1,6 +1,7 @@
 <template>
   <v-navigation-drawer
     location="left"
+    elevation="3"
     rail
     expand-on-hover
     permanent

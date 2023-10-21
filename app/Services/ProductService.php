@@ -22,8 +22,10 @@ class ProductService
      */
     public function createProduct(array $data): void {
         $this->fileService->uploadImage($data['image']);
-        $product = Product::create($data);
-        $this->tagService->createTags($product, $data['tags']);
+        $this->tagService->createTags(
+            Product::create($data),
+            $data['tags']
+        );
         toast('Товар добавлен');
     }
 
