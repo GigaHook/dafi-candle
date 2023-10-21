@@ -13,8 +13,7 @@
     <!--TODO: добавить уведомления пользователя-->
     <v-btn @click="drawer = !drawer" icon>
       <v-badge
-        v-if="getBadges()"
-        :content="$page.props.badges.ordersAdmin"
+        v-if="badges"
         dot
         color="red"
       >
@@ -47,10 +46,10 @@
         Корзина
         <template #append>
           <v-badge
-            v-if="getCartBadge()"
+            v-if="cartBadges"
             inline
             color="red"
-            :content="getCartBadge()"
+            :content="cartBadges"
           />
         </template>
       </v-list-item>
@@ -114,25 +113,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { router, usePage } from '@inertiajs/vue3'
 
 const drawer = ref(false)
 const page = usePage()
 
+const cartBadges = computed(() => page.props.cart.items.reduce((sum, item) => sum + item.quantity, 0))
+const badges = computed(() => cartBadges.value || (page.props.badges?.ordersAdmin && page.url !== '/orders'))
+
 function handleClick(url) {
   router.get(route(url))
   drawer.value = false
-}
-
-//добавлять маленькую точку в бургере или нет
-function getBadges() {
-  return getCartBadge() || (page.props.badges.ordersAdmin && page.url !== '/orders')
-}
-
-function getCartBadge() {
-  let badges = 0
-  page.props.cart.items.forEach(item => badges += item.quantity)
-  return badges
 }
 </script>
