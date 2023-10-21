@@ -20,15 +20,14 @@ class OrderService
     {
         return auth()->user()->is_admin
             ? Order::where('user_id', auth()->id())->latest()->get()->load('adress') //для юзера
-            : Order::latest()->get()->load('adress'); //для админа
+            : Order::lazy()->latest()->get()->load('adress'); //для админа
     }
 
-    public function createOrder(array $data): void 
+    public function createOrder(array $data): void
     {
         DB::transaction(function() use($data) {
             $adress = $this->adressService->createAdress($data);
 
-            //TODO: пересчитать стоимость после изменения содержания заказа
             $order = Order::create([
                 'user_id' => auth()->id(),
                 'adress_id' => $adress->id,
@@ -53,7 +52,7 @@ class OrderService
         $order->save();
     }
 
-    public function updateOrder(Order $order, array $data): void 
+    public function updateOrder(Order $order): void 
     {
         //
     }

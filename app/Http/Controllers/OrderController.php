@@ -57,7 +57,7 @@ class OrderController extends Controller
 
     public function update(OrderUpdateRequest $request, Order $order): void 
     {
-        $this->orderService->updateOrder($order, $request->validated());
+        $this->orderService->updateOrder($order);
     }
     
     public function updateStatus(Request $request, Order $order): void
