@@ -3,75 +3,76 @@
   <v-toolbar
     color="surface"
     elevation="3"
+    class="py-1"
   >
     <v-text-field
       variant="outlined"
       color="primary"
       density="compact"
-      style="max-width: 450px;"
-      class="mt-6 ms-3"
-      placeholder="Поиск"
+      class="mt-6 ms-4"
+      style="max-width: 550px;"
+      label="Поиск"
       append-inner-icon="mdi-magnify"
       clearable
       v-model="searchText"
-      :loading="searching"
-      
-    />
+      @click:append-inner="update"
+      @click:clear="update"
+      @keyup.enter="update"
+    > 
+      <template #append>
+        <div class="ms-n4">
+          <ToolbarDropdown icon="mdi-format-list-bulleted-type">
+            <v-list>            
+              <v-list-subheader>
+                ТИПЫ
+              </v-list-subheader>
+              <v-divider/>
+              <v-list-item
+                v-for="productType in types"
+                :key="productType.id"
+              >
+                <v-switch
+                  :value="productType.id"
+                  v-model="selectedTypes"
+                  @update:model-value="update"
+                  density="compact"
+                  color="primary"
+                  class="ms-2"
+                  hide-details
+                  multiple
+                >
+                  <template #label>
+                    <span class="ps-2">
+                      {{ productType.name }}
+                    </span>
+                  </template>
+                </v-switch>
+              </v-list-item>
+            </v-list>
+          </ToolbarDropdown>
+
+          <ToolbarDropdown icon="mdi-sort">
+            <v-list :selected="[selectedSort]" color="primary">
+              <v-list-subheader>
+                СОРТИРОВКА
+              </v-list-subheader>
+              <v-divider/>
+              <v-list-item
+                v-for="(sort, i) in sorts"
+                :key="i"
+                :title="sort.title"
+                :value="sort"
+                @click="setSort(sort)"
+              />
+            </v-list>
+          </ToolbarDropdown>
+        </div>
+      </template>
+    </v-text-field>
   </v-toolbar>
 
   <v-container fluid>  
     <v-row>
-      <!--FILTERS-->
-      <v-col cols="12">
-        
-
-        <v-expansion-panels elevation="3" class="mb-n1">
-          <v-expansion-panel density="compact">
-
-            <v-expansion-panel-title class="text-h6">
-              Фильтры
-            </v-expansion-panel-title>
-
-            <v-expansion-panel-text>
-              <v-row dense>
-
-                <v-col md="2" sm="6" cols="12">
-                  <p class="text-h6">Тип</p>
-                  <v-switch
-                    v-for="productType in $page.props.types"
-                    :key="productType.id"
-                    :value="productType.id"
-                    :label="productType.name"
-                    v-model="selectedTypes"
-                    @update:model-value="update"
-                    hide-details
-                    density="compact"
-                    color="primary"
-                    multiple
-                  />
-                </v-col>
-
-                <v-col md="4" sm="6" cols="12">
-                  <p class="text-h6 mb-1">Сортировать по</p>
-                  <v-select
-                    variant="outlined"
-                    v-model="sortSelect"
-                    density="compact"
-                    :items="sorts"
-                    item-title="name"
-                    item-value="options"
-                    return-object
-                    @update:model-value="update"
-                  />
-                </v-col>
-
-              </v-row>
-            </v-expansion-panel-text>
-            
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </v-col>
-      
       <!--PRODUCTS-->
       <template v-if="!loading">
         <ProductCard
@@ -108,13 +109,14 @@
   </v-container>
 </template>
 <script setup>
-import AppLayout from '../../Layouts/AppLayout.vue'
-import ProductCard from '../../Components/ProductCard.vue'
-import { ref, toRef, reactive, computed, defineComponent } from 'vue'
+import AppLayout from '@/Layouts/AppLayout.vue'
+import ProductCard from '@/Components/ProductCard.vue'
+import ToolbarDropdown from '@/Components/ToolbarDropdown.vue'
+import { ref, watch, defineComponent } from 'vue'
 import { router } from '@inertiajs/vue3'
 
 defineOptions({ layout: AppLayout })
-defineComponent({ ProductCard })
+defineComponent({ ProductCard, ToolbarDropdown })
 
 const { products, types } = defineProps({ 
   products: Object, 
@@ -123,45 +125,47 @@ const { products, types } = defineProps({
 
 const sorts = [
   {
-    name: 'По возрастанию цены',
-    options: { sortBy: 'price', sortOrder: 'asc'}
-  }, 
-  {
-    name: 'По убыванию цены',
-    options: { sortBy: 'price', sortOrder: 'desc'}
-  }, 
-  {
-    name: 'Сначала старые',
-    options: { sortBy: 'created_at', sortOrder: 'asc'}
-  }, 
-  {
-    name: 'Сначала новые',
+    title: 'Сначала новые',
     options: { sortBy:'created_at', sortOrder: 'desc'}
   }, 
   {
-    name: 'В алфавитном порядке',
+    title: 'По возрастанию цены',
+    options: { sortBy: 'price', sortOrder: 'asc'}
+  }, 
+  {
+    title: 'По убыванию цены',
+    options: { sortBy: 'price', sortOrder: 'desc'}
+  },
+  {
+    title: 'В алфавитном порядке',
     options: { sortBy: 'name', sortOrder: 'asc'}
   }
 ]
 
 const loading = ref(false)
 const selectedTypes = ref(types.map(type => type.id))
-const sortSelect = ref(sorts[3]) 
+const selectedSort = ref(sorts[1]) 
 const searchText = ref()
-const searching = ref(false)
 
-function requestData() {
-  return {
-    sortBy: sortSelect.value.options.sortBy,
-    sortOrder: sortSelect.value.options.sortOrder,
-    selectedTypes: selectedTypes.value,
+watch(selectedTypes, (oldTypes) => {
+  if (oldTypes.length == 0) {
+    selectedTypes.value[0] = types[0].id
   }
-}
+})
 
 const requestOptions = {
   preserveState: true,
   onStart: () => loading.value = true,
   onFinish: () => loading.value = false,
+}
+
+function requestData() {
+  return {
+    sortBy: selectedSort.value.options.sortBy,
+    sortOrder: selectedSort.value.options.sortOrder,
+    selectedTypes: selectedTypes.value,
+    searchText: searchText.value,
+  }
 }
 
 function update() {
@@ -170,5 +174,10 @@ function update() {
 
 function toPage(pageNumber) {
   router.get(route('products.index'), {...requestData(), page: pageNumber}, requestOptions)
+}
+
+function setSort(sort) {
+  selectedSort.value = sort
+  update()
 }
 </script>

@@ -1,8 +1,6 @@
 <template>
   <v-col xl="3" lg="3" md="4" sm="6" cols="12">
     <v-card
-      @mouseover="hover = true"
-      @mouseleave="hover = false"      
       class="fill-height d-flex flex-column justify-space-between"
       style="min-height: fit-content !important;"
       elevation="3"
@@ -11,6 +9,9 @@
         :src="`storage/upload/${product.image}`"
         cover
         style="height: 320px"
+        @mouseover="hover = true"
+        @mouseleave="hover = false"
+        v-ripple
       >
         <div class="d-flex justify-end">
           <v-btn

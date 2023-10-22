@@ -55,23 +55,17 @@ class ProductService
     }
     
     /**
-     * фильтры, сортировка, пагинация
+     * фильтры, поиск, сортировка, пагинация
      */
     public function processProducts(array $data): LengthAwarePaginator {
         $query = Product::query();
 
-        if (isset($data['selectedTypes'])) {
-            $query->whereIn('type_id', $data['selectedTypes']);
-        }
-
-        if (isset($data['sortBy']) && isset($data['sortOrder'])) {
-            $query->orderBy($data['sortBy'], $data['sortOrder']);
-        } else {
-            $query->orderBy('created_at', 'desc');
-        }
-
-        $products = $query->with('type')->paginate(12);
+        isset($data['selectedTypes']) && $query->whereIn('type_id', $data['selectedTypes']);
+        isset($data['searchText']) && $query->where('name', 'LIKE', '%'.str_replace(' ', '', $data['searchText']).'%');
+        isset($data['sortBy'], $data['sortOrder'])
+            ? $query->orderBy($data['sortBy'], $data['sortOrder'])
+            : $query->orderBy('created_at', 'desc');
         
-        return $products;
+        return $query->with('type')->paginate(12);
     }
 }
