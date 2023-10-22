@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
-use App\Services\BadgeService;
+use App\Models\Type;
 use App\Services\ProductService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,7 +15,6 @@ class ProductController extends Controller
 {
     public function __construct(
         private $productService = new ProductService,
-        private $badgeService = new BadgeService,
     ) {
         $this->middleware('auth')->except(['index', 'show']);
         $this->middleware('admin')->except(['index', 'show']);
@@ -24,6 +23,7 @@ class ProductController extends Controller
     public function index(Request $request): \Inertia\Response {
         return Inertia::render('Products/ProductsIndex', [
             'products' => $this->productService->processProducts($request->all()),
+            'types' => Type::all(),
         ]);
     }
 

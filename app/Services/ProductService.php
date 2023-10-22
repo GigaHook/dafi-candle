@@ -11,14 +11,12 @@ use Illuminate\Support\Arr;
 class ProductService 
 {
     public function __construct(
-        protected $tagService = new TagService,
-        protected $fileService = new FileService,
+        private $tagService = new TagService,
+        private $fileService = new FileService,
     ) {}
 
     /**
      * качает изображение, создаёт продукт и теги если они есть и связывает их
-     * @param array $data
-     * @return void
      */
     public function createProduct(array $data): void {
         $this->fileService->uploadImage($data['image']);
@@ -32,9 +30,6 @@ class ProductService
     /**
      * загрузка нового изрображения и ядаление старого,
      * обновление продукта и его тегов, создание новых, удаление неиспольующихся
-     * @param array $data
-     * @param \App\Models\Product $product
-     * @return void
      */
     public function updateProduct(array $data, Product $product): void {
         if (isset($data['image'])) {
@@ -51,8 +46,6 @@ class ProductService
 
     /**
      * Удаление продукта, картинки, отвязка тегов и удаление неиспольующихся
-     * @param \App\Models\Product $product
-     * @return void
      */
     public function deleteProduct(Product $product): void {
         $tagIds = $product->tags()->pluck('tags.id');
@@ -63,8 +56,6 @@ class ProductService
     
     /**
      * фильтры, сортировка, пагинация
-     * @param array $data
-     * @return array
      */
     public function processProducts(array $data): LengthAwarePaginator {
         $query = Product::query();

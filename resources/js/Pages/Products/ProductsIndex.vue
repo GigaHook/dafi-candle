@@ -15,7 +15,7 @@
       clearable
       v-model="searchText"
       :loading="searching"
-      @click:append-inner="search"
+      
     />
   </v-toolbar>
 
@@ -25,7 +25,7 @@
       <v-col cols="12">
         
 
-        <!--<v-expansion-panels elevation="3" class="mb-n1">
+        <v-expansion-panels elevation="3" class="mb-n1">
           <v-expansion-panel density="compact">
 
             <v-expansion-panel-title class="text-h6">
@@ -43,7 +43,7 @@
                     :value="productType.id"
                     :label="productType.name"
                     v-model="selectedTypes"
-                    @update:model-value="update(products.links[products.current_page].url)"
+                    @update:model-value="update"
                     hide-details
                     density="compact"
                     color="primary"
@@ -55,12 +55,13 @@
                   <p class="text-h6 mb-1">Сортировать по</p>
                   <v-select
                     variant="outlined"
+                    v-model="sortSelect"
                     density="compact"
-                    v-model="select"
-                    :items="items"
+                    :items="sorts"
                     item-title="name"
                     item-value="options"
-                    @update:model-value="update(products.links[products.current_page].url)"
+                    return-object
+                    @update:model-value="update"
                   />
                 </v-col>
 
@@ -68,7 +69,7 @@
             </v-expansion-panel-text>
             
           </v-expansion-panel>
-        </v-expansion-panels>-->
+        </v-expansion-panels>
       </v-col>
       
       <!--PRODUCTS-->
@@ -109,14 +110,18 @@
 <script setup>
 import AppLayout from '../../Layouts/AppLayout.vue'
 import ProductCard from '../../Components/ProductCard.vue'
-import { ref, reactive, computed, defineComponent } from 'vue'
-import { usePage, router } from '@inertiajs/vue3'
+import { ref, toRef, reactive, computed, defineComponent } from 'vue'
+import { router } from '@inertiajs/vue3'
 
 defineOptions({ layout: AppLayout })
 defineComponent({ ProductCard })
-const { products } = defineProps({ products: Object })
 
-const items = [ //sortValues
+const { products, types } = defineProps({ 
+  products: Object, 
+  types: Object 
+})
+
+const sorts = [
   {
     name: 'По возрастанию цены',
     options: { sortBy: 'price', sortOrder: 'asc'}
@@ -139,32 +144,31 @@ const items = [ //sortValues
   }
 ]
 
+const loading = ref(false)
+const selectedTypes = ref(types.map(type => type.id))
+const sortSelect = ref(sorts[3]) 
+const searchText = ref()
+const searching = ref(false)
+
+function requestData() {
+  return {
+    sortBy: sortSelect.value.options.sortBy,
+    sortOrder: sortSelect.value.options.sortOrder,
+    selectedTypes: selectedTypes.value,
+  }
+}
+
 const requestOptions = {
   preserveState: true,
   onStart: () => loading.value = true,
   onFinish: () => loading.value = false,
 }
 
-const page = usePage()
-const loading = ref(false)
-const selectedTypes = ref(page.props.types.map(type => type.id))
-const searchText = ref()
-const searching = ref(false)
-const select = reactive(items[3]) //sortModelValue
-
-const requestData = computed(() => {
-  return {
-    sortBy: select.options.sortBy,
-    sortOrder: select.options.sortOrder,
-    selectedTypes: selectedTypes.value,
-  }
-})
-
-function update(link) {
-  router.get(link, requestData.value, requestOptions)
+function update() {
+  router.get(route('products.index'), requestData(), requestOptions)
 }
 
 function toPage(pageNumber) {
-  router.get(products.links[pageNumber].ulr, requestData.value, requestOptions)
+  router.get(route('products.index'), {...requestData(), page: pageNumber}, requestOptions)
 }
 </script>
