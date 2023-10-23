@@ -7,6 +7,8 @@ use App\Http\Requests\OrderUpdateRequest;
 use App\Models\Order;
 use App\Services\BadgeService;
 use App\Services\OrderService;
+use App\Services\ProductService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,6 +17,7 @@ class OrderController extends Controller
     public function __construct(
         private $orderService = new OrderService,
         private $badgeService = new BadgeService,
+        private $productService = new ProductService,
     ) {
         $this->middleware('admin')->only(['index']);
         $this->middleware('badges.orders')->only(['index']);
@@ -50,9 +53,10 @@ class OrderController extends Controller
             ]);
     }
 
-    public function edit(Order $order): \Inertia\Response 
+    public function edit(Order $order): RedirectResponse
     {
-        return Inertia::render(); //TODO
+        Inertia::share('order', $order->load('products'));
+        return redirect()->route("products.index");
     }
 
     public function update(OrderUpdateRequest $request, Order $order): void 

@@ -104,6 +104,7 @@
           
           <BtnPrimary
             class="mt-4"
+            @click="$router.get(route('orders.edit', order.id))"
           >
             Добавить
           </BtnPrimary>
