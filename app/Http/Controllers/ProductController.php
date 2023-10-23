@@ -24,6 +24,7 @@ class ProductController extends Controller
         return Inertia::render('Products/ProductsIndex', [
             'products' => $this->productService->processProducts($request->all()),
             'types' => Type::all(),
+            'order' => session('order'),
         ]);
     }
 

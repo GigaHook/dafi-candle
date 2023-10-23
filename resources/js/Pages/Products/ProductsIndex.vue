@@ -1,5 +1,5 @@
 <template>
-  <Head :title="$page.props.order ? `Редактирование заказа №${$page.props.order.id}` : 'Каталог'"/>
+  <Head :title="order ? `Редактирование заказа №${order.id}` : 'Каталог'"/>
   <v-toolbar
     color="surface"
     elevation="3"
@@ -79,6 +79,7 @@
           v-for="product in products.data"
           :key="product.id"
           :product="product"
+          :order="order"
         />
       </template>
 
@@ -113,14 +114,18 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import ProductCard from '@/Components/ProductCard.vue'
 import ToolbarDropdown from '@/Components/ToolbarDropdown.vue'
 import { ref, watch, defineComponent } from 'vue'
-import { router, usePage } from '@inertiajs/vue3'
+import { router } from '@inertiajs/vue3'
 
 defineOptions({ layout: AppLayout })
 defineComponent({ ProductCard, ToolbarDropdown })
 
-const { products, types } = defineProps({ 
+const { products, types, order } = defineProps({ 
   products: Object, 
   types: Object,
+  order: {
+    type: Object,
+    required: false,
+  }
 })
 
 const sorts = [
@@ -146,8 +151,6 @@ const loading = ref(false)
 const selectedTypes = ref(types.map(type => type.id))
 const selectedSort = ref(sorts[1]) 
 const searchText = ref()
-
-console.log(usePage().props);
 
 watch(selectedTypes, (oldTypes) => {
   if (oldTypes.length == 0) {

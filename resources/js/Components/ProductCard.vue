@@ -71,21 +71,26 @@
 
       <v-divider/>
       
-      <div class="d-flex flex-nowrap justify-space-between align-center ms-2 me-4" style="min-height: 52px !important;">
+      <!--for products index-->
+      <div  
+        class="d-flex flex-nowrap justify-space-between align-center ms-2 me-4"
+        style="min-height: 52px !important;"
+      >
         <v-btn
-          v-if="!$page.props.cart.items.find(item => item.id == product.id)"
+          v-if="!pageVariant.product"
           @click="addToCart"
           :loading="loading"
           variant="text"
           color="primary"
           max-width="fit-content"
         >
-          Купить
+          {{ !order ? 'Купить' : 'Добавить' }}
         </v-btn>
 
-        <CartItemControls
+        <ProductControls
           v-else
-          :product="$page.props.cart.items.find(item => item.id == product.id)"
+          :product="pageVariant.product"
+          :method-names="pageVariant.methodNames"
         />
 
         <div class="d-flex flex-nowrap align-center">
@@ -99,20 +104,52 @@
 </template>
 
 <script setup>
-import { ref, defineComponent } from 'vue'
-import { router } from '@inertiajs/vue3'
-import CartItemControls from './CartItemControls.vue'
+import ProductControls from './ProductControls.vue'
+import { ref, computed, defineComponent } from 'vue'
+import { router, usePage } from '@inertiajs/vue3'
+import { useOrder } from '@/Composables/useOrder'
 
-defineComponent({
-  CartItemControls: CartItemControls,
-})
+defineComponent({ ProductControls, })
 
-const { product } = defineProps({
-  product: Object
+const { product, order } = defineProps({
+  product: Object,
+  order: {
+    type: Object,
+    required: false,
+  }
 })
 
 const hover = ref(false)
 const loading = ref(false)
+const page = usePage()
+const { updateOrderItems } = useOrder(order)
+
+const pageVariant = computed(() => {
+  return order
+    ? {
+      product: order.products.find(item => item.id == product.id),
+      store: () => updateOrderItems('store', product.id),
+      update: () => updateOrderItems('patch', product.id),
+      delete: () => updateOrderItems('delete', product.id),
+    }
+    : {
+      product: page.props.cart.items.find(item => item.id == product.id),
+      
+      store: () => router.post(route('cart.store', product.id), { 
+        preserveState: true,
+        preserveScroll: true 
+      }),
+
+      update: () => router.patch(route('cart.patch'), { 
+        id: product.id 
+      }, { 
+        preserveState: true,
+        preserveScroll: true 
+      }),
+
+      delete: () => ''
+    }
+})
 
 function addToCart() {
   router.post(route('cart.store'), {
@@ -123,19 +160,9 @@ function addToCart() {
     onFinish: () => loading.value = false,
   })
 }
-
 </script>
 
 <style scoped>
-.img-icon{
-  position: absolute;
-  right: 6px;
-  top: 6px;
-  background-color: #181818;
-  border-radius: 5px;
-  outline: 2px solid #181818;
-}
-
 .overlay{
   transition: all .1s ease-in-out;
   font-size: 16px !important;

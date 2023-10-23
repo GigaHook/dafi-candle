@@ -34,7 +34,7 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'user'   => auth()->user(),
-            'types'  => Type::all(),
+            'types'  => Type::all(), //TODO убрать этот позор отсюда нахуй
             'toast'  => session('toast'),
             'badges' => session('badges'),
             'cart'   => cartService()->getCart(),

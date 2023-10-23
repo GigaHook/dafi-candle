@@ -6,7 +6,7 @@
       variant="tonal"
       rounded="lg"
       color="primary"
-      @click="$router.patch(route('cart.update', product.id), { preserveState: true, preserveScroll: true })"
+      @click="$router.patch(route(methodNames.update, product.id), { preserveState: true, preserveScroll: true })"
     >
       <v-icon icon="mdi-minus"/>
     </v-btn>
@@ -21,7 +21,7 @@
       variant="tonal"
       rounded="lg"
       color="primary"
-      @click="$router.post(route('cart.store'), { id: product.id }, { preserveScroll: true })"
+      @click="$router.post(route(methodNames.store), { id: product.id }, { preserveScroll: true })"
     >
       <v-icon icon="mdi-plus"/>
     </v-btn>
@@ -29,5 +29,5 @@
 </template>
 
 <script setup>
-defineProps({ product: Object })
+defineProps({ product: Object, methodNames: Object })
 </script>

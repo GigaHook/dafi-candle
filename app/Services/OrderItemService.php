@@ -21,7 +21,7 @@ class OrderItemService
         $orderItem = $this->getOrderItem($order, $productId);
         $orderItem->quantity++;
         $orderItem->save();
-        
+
         event(new OrderContentsUpdated($order));
     }
 

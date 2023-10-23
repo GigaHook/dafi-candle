@@ -23,11 +23,21 @@ export function useOrder(order) {
     })
   }
 
+  function updateOrderItems(method, productId) {
+    router.post(route('orderitems.store', [order.id, productId]), {
+      _method: method
+    }, {
+      preserveState: true,
+      preserveScroll: true,
+    })
+  }
+
   return {
     creationDate,
     creationTime,
     statusColors,
-    updateStatus,
     status,
+    updateStatus,
+    updateOrderItems,
   }
 }

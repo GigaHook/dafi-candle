@@ -63,7 +63,7 @@
         <v-btn
           icon
           variant="plain"
-          @click="handle('patch')"
+          @click="updateOrderItems('patch', product.id)"
         >
           <v-icon icon="mdi-minus"/>
         </v-btn>
@@ -73,7 +73,7 @@
         <v-btn
           icon
           variant="plain"
-          @click="handle('post')"
+          @click="updateOrderItems('post', product.id)"
         >
           <v-icon icon="mdi-plus"/>
         </v-btn>
@@ -85,7 +85,7 @@
           <v-icon icon="mdi-delete-outline"/>
           <Modal
             text="Удалить предмет заказа?"
-            @confirm="handle('delete')"
+            @confirm="updateOrderItems('delete', product.id)"
           />
         </v-btn>
       </div>
@@ -99,27 +99,20 @@
 
 <script setup>
 import { ref } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { useOrder } from '@/Composables/useOrder'
 
-const { product, orderId } = defineProps({
+const { product, order } = defineProps({
   product: Object,
+  order: Object,
   last: Boolean,
   editable: {
     type: Boolean,
     required: false,
     default: false,
   },
-  orderId: Number,
 })
 
 const hover = ref(false)
 
-function handle(method) {
-  router.post(route('orderitems.store', [orderId, product.id]), {
-    _method: method
-  }, {
-    preserveState: true,
-    preserveScroll: true,
-  })
-}
+const { updateOrderItems } = useOrder(order)
 </script>

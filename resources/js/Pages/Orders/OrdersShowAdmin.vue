@@ -97,7 +97,7 @@
             v-for="product in order.products"
             :key="product.id"
             :product="product"
-            :orderId="order.id"
+            :order="order"
             :editable="true"
             :last="product.id == order.products.at(-1).id"
           />

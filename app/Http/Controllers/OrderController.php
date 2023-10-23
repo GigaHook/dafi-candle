@@ -17,7 +17,6 @@ class OrderController extends Controller
     public function __construct(
         private $orderService = new OrderService,
         private $badgeService = new BadgeService,
-        private $productService = new ProductService,
     ) {
         $this->middleware('admin')->only(['index']);
         $this->middleware('badges.orders')->only(['index']);
@@ -55,7 +54,7 @@ class OrderController extends Controller
 
     public function edit(Order $order): RedirectResponse
     {
-        Inertia::share('order', $order->load('products'));
+        session()->put('order', $order->load('products'));
         return redirect()->route("products.index");
     }
 
