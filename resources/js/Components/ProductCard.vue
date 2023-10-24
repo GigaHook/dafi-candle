@@ -78,7 +78,7 @@
       >
         <v-btn
           v-if="!pageVariant.product"
-          @click="addToCart"
+          @click="pageVariant.store"
           :loading="loading"
           variant="text"
           color="primary"
@@ -90,7 +90,8 @@
         <ProductControls
           v-else
           :product="pageVariant.product"
-          :method-names="pageVariant.methodNames"
+          @store="pageVariant.store"
+          @update="pageVariant.update"
         />
 
         <div class="d-flex flex-nowrap align-center">
@@ -109,7 +110,7 @@ import { ref, computed, defineComponent } from 'vue'
 import { router, usePage } from '@inertiajs/vue3'
 import { useOrder } from '@/Composables/useOrder'
 
-defineComponent({ ProductControls, })
+defineComponent({ ProductControls })
 
 const { product, order } = defineProps({
   product: Object,
@@ -122,44 +123,42 @@ const { product, order } = defineProps({
 const hover = ref(false)
 const loading = ref(false)
 const page = usePage()
-const { updateOrderItems } = useOrder(order)
 
+//определить мы редактируем заказ или это просто в каталоге
 const pageVariant = computed(() => {
-  return order
-    ? {
-      product: order.products.find(item => item.id == product.id),
-      store: () => updateOrderItems('store', product.id),
-      update: () => updateOrderItems('patch', product.id),
-      delete: () => updateOrderItems('delete', product.id),
-    }
-    : {
-      product: page.props.cart.items.find(item => item.id == product.id),
-      
-      store: () => router.post(route('cart.store', product.id), { 
-        preserveState: true,
-        preserveScroll: true 
-      }),
+  if (order) {
+    return (() => {
+      const { updateOrderItems } = useOrder(order)
+      return {
+        product: (() => {
+          const orderProduct = order.products.find(item => item.id == product.id)
+          console.log(orderProduct)
+          //orderProduct.quantity = orderProduct.order_item.quantity
+          return orderProduct
+        })(),
 
-      update: () => router.patch(route('cart.patch'), { 
-        id: product.id 
-      }, { 
-        preserveState: true,
-        preserveScroll: true 
-      }),
+        store: () => updateOrderItems('store', product.id),
+        update: () => updateOrderItems('patch', product.id),
+      }
+    })()
+  }
 
-      delete: () => ''
-    }
+  return {
+    product: page.props.cart.items.find(item => item.id == product.id),
+
+    store: () => router.post(route('cart.store'), {
+      id: product.id
+    }, { 
+      preserveState: true,
+      preserveScroll: true 
+    }),
+    
+    update: () => router.patch(route('cart.update', { id: product.id }), { 
+      preserveState: true,
+      preserveScroll: true 
+    }),
+  }
 })
-
-function addToCart() {
-  router.post(route('cart.store'), {
-    id: product.id
-  }, {
-    preserveScroll: true,
-    onStart: () => loading.value = true,
-    onFinish: () => loading.value = false,
-  })
-}
 </script>
 
 <style scoped>

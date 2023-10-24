@@ -3,13 +3,13 @@
   <v-toolbar
     color="surface"
     elevation="3"
-    class="py-1"
+    class="py-1 pe-1"
   >
     <v-text-field
       variant="outlined"
       color="primary"
       density="compact"
-      class="mt-6 ms-4"
+      class="mt-6 ms-4 "
       style="max-width: 550px;"
       label="Поиск"
       append-inner-icon="mdi-magnify"
@@ -69,6 +69,17 @@
         </div>
       </template>
     </v-text-field>
+    <v-spacer/>
+
+    <template v-if="order">
+      <BtnPrimary
+        variant="elevated"
+        @click="$router.get(route('orders.show', order.id))"
+      >
+        Вернуться к заказу
+      </BtnPrimary>
+    </template>
+
   </v-toolbar>
 
   <v-container fluid>  
@@ -113,7 +124,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue'
 import ProductCard from '@/Components/ProductCard.vue'
 import ToolbarDropdown from '@/Components/ToolbarDropdown.vue'
-import { ref, watch, defineComponent } from 'vue'
+import { ref, watch, onBeforeUnmount, defineComponent } from 'vue'
 import { router } from '@inertiajs/vue3'
 
 defineOptions({ layout: AppLayout })
@@ -184,5 +195,11 @@ function toPage(pageNumber) {
 function setSort(sort) {
   selectedSort.value = sort
   update()
+}
+
+if (order) {
+  onBeforeUnmount(() => {
+    //router.post(route()) //TODO
+  })
 }
 </script>

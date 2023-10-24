@@ -52,7 +52,22 @@
       cols="6" md="2"
       :class="display.md.value && 'ms-n10'"
     >
-      <CartItemControls :product="product"/>
+      <ProductControls
+        :product="product"
+        @store="$router.post(route('cart.store'), {
+          id: product.id
+        }, { 
+          preserveState: true,
+          preserveScroll: true 
+        })"
+
+        @update="$router.patch(route('cart.update', { 
+          id: product.id 
+        }), { 
+          preserveState: true,
+          preserveScroll: true 
+        })"
+      />
     </v-col>
     
     <v-spacer v-if="display.md"/>
@@ -68,7 +83,9 @@
       <v-btn
         variant="plain"
         icon="mdi-delete-outline"
-        @click="$router.delete(route('cart.destroy', product.id), { preserveScroll: true })"
+        @click="$router.delete(route('cart.destroy', product.id), { 
+          preserveScroll: true 
+        })"
       />
     </v-col>
 
@@ -80,13 +97,13 @@
 </template>
 
 <script setup>
-import CartItemControls from './CartItemControls.vue'
+import ProductControls from './ProductControls.vue'
 import { ref, defineComponent } from 'vue'
 import { useDisplay } from 'vuetify'
 
 const display = useDisplay()
 const hover = ref(false)
 
-defineComponent({ CartItemControls: CartItemControls })
+defineComponent({ ProductControls: ProductControls })
 defineProps({ product: Object, last: Boolean })
 </script>

@@ -6,7 +6,7 @@
       variant="tonal"
       rounded="lg"
       color="primary"
-      @click="$router.patch(route(methodNames.update, product.id), { preserveState: true, preserveScroll: true })"
+      @click="$emit('update')"
     >
       <v-icon icon="mdi-minus"/>
     </v-btn>
@@ -21,7 +21,7 @@
       variant="tonal"
       rounded="lg"
       color="primary"
-      @click="$router.post(route(methodNames.store), { id: product.id }, { preserveScroll: true })"
+      @click="$emit('store')"
     >
       <v-icon icon="mdi-plus"/>
     </v-btn>
