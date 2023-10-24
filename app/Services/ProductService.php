@@ -50,8 +50,12 @@ class ProductService
     public function deleteProduct(Product $product): void {
         $tagIds = $product->tags()->pluck('tags.id');
         $product->delete();
+
         $this->tagService->deleteUnusedTags($tagIds);
-        $this->fileService->deleteImage($product->image);        
+
+        if (Product::where('image', $product->image)->first()) return;
+
+        $this->fileService->deleteImage($product->image);
     }
     
     /**

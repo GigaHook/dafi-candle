@@ -18,7 +18,7 @@ class OrderController extends Controller
         private $orderService = new OrderService,
         private $badgeService = new BadgeService,
     ) {
-        $this->middleware('admin')->only(['index']);
+        $this->middleware('admin')->only(['index', 'edit', 'update']);
         $this->middleware('badges.orders')->only(['index']);
     }
 
@@ -52,9 +52,9 @@ class OrderController extends Controller
             ]);
     }
 
-    public function edit(Order $order): RedirectResponse
+    public function edit(int $id): RedirectResponse
     {
-        session()->put('order', $order->load('products'));
+        session()->put('editingOrder', $id);
         return redirect()->route("products.index");
     }
 
@@ -71,5 +71,10 @@ class OrderController extends Controller
     public function destroy(Order $order): void 
     {
         $this->orderService->deleteOrder($order);
+    }
+
+    public function finishEdit(): void 
+    {
+        session()->forget('order');
     }
 }

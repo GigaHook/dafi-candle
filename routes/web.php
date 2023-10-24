@@ -38,9 +38,10 @@ Route::middleware('auth')->group(function() {
     //заказы
     Route::resource('orders', OrderController::class); //+ещё мидлвары в контроллере
     Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+    Route::post('orders/finish_edit', [OrderController::class,'finishEdit'])->name('orders.edit.finish');
 });
 
-//изменение заказа
+//изменение содержания заказа
 Route::middleware(['auth', 'admin'])->group(function() {
     Route::post('orders/{order}/orderitems/{orderitem}', [OrderItemController::class, 'store'])
         ->name('orderitems.store');

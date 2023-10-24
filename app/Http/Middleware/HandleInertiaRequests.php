@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\Type;
 use App\Services\BadgeService;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -38,6 +39,9 @@ class HandleInertiaRequests extends Middleware
             'toast'  => session('toast'),
             'badges' => session('badges'),
             'cart'   => cartService()->getCart(),
+            'order'  => function() {
+                return (new OrderService)->getFormattedOrder(session('editingOrder'));
+            },
             'ziggy'  => function() use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
                     'location' => $request->url(),

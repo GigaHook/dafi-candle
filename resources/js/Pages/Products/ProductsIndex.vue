@@ -1,5 +1,5 @@
 <template>
-  <Head :title="order ? `Редактирование заказа №${order.id}` : 'Каталог'"/>
+  <Head :title="$page.props.order ? `Редактирование заказа №${$page.props.order.id}` : 'Каталог'"/>
   <v-toolbar
     color="surface"
     elevation="3"
@@ -27,6 +27,7 @@
                 ТИПЫ
               </v-list-subheader>
               <v-divider/>
+
               <v-list-item
                 v-for="productType in types"
                 :key="productType.id"
@@ -57,6 +58,7 @@
                 СОРТИРОВКА
               </v-list-subheader>
               <v-divider/>
+
               <v-list-item
                 v-for="(sort, i) in sorts"
                 :key="i"
@@ -71,10 +73,12 @@
     </v-text-field>
     <v-spacer/>
 
-    <template v-if="order">
+    {{ $page.props.order.products[0].name }}
+
+    <template v-if="$page.props.order">
       <BtnPrimary
         variant="elevated"
-        @click="$router.get(route('orders.show', order.id))"
+        @click="$router.get(route('orders.show', $page.props.order.id))"
       >
         Вернуться к заказу
       </BtnPrimary>
@@ -90,7 +94,6 @@
           v-for="product in products.data"
           :key="product.id"
           :product="product"
-          :order="order"
         />
       </template>
 
@@ -125,18 +128,14 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import ProductCard from '@/Components/ProductCard.vue'
 import ToolbarDropdown from '@/Components/ToolbarDropdown.vue'
 import { ref, watch, onBeforeUnmount, defineComponent } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { router, usePage } from '@inertiajs/vue3'
 
 defineOptions({ layout: AppLayout })
 defineComponent({ ProductCard, ToolbarDropdown })
 
-const { products, types, order } = defineProps({ 
+const { products, types } = defineProps({ 
   products: Object, 
   types: Object,
-  order: {
-    type: Object,
-    required: false,
-  }
 })
 
 const sorts = [
@@ -158,6 +157,7 @@ const sorts = [
   }
 ]
 
+const page = usePage()
 const loading = ref(false)
 const selectedTypes = ref(types.map(type => type.id))
 const selectedSort = ref(sorts[1]) 
@@ -197,9 +197,9 @@ function setSort(sort) {
   update()
 }
 
-if (order) {
+if (page.props.order) {
   onBeforeUnmount(() => {
-    //router.post(route()) //TODO
+    router.post(route('orders.edit.finish'))
   })
 }
 </script>

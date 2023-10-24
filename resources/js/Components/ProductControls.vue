@@ -29,5 +29,16 @@
 </template>
 
 <script setup>
-defineProps({ product: Object, methodNames: Object })
+const { product } = defineProps({ product: Object })
 </script>
+
+
+
+
+
+
+
+
+
+
+

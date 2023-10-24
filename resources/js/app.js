@@ -17,7 +17,7 @@ import * as directives from 'vuetify/directives'
 import VueTheMask from 'vue-the-mask'
 
 //notifications
-import Toast, { POSITION, TYPE } from "vue-toastification"
+import Toast, { POSITION } from "vue-toastification"
 import "vue-toastification/dist/index.css"
 
 //mixins or something idk
@@ -45,7 +45,8 @@ const vuetify = createVuetify({
         defaultTheme: "mainTheme",
         themes: { mainTheme }
     },
-    icons: { defaultSet: 'mdi' }
+    icons: { defaultSet: 'mdi' },
+    ssr: true,
 });
 
 const appName = 'Dafi Candle'
@@ -68,8 +69,9 @@ createInertiaApp({
         .component('Modal', Modal)
 
         app.config.globalProperties.$router = router
-
+        
         app.mount(el)
+        console.log(app.config.globalProperties)
 
         return app
     },

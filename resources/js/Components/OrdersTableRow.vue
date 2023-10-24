@@ -30,7 +30,7 @@
 
     <td class="px-0">
       <BtnSecondary
-        @click="$router.get(route('orders.show', order.id))"
+        @click="$inertia.get(route('orders.show', order.id))"
         class="text-button"
       >
         Подробнее
@@ -44,7 +44,7 @@
       >
         <v-icon icon="mdi-delete-outline"/>
         <Modal
-          @confirm="$router.delete(route('orders.destroy', order.id))"
+          @confirm="$inertia.delete(route('orders.destroy', order.id))"
           title="Подтверждение"
           text="Удалить заказ?"
         />

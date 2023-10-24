@@ -84,7 +84,7 @@
           color="primary"
           max-width="fit-content"
         >
-          {{ !order ? 'Купить' : 'Добавить' }}
+          {{ $page.props.order ? 'Добавить' : 'Купить' }}
         </v-btn>
 
         <ProductControls
@@ -106,59 +106,40 @@
 
 <script setup>
 import ProductControls from './ProductControls.vue'
-import { ref, computed, defineComponent } from 'vue'
+import { ref, reactive, defineComponent } from 'vue'
 import { router, usePage } from '@inertiajs/vue3'
 import { useOrder } from '@/Composables/useOrder'
 
 defineComponent({ ProductControls })
 
-const { product, order } = defineProps({
-  product: Object,
-  order: {
-    type: Object,
-    required: false,
-  }
-})
+const { product } = defineProps({ product: Object })
 
 const hover = ref(false)
 const loading = ref(false)
 const page = usePage()
+const pageVariant = reactive({})
 
 //определить мы редактируем заказ или это просто в каталоге
-const pageVariant = computed(() => {
-  if (order) {
-    return (() => {
-      const { updateOrderItems } = useOrder(order)
-      return {
-        product: (() => {
-          const orderProduct = order.products.find(item => item.id == product.id)
-          console.log(orderProduct)
-          //orderProduct.quantity = orderProduct.order_item.quantity
-          return orderProduct
-        })(),
-
-        store: () => updateOrderItems('store', product.id),
-        update: () => updateOrderItems('patch', product.id),
-      }
-    })()
-  }
-
-  return {
-    product: page.props.cart.items.find(item => item.id == product.id),
-
-    store: () => router.post(route('cart.store'), {
-      id: product.id
-    }, { 
-      preserveState: true,
-      preserveScroll: true 
-    }),
-    
-    update: () => router.patch(route('cart.update', { id: product.id }), { 
-      preserveState: true,
-      preserveScroll: true 
-    }),
-  }
-})
+if (page.props.order) {
+  const { updateOrderItems } = useOrder(page.props.order)
+  pageVariant.product = page.props.order.products.find(item => item.id == product.id)
+  pageVariant.store = () => updateOrderItems('post', product.id)
+  pageVariant.update = () => updateOrderItems('patch', product.id)
+} else {
+  pageVariant.product = page.props.cart.items.find(item => item.id == product.id)
+  pageVariant.store = () => router.post(route('cart.store'), {
+    id: product.id
+  }, { 
+    preserveState: true,
+    preserveScroll: true 
+  })
+  pageVariant.update = () => router.patch(route('cart.update', {
+      id: product.id 
+    }), { 
+    preserveState: true,
+    preserveScroll: true 
+  })
+}
 </script>
 
 <style scoped>

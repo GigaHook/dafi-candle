@@ -23,6 +23,18 @@ class OrderService
             : Order::lazy()->latest()->get()->load('adress'); //для админа
     }
 
+    public function getFormattedOrder(int $id): Order
+    {
+        $order = Order::find($id)->load('products');
+        info($order->products[0]->orderItem->quantity);
+        foreach ($order->products as $product) {
+            $product->quantity = $product->orderItem->quantity;
+        }
+        info($order->products[0]);
+        info($order->products[0]->quantity);
+        return $order;
+    }
+
     public function createOrder(array $data): void
     {
         DB::transaction(function() use($data) {
@@ -84,6 +96,4 @@ class OrderService
         $order->price = $price;
         $order->save();
     }
-
-    
 }
