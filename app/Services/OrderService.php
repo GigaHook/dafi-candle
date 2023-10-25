@@ -23,15 +23,16 @@ class OrderService
             : Order::lazy()->latest()->get()->load('adress'); //для админа
     }
 
-    public function getFormattedOrder(int $id): Order
+    public function getFormattedOrder(?int $id): ?Order
     {
+        if (!$id) return null;
+
         $order = Order::find($id)->load('products');
-        info($order->products[0]->orderItem->quantity);
+
         foreach ($order->products as $product) {
             $product->quantity = $product->orderItem->quantity;
         }
-        info($order->products[0]);
-        info($order->products[0]->quantity);
+        
         return $order;
     }
 

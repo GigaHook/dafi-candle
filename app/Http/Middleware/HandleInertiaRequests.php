@@ -39,9 +39,6 @@ class HandleInertiaRequests extends Middleware
             'toast'  => session('toast'),
             'badges' => session('badges'),
             'cart'   => cartService()->getCart(),
-            'order'  => function() {
-                return (new OrderService)->getFormattedOrder(session('editingOrder'));
-            },
             'ziggy'  => function() use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
                     'location' => $request->url(),

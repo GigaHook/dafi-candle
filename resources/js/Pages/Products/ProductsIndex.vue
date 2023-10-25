@@ -1,5 +1,5 @@
 <template>
-  <Head :title="$page.props.order ? `Редактирование заказа №${$page.props.order.id}` : 'Каталог'"/>
+  <Head :title="order ? `Редактирование заказа №${order.id}` : 'Каталог'"/>
   <v-toolbar
     color="surface"
     elevation="3"
@@ -73,12 +73,12 @@
     </v-text-field>
     <v-spacer/>
 
-    {{ $page.props.order.products[0].name }}
+    {{  }}
 
-    <template v-if="$page.props.order">
+    <template v-if="order">
       <BtnPrimary
         variant="elevated"
-        @click="$router.get(route('orders.show', $page.props.order.id))"
+        @click="$router.get(route('orders.show', order.id))"
       >
         Вернуться к заказу
       </BtnPrimary>
@@ -94,6 +94,7 @@
           v-for="product in products.data"
           :key="product.id"
           :product="product"
+          :order="order"
         />
       </template>
 
@@ -133,9 +134,13 @@ import { router, usePage } from '@inertiajs/vue3'
 defineOptions({ layout: AppLayout })
 defineComponent({ ProductCard, ToolbarDropdown })
 
-const { products, types } = defineProps({ 
+const { products, types, order } = defineProps({ 
   products: Object, 
   types: Object,
+  order: {
+    type: Object,
+    required: false,
+  }
 })
 
 const sorts = [
@@ -157,7 +162,6 @@ const sorts = [
   }
 ]
 
-const page = usePage()
 const loading = ref(false)
 const selectedTypes = ref(types.map(type => type.id))
 const selectedSort = ref(sorts[1]) 
@@ -197,7 +201,7 @@ function setSort(sort) {
   update()
 }
 
-if (page.props.order) {
+if (order) {
   onBeforeUnmount(() => {
     router.post(route('orders.edit.finish'))
   })

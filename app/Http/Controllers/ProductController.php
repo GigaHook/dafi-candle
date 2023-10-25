@@ -6,6 +6,7 @@ use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
 use App\Models\Type;
+use App\Services\OrderService;
 use App\Services\ProductService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ class ProductController extends Controller
 {
     public function __construct(
         private $productService = new ProductService,
+        private $orderService = new OrderService,
     ) {
         $this->middleware('auth')->except(['index', 'show']);
         $this->middleware('admin')->except(['index', 'show']);
@@ -24,7 +26,11 @@ class ProductController extends Controller
         return Inertia::render('Products/ProductsIndex', [
             'products' => $this->productService->processProducts($request->all()),
             'types' => Type::all(),
-            'order' => session('order'),
+            'order' => function() {
+                if (session('editingOrder')) {
+                    return $this->orderService->getFormattedOrder(session('editingOrder'));
+                } else return null;
+            },
         ]);
     }
 

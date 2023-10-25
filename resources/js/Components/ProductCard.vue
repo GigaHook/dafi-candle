@@ -84,7 +84,7 @@
           color="primary"
           max-width="fit-content"
         >
-          {{ $page.props.order ? 'Добавить' : 'Купить' }}
+          {{ order ? 'Добавить' : 'Купить' }}
         </v-btn>
 
         <ProductControls
@@ -106,40 +106,70 @@
 
 <script setup>
 import ProductControls from './ProductControls.vue'
-import { ref, reactive, defineComponent } from 'vue'
+import { ref, toRefs, reactive, defineComponent } from 'vue'
 import { router, usePage } from '@inertiajs/vue3'
 import { useOrder } from '@/Composables/useOrder'
 
 defineComponent({ ProductControls })
 
-const { product } = defineProps({ product: Object })
+const { product, order } = defineProps({ 
+  product: Object,
+  order: {
+    type: Object,
+    required: false,
+  }
+})
 
+const page = usePage()
 const hover = ref(false)
 const loading = ref(false)
-const page = usePage()
-const pageVariant = reactive({})
 
-//определить мы редактируем заказ или это просто в каталоге
-if (page.props.order) {
-  const { updateOrderItems } = useOrder(page.props.order)
-  pageVariant.product = page.props.order.products.find(item => item.id == product.id)
-  pageVariant.store = () => updateOrderItems('post', product.id)
-  pageVariant.update = () => updateOrderItems('patch', product.id)
-} else {
-  pageVariant.product = page.props.cart.items.find(item => item.id == product.id)
-  pageVariant.store = () => router.post(route('cart.store'), {
+const pageVariant = toRefs({
+  product: page.props.cart.items.find(item => item.id == product.id),
+
+  store: () => router.post(route('cart.store'), {
     id: product.id
   }, { 
     preserveState: true,
     preserveScroll: true 
-  })
-  pageVariant.update = () => router.patch(route('cart.update', {
+  }),
+  
+  update: () => router.patch(route('cart.update', {
       id: product.id 
     }), { 
     preserveState: true,
     preserveScroll: true 
-  })
-}
+  }),
+})
+
+//определить мы редактируем заказ или просто каталог
+//if (order) {
+//  const { updateOrderItems } = useOrder(order)
+//
+//  const pageVariant = reactive({
+//    product: order.products.find(item => item.id == product.id),
+//    store: () => updateOrderItems('post', product.id),
+//    update: () => updateOrderItems('patch', product.id),
+//  })
+//} else {
+//  const pageVariant = reactive({
+//    product: toRef(page.props.cart.items.find(item => item.id == product.id)),
+//
+//    store: () => router.post(route('cart.store'), {
+//      id: product.id
+//    }, { 
+//      preserveState: true,
+//      preserveScroll: true 
+//    }),
+//    
+//    update: () => router.patch(route('cart.update', {
+//        id: product.id 
+//      }), { 
+//      preserveState: true,
+//      preserveScroll: true 
+//    }),
+//  })
+//}
 </script>
 
 <style scoped>
