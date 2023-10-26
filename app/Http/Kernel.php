@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin' => \App\Http\Middleware\AdminGuard::class,
         'badges.orders' => \App\Http\Middleware\RemoveOrderBadges::class,
+        'orders.editing' => \App\Http\Middleware\CheckOrderEditing::class,
     ];
 }

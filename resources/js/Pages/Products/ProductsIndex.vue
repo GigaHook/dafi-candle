@@ -73,8 +73,6 @@
     </v-text-field>
     <v-spacer/>
 
-    {{  }}
-
     <template v-if="order">
       <BtnPrimary
         variant="elevated"
@@ -90,12 +88,22 @@
     <v-row>
       <!--PRODUCTS-->
       <template v-if="!loading">
-        <ProductCard
+        <template v-if="order">
+          <ProductCardOrderEdit
           v-for="product in products.data"
           :key="product.id"
           :product="product"
-          :order="order"
-        />
+          :order="reactiveOrder"
+          />
+        </template>
+
+        <template v-else>
+          <ProductCard
+            v-for="product in products.data"
+            :key="product.id"
+            :product="product"
+          />
+        </template>
       </template>
 
       <v-col v-else cols="12" class="d-flex justify-center align-center">
@@ -127,12 +135,15 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue'
 import ProductCard from '@/Components/ProductCard.vue'
+import ProductCardOrderEdit from '@/Components/ProductCardOrderEdit.vue'
 import ToolbarDropdown from '@/Components/ToolbarDropdown.vue'
+
 import { ref, watch, onBeforeUnmount, defineComponent } from 'vue'
-import { router, usePage } from '@inertiajs/vue3'
+import { router } from '@inertiajs/vue3'
+import { reactive } from 'vue'
 
 defineOptions({ layout: AppLayout })
-defineComponent({ ProductCard, ToolbarDropdown })
+defineComponent({ ProductCard, ProductCardOrderEdit, ToolbarDropdown })
 
 const { products, types, order } = defineProps({ 
   products: Object, 
@@ -166,6 +177,7 @@ const loading = ref(false)
 const selectedTypes = ref(types.map(type => type.id))
 const selectedSort = ref(sorts[1]) 
 const searchText = ref()
+const reactiveOrder = reactive(order)
 
 watch(selectedTypes, (oldTypes) => {
   if (oldTypes.length == 0) {
@@ -188,12 +200,16 @@ function requestData() {
   }
 }
 
+function routeData() {
+  return order ? ['orders.edit', order.id] : ['products.index']
+}
+
 function update() {
-  router.get(route('products.index'), requestData(), requestOptions)
+  router.get(route(...routeData()), requestData(), requestOptions)
 }
 
 function toPage(pageNumber) {
-  router.get(route('products.index'), {...requestData(), page: pageNumber}, requestOptions)
+  router.get(route(...routeData()), {...requestData(), page: pageNumber}, requestOptions)
 }
 
 function setSort(sort) {

@@ -20,17 +20,13 @@ class ProductController extends Controller
     ) {
         $this->middleware('auth')->except(['index', 'show']);
         $this->middleware('admin')->except(['index', 'show']);
+        $this->middleware('orders.editing')->only(['index']);
     }
 
     public function index(Request $request): \Inertia\Response {
         return Inertia::render('Products/ProductsIndex', [
             'products' => $this->productService->processProducts($request->all()),
             'types' => Type::all(),
-            'order' => function() {
-                if (session('editingOrder')) {
-                    return $this->orderService->getFormattedOrder(session('editingOrder'));
-                } else return null;
-            },
         ]);
     }
 

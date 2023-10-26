@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use App\Models\Order;
+use App\Models\Type;
 use App\Services\BadgeService;
 use App\Services\OrderService;
 use App\Services\ProductService;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -17,6 +17,7 @@ class OrderController extends Controller
     public function __construct(
         private $orderService = new OrderService,
         private $badgeService = new BadgeService,
+        private $productService = new ProductService,
     ) {
         $this->middleware('admin')->only(['index', 'edit', 'update']);
         $this->middleware('badges.orders')->only(['index']);
@@ -48,10 +49,20 @@ class OrderController extends Controller
         ]);
     }
 
-    public function edit(int $id): RedirectResponse
+    public function edit(Request $request, int $id): \Inertia\Response 
     {
         session()->put('editingOrder', $id);
-        return redirect()->route("products.index");
+
+        return Inertia::render('Products/ProductsIndex', [
+            'products' => $this->productService->processProducts($request->all()),
+            'types' => Type::all(),
+            'order' => Order::find($id)->load('products'),
+        ]);
+    }
+    
+    public function finishEdit(): void 
+    {
+        session()->forget('order');
     }
 
     public function update(OrderUpdateRequest $request, Order $order): void 
@@ -67,10 +78,5 @@ class OrderController extends Controller
     public function destroy(Order $order): void 
     {
         $this->orderService->deleteOrder($order);
-    }
-
-    public function finishEdit(): void 
-    {
-        session()->forget('order');
     }
 }

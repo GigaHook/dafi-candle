@@ -12,7 +12,7 @@
     </v-btn>
     
     <div class="mx-4 mt-1" style="font-size: 18px">
-      {{ product.quantity }}
+      {{ quantity }}
     </div>
 
     <v-btn
@@ -29,7 +29,10 @@
 </template>
 
 <script setup>
-const { product } = defineProps({ product: Object })
+defineProps({
+  product: Object,
+  quantity: Number,
+})
 </script>
 
 

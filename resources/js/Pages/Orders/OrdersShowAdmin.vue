@@ -80,7 +80,7 @@
 
         <BtnSecondary
           v-if="display.mdAndUp.value"
-          @click="$router.get(route('orders.index'))"
+          @click="$inertia.get(route('orders.index'))"
           class="mt-2 mb-n3"
         >
           Назад
@@ -104,7 +104,7 @@
           
           <BtnPrimary
             class="mt-4"
-            @click="$router.get(route('orders.edit', order.id))"
+            @click="$inertia.get(route('orders.edit', order.id))"
           >
             Добавить
           </BtnPrimary>
@@ -113,7 +113,7 @@
         
         <BtnSecondary
           v-if="display.smAndDown.value"
-          @click="$router.get(route('orders.index'))"
+          @click="$inertia.get(route('orders.index'))"
           class="mt-2 mb-n3"
         >
           Назад

@@ -6,7 +6,7 @@
       elevation="3"
     >
       <v-img
-        :src="`storage/upload/${product.image}`"
+        :src="`../../storage/upload/${product.image}`"
         cover
         style="height: 320px"
         @mouseover="hover = true"
@@ -47,7 +47,7 @@
       <div class="px-4 py-1 position-relative" style="min-height: 68px !important;">
         <v-slide-x-reverse-transition class="position-absolute right-0 ma-2">
           <v-icon
-            v-if="cartProduct"
+            v-if="orderProduct"
             icon="mdi-cart-check"
             size="32"
             class="position-absolute"
@@ -76,23 +76,26 @@
         style="min-height: 52px !important;"
       >
         <v-btn
-          v-if="!cartProduct"
-          @click="store"
+          v-if="!orderProduct"
+          @click="updateOrderItems('post', product.id)"
           :loading="loading"
           variant="text"
           color="primary"
           max-width="fit-content"
         >
-          Купить
+          Добавить
         </v-btn>
 
         <ProductControls
           v-else
-          :product="cartProduct"
-          :quantity="cartProduct.quantity"
-          @store="store"
-          @update="update"
+          :product="orderProduct"
+          :quantity="orderProduct.order_item.quantity"
+          @store="updateOrderItems('post', product.id)"
+          @update="updateOrderItems('patch', product.id)"
         />
+
+        {{ orderProduct?.order_item.quantity }}
+
 
         <div class="d-flex flex-nowrap align-center">
           {{ product.price }}
@@ -107,65 +110,24 @@
 <script setup>
 import ProductControls from './ProductControls.vue'
 import { ref, computed, defineComponent } from 'vue'
-import { router, usePage } from '@inertiajs/vue3'
+import { useOrder } from '@/Composables/useOrder'
+import { reactive } from 'vue';
 
 defineComponent({ ProductControls })
 
-const { product } = defineProps({ product: Object })
-
-const page = usePage()
-const hover = ref(false)
-const loading = ref(false)
-const cartProduct = computed(() => {
-  return page.props.cart.items.find(item => item.id == product.id)
+const { product, order } = defineProps({ 
+  product: Object,
+  order: {
+    type: Object,
+    required: false,
+  }
 })
 
-function store() {
-  router.post(route('cart.store'), {
-    id: product.id
-  }, { 
-    preserveState: true,
-    preserveScroll: true 
-  })
-}
-
-function update() {
-  router.patch(route('cart.update', {
-      id: product.id 
-    }), { 
-    preserveState: true,
-    preserveScroll: true 
-  })
-}
-
-//определить мы редактируем заказ или просто каталог
-//if (order) {
-//  const { updateOrderItems } = useOrder(order)
-//
-//  const pageVariant = reactive({
-//    product: order.products.find(item => item.id == product.id),
-//    store: () => updateOrderItems('post', product.id),
-//    update: () => updateOrderItems('patch', product.id),
-//  })
-//} else {
-//  const pageVariant = reactive({
-//    product: toRef(page.props.cart.items.find(item => item.id == product.id)),
-//
-//    store: () => router.post(route('cart.store'), {
-//      id: product.id
-//    }, { 
-//      preserveState: true,
-//      preserveScroll: true 
-//    }),
-//    
-//    update: () => router.patch(route('cart.update', {
-//        id: product.id 
-//      }), { 
-//      preserveState: true,
-//      preserveScroll: true 
-//    }),
-//  })
-//}
+const hover = ref(false)
+const loading = ref(false)
+const { updateOrderItems } = useOrder(order)
+//сунуть хуйню ниже в $page.props
+const orderProduct = computed(() => order.products.find(item => item.id == product.id))
 </script>
 
 <style scoped>
