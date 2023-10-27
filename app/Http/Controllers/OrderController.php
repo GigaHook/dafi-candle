@@ -56,13 +56,12 @@ class OrderController extends Controller
         return Inertia::render('Products/ProductsIndex', [
             'products' => $this->productService->processProducts($request->all()),
             'types' => Type::all(),
-            'order' => Order::find($id)->load('products'),
         ]);
     }
     
     public function finishEdit(): void 
     {
-        session()->forget('order');
+        session()->forget('editingOrder');
     }
 
     public function update(OrderUpdateRequest $request, Order $order): void 

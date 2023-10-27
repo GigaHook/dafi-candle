@@ -111,23 +111,18 @@
 import ProductControls from './ProductControls.vue'
 import { ref, computed, defineComponent } from 'vue'
 import { useOrder } from '@/Composables/useOrder'
-import { reactive } from 'vue';
+import { usePage } from '@inertiajs/vue3'
 
 defineComponent({ ProductControls })
 
-const { product, order } = defineProps({ 
+const { product } = defineProps({ 
   product: Object,
-  order: {
-    type: Object,
-    required: false,
-  }
 })
-
+const page = usePage()
 const hover = ref(false)
 const loading = ref(false)
-const { updateOrderItems } = useOrder(order)
-//сунуть хуйню ниже в $page.props
-const orderProduct = computed(() => order.products.find(item => item.id == product.id))
+const { updateOrderItems } = useOrder(page.props.order)
+const orderProduct = computed(() => page.props.order.products.find(item => item.id == product.id))
 </script>
 
 <style scoped>

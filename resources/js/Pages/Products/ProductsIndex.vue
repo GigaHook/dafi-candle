@@ -1,5 +1,5 @@
 <template>
-  <Head :title="order ? `Редактирование заказа №${order.id}` : 'Каталог'"/>
+  <Head :title="$page.props.order ? `Редактирование заказа №${$page.props.order.id}` : 'Каталог'"/>
   <v-toolbar
     color="surface"
     elevation="3"
@@ -73,10 +73,10 @@
     </v-text-field>
     <v-spacer/>
 
-    <template v-if="order">
+    <template v-if="$page.props.order">
       <BtnPrimary
         variant="elevated"
-        @click="$router.get(route('orders.show', order.id))"
+        @click="$inertia.get(route('orders.show', $page.props.order.id))"
       >
         Вернуться к заказу
       </BtnPrimary>
@@ -88,12 +88,11 @@
     <v-row>
       <!--PRODUCTS-->
       <template v-if="!loading">
-        <template v-if="order">
+        <template v-if="$page.props.order">
           <ProductCardOrderEdit
           v-for="product in products.data"
           :key="product.id"
           :product="product"
-          :order="reactiveOrder"
           />
         </template>
 
@@ -139,19 +138,14 @@ import ProductCardOrderEdit from '@/Components/ProductCardOrderEdit.vue'
 import ToolbarDropdown from '@/Components/ToolbarDropdown.vue'
 
 import { ref, watch, onBeforeUnmount, defineComponent } from 'vue'
-import { router } from '@inertiajs/vue3'
-import { reactive } from 'vue'
+import { router, usePage } from '@inertiajs/vue3'
 
 defineOptions({ layout: AppLayout })
 defineComponent({ ProductCard, ProductCardOrderEdit, ToolbarDropdown })
 
-const { products, types, order } = defineProps({ 
+const { products, types } = defineProps({ 
   products: Object, 
   types: Object,
-  order: {
-    type: Object,
-    required: false,
-  }
 })
 
 const sorts = [
@@ -173,11 +167,11 @@ const sorts = [
   }
 ]
 
+const page = usePage()
 const loading = ref(false)
 const selectedTypes = ref(types.map(type => type.id))
 const selectedSort = ref(sorts[1]) 
 const searchText = ref()
-const reactiveOrder = reactive(order)
 
 watch(selectedTypes, (oldTypes) => {
   if (oldTypes.length == 0) {
@@ -201,15 +195,15 @@ function requestData() {
 }
 
 function routeData() {
-  return order ? ['orders.edit', order.id] : ['products.index']
+  return page.props.order ? 'orders.edit' : 'products.index'
 }
 
 function update() {
-  router.get(route(...routeData()), requestData(), requestOptions)
+  router.get(route(routeData()), requestData(), requestOptions)
 }
 
 function toPage(pageNumber) {
-  router.get(route(...routeData()), {...requestData(), page: pageNumber}, requestOptions)
+  router.get(route(routeData()), {...requestData(), page: pageNumber}, requestOptions)
 }
 
 function setSort(sort) {
@@ -217,9 +211,9 @@ function setSort(sort) {
   update()
 }
 
-if (order) {
-  onBeforeUnmount(() => {
-    router.post(route('orders.edit.finish'))
-  })
-}
+//if (page.props.order) {
+//  onBeforeUnmount(() => {
+//    router.post(route('orders.edit.finish'))
+//  })
+//}
 </script>

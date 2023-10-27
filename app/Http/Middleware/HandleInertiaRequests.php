@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Order;
 use App\Models\Type;
 use App\Services\BadgeService;
 use App\Services\OrderService;
@@ -39,6 +40,7 @@ class HandleInertiaRequests extends Middleware
             'toast'  => session('toast'),
             'badges' => session('badges'),
             'cart'   => cartService()->getCart(),
+            'order'  => Order::find(session('editingOrder'))->load('products') ?? null,
             'ziggy'  => function() use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
                     'location' => $request->url(),
