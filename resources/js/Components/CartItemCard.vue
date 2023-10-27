@@ -15,7 +15,7 @@
           class="align-center justify-center text-button font-weight-bold"
           style="cursor: pointer;"
           scrim="black"
-          @click="$router.get(route('products.show', product.id))"
+          @click="$inertia.get(route('products.show', product.id))"
         >
           Подробнее
         </v-overlay>
@@ -26,7 +26,7 @@
       <div
         @mouseover="hover = true"
         @mouseleave="hover = false" 
-        @click="$router.get(route('products.show', product.id))"
+        @click="$inertia.get(route('products.show', product.id))"
         class="text-h6 d-inline"
         style="cursor: pointer;"
       >
@@ -53,20 +53,9 @@
       :class="display.md.value && 'ms-n10'"
     >
       <ProductControls
-        :product="product"
-        @store="$router.post(route('cart.store'), {
-          id: product.id
-        }, { 
-          preserveState: true,
-          preserveScroll: true 
-        })"
-
-        @update="$router.patch(route('cart.update', { 
-          id: product.id 
-        }), { 
-          preserveState: true,
-          preserveScroll: true 
-        })"
+        :quantity="product.quantity"
+        @store="store"
+        @update="update"
       />
     </v-col>
     
@@ -83,7 +72,7 @@
       <v-btn
         variant="plain"
         icon="mdi-delete-outline"
-        @click="$router.delete(route('cart.destroy', product.id), { 
+        @click="$inertia.delete(route('cart.destroy', product.id), { 
           preserveScroll: true 
         })"
       />
@@ -98,12 +87,14 @@
 
 <script setup>
 import ProductControls from './ProductControls.vue'
+import useProduct from '@/Composables/useProduct'
 import { ref, defineComponent } from 'vue'
 import { useDisplay } from 'vuetify'
 
+defineComponent({ ProductControls})
+
+const { product } = defineProps({ product: Object, last: Boolean })
+const { store, update } = useProduct(product)
 const display = useDisplay()
 const hover = ref(false)
-
-defineComponent({ ProductControls: ProductControls })
-defineProps({ product: Object, last: Boolean })
 </script>

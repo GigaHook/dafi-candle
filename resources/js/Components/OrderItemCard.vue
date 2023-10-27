@@ -15,7 +15,7 @@
           class="align-center justify-center text-button font-weight-bold"
           style="cursor: pointer;"
           scrim="black"
-          @click="$router.get(route('products.show', product.id))"
+          @click="$inertia.get(route('products.show', product.id))"
         >
           Подробнее
         </v-overlay>
@@ -26,7 +26,7 @@
       <div
         @mouseover="hover = true"
         @mouseleave="hover = false" 
-        @click="$router.get(route('products.show', product.id))"
+        @click="$inertia.get(route('products.show', product.id))"
         class="text-h6 d-inline"
         style="cursor: pointer;"
       >
@@ -91,7 +91,7 @@
       </div>
     </v-col>
 
-    <v-col v-if="!last" cols="12">
+    <v-col cols="12">
       <v-divider class="my-2"/>
     </v-col>
   </v-row>
@@ -104,7 +104,6 @@ import { useOrder } from '@/Composables/useOrder'
 const { product, order } = defineProps({
   product: Object,
   order: Object,
-  last: Boolean,
   editable: {
     type: Boolean,
     required: false,

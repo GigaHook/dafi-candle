@@ -103,7 +103,7 @@
           />
           
           <BtnPrimary
-            class="mt-4"
+            class="mt-2"
             @click="$inertia.get(route('orders.edit', order.id))"
           >
             Добавить

@@ -21,13 +21,13 @@
       <AdminSidebarItem
         icon="mdi-plus-box"
         title="Добавить товар"
-        @click="$router.get(route('products.create'))"
+        @click="$inertia.get(route('products.create'))"
       />
 
       <AdminSidebarItem
         icon="mdi-notebook-multiple"
         title="Заказы"
-        @click="$router.get(route('orders.index'))"
+        @click="$inertia.get(route('orders.index'))"
         :badge="Number($page.url !== '/orders' && $page.props.badges.ordersAdmin)"
       />
     </v-list>

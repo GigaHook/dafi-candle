@@ -31,7 +31,7 @@
                 >
                   <v-icon icon="mdi-cart-remove" size="24"/>
                   <Modal
-                    @confirm="$router.get(route('cart.clear'))"
+                    @confirm="$inertia.get(route('cart.clear'))"
                     :title="'Удалить все предметы из корзины?'"
                     :confirm-text="'Удалить'"
                   />
@@ -39,7 +39,7 @@
               </div>
 
               <BtnPrimary
-                @click="$router.get(route('orders.create'))"
+                @click="$inertia.get(route('orders.create'))"
                 :disabled="!$page.props.user"
                 class="w-100 mt-2"
               >
@@ -56,7 +56,7 @@
                 :min-height="display.sm.value && '150px'"
               >
                 Чтобы оформить заказ, нужно зарегистрироваться или войти в аккаунт.<br>
-                <BtnPrimary @click="$router.get(route('login'))" class="mt-2">
+                <BtnPrimary @click="$inertia.get(route('login'))" class="mt-2">
                   Войти
                 </BtnPrimary>
               </v-alert>
@@ -72,7 +72,7 @@
         <v-card class="text-center text-h5 pa-4 pt-2" elevation="3">
           Тут пока ничего нет<br>
           <BtnPrimary
-            @click="$router.get(route('products.index'))"
+            @click="$inertia.get(route('products.index'))"
             size="large"
             class="mt-2"
           >

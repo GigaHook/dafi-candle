@@ -41,6 +41,7 @@ class OrderItemService
             $orderItem->save();
         } else {
             $orderItem->delete();
+            toast('Товар удалён из заказа');
         }
 
         event(new OrderContentsUpdated($order));

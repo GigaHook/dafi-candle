@@ -21,11 +21,11 @@
         />
 
         <div class="d-flex justify-space-between w-100">
-          <BtnPrimary @click="$router.post(route('cart.store'), { id: product.id })">
+          <BtnPrimary @click="$inertia.post(route('cart.store'), { id: product.id })">
             Купить
           </BtnPrimary>
 
-          <BtnSecondary @click="window.history.back()">
+          <BtnSecondary @click="$inertia.back()">
             Назад
           </BtnSecondary>
         </div>

@@ -13,6 +13,7 @@ export function useOrder(order) {
   }
 
   const status = ref(order.status)
+  const loading = ref(false)
 
   function updateStatus() {
     router.post(route('orders.status', { id: order.id }), {
@@ -20,6 +21,8 @@ export function useOrder(order) {
     }, {
       preserveState: true,
       preserveScroll: true,
+      onStart: () => loading.value = true,
+      onFinish: () => loading.value = false,
     })
   }
 
@@ -29,6 +32,8 @@ export function useOrder(order) {
     }, {
       preserveState: true,
       preserveScroll: true,
+      onStart: () => loading.value = true,
+      onFinish: () => loading.value = false,
     })
   }
 
@@ -37,6 +42,7 @@ export function useOrder(order) {
     creationTime,
     statusColors,
     status,
+    loading,
     updateStatus,
     updateOrderItems,
   }

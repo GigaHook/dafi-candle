@@ -9,6 +9,7 @@ use App\Models\Type;
 use App\Services\BadgeService;
 use App\Services\OrderService;
 use App\Services\ProductService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -26,7 +27,6 @@ class OrderController extends Controller
     public function index(): \Inertia\Response 
     {   
         $this->badgeService->removeOrdersBadges();
-
         return Inertia::render('Orders/OrdersIndex', [
             'orders' => $this->orderService->getOrders()
         ]);
@@ -49,19 +49,15 @@ class OrderController extends Controller
         ]);
     }
 
-    public function edit(Request $request, int $id): \Inertia\Response 
+    public function edit(int $id): RedirectResponse
     {
         session()->put('editingOrder', $id);
-
-        return Inertia::render('Products/ProductsIndex', [
-            'products' => $this->productService->processProducts($request->all()),
-            'types' => Type::all(),
-        ]);
+        return redirect()->route('products.index');
     }
     
-    public function finishEdit(): void 
+    public function finishEdit(): RedirectResponse
     {
-        session()->forget('editingOrder');
+        return redirect()->route('orders.show', session()->pull('editingOrder'));;
     }
 
     public function update(OrderUpdateRequest $request, Order $order): void 

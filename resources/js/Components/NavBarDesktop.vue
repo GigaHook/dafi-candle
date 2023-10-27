@@ -3,14 +3,14 @@
     <span
       class="dafi-en me-auto ps-2"
       style="color:white; cursor: pointer; font-size: 50px; min-width:234px"
-      @click="$router.get(route('home'))"
+      @click="$inertia.get(route('home'))"
     >
       Dafi Candle
     </span>
 
     <NavItemDesktop
       :active="$page.url.includes('/products')"
-      @click="$router.get(route('products.index'))"
+      @click="$inertia.get(route('products.index'))"
       text="asd"
     >
       каталог
@@ -19,14 +19,14 @@
     <NavItemDesktop
       :active="$page.url.includes('/cart')"
       :badge="getCartBadge()"
-      @click="$router.get(route('cart.index'))"
+      @click="$inertia.get(route('cart.index'))"
     >
       корзина
     </NavItemDesktop>
       
     <NavItemDesktop
       :active="$page.url.includes('/about')"
-      @click="$router.get(route('about'))"
+      @click="$inertia.get(route('about'))"
     >
       о нас
     </NavItemDesktop>
@@ -34,7 +34,7 @@
     <NavItemDesktop
       v-if="$page.props.user"
       :active="$page.url.includes('/profile')"
-      @click="$router.get(route('profile'))"
+      @click="$inertia.get(route('profile'))"
     >
       профиль
     </NavItemDesktop>
@@ -42,7 +42,7 @@
     <NavItemDesktop
       v-else
       :active="$page.url.includes('/login')"
-      @click="$router.get(route('login'))"
+      @click="$inertia.get(route('login'))"
     >
       войти
     </NavItemDesktop>

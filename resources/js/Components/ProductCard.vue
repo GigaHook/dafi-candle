@@ -47,8 +47,8 @@
       <div class="px-4 py-1 position-relative" style="min-height: 68px !important;">
         <v-slide-x-reverse-transition class="position-absolute right-0 ma-2">
           <v-icon
-            v-if="cartProduct"
-            icon="mdi-cart-check"
+            v-if="productInstance"
+            :icon="icon"
             size="32"
             class="position-absolute"
           />
@@ -75,24 +75,25 @@
         class="d-flex flex-nowrap justify-space-between align-center ms-2 me-4"
         style="min-height: 52px !important;"
       >
-        <v-btn
-          v-if="!cartProduct"
-          @click="store"
-          :loading="loading"
-          variant="text"
-          color="primary"
-          max-width="fit-content"
-        >
-          Купить
-        </v-btn>
+        <v-fade-transition group leave-absolute hide-on-leave>
+          <v-btn
+            v-if="!productInstance"
+            @click="store"
+            :loading="loading"
+            variant="text"
+            color="primary"
+            max-width="fit-content"
+          >
+            {{ buttonText }}
+          </v-btn>
 
-        <ProductControls
-          v-else
-          :product="cartProduct"
-          :quantity="cartProduct.quantity"
-          @store="store"
-          @update="update"
-        />
+          <ProductControls
+            v-else
+            :quantity="$page.props.order ? productInstance.order_item.quantity : productInstance.quantity"
+            @store="store"
+            @update="update"
+          />
+        </v-fade-transition>
 
         <div class="d-flex flex-nowrap align-center">
           {{ product.price }}
@@ -106,66 +107,25 @@
 
 <script setup>
 import ProductControls from './ProductControls.vue'
-import { ref, computed, defineComponent } from 'vue'
-import { router, usePage } from '@inertiajs/vue3'
+import useProduct from '@/Composables/useProduct'
+import { ref, defineComponent } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 
 defineComponent({ ProductControls })
 
 const { product } = defineProps({ product: Object })
-
 const page = usePage()
 const hover = ref(false)
-const loading = ref(false)
-const cartProduct = computed(() => {
-  return page.props.cart.items.find(item => item.id == product.id)
-})
 
-function store() {
-  router.post(route('cart.store'), {
-    id: product.id
-  }, { 
-    preserveState: true,
-    preserveScroll: true 
-  })
-}
+const { 
+  productInstance, 
+  loading, 
+  store, 
+  update, 
+  buttonText, 
+  icon,
+} = useProduct(product, page.props.order)
 
-function update() {
-  router.patch(route('cart.update', {
-      id: product.id 
-    }), { 
-    preserveState: true,
-    preserveScroll: true 
-  })
-}
-
-//определить мы редактируем заказ или просто каталог
-//if (order) {
-//  const { updateOrderItems } = useOrder(order)
-//
-//  const pageVariant = reactive({
-//    product: order.products.find(item => item.id == product.id),
-//    store: () => updateOrderItems('post', product.id),
-//    update: () => updateOrderItems('patch', product.id),
-//  })
-//} else {
-//  const pageVariant = reactive({
-//    product: toRef(page.props.cart.items.find(item => item.id == product.id)),
-//
-//    store: () => router.post(route('cart.store'), {
-//      id: product.id
-//    }, { 
-//      preserveState: true,
-//      preserveScroll: true 
-//    }),
-//    
-//    update: () => router.patch(route('cart.update', {
-//        id: product.id 
-//      }), { 
-//      preserveState: true,
-//      preserveScroll: true 
-//    }),
-//  })
-//}
 </script>
 
 <style scoped>

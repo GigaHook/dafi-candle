@@ -48,7 +48,7 @@
         <v-slide-x-reverse-transition class="position-absolute right-0 ma-2">
           <v-icon
             v-if="orderProduct"
-            icon="mdi-cart-check"
+            icon="mdi-notebook-check-outline"
             size="32"
             class="position-absolute"
           />
@@ -75,27 +75,25 @@
         class="d-flex flex-nowrap justify-space-between align-center ms-2 me-4"
         style="min-height: 52px !important;"
       >
-        <v-btn
-          v-if="!orderProduct"
-          @click="updateOrderItems('post', product.id)"
-          :loading="loading"
-          variant="text"
-          color="primary"
-          max-width="fit-content"
-        >
-          Добавить
-        </v-btn>
+        <v-fade-transition group leave-absolute hide-on-leave>
+          <v-btn
+            v-if="!orderProduct"
+            @click="updateOrderItems('post', product.id)"
+            :loading="loading"
+            variant="text"
+            color="primary"
+            max-width="fit-content"
+          >
+            Добавить
+          </v-btn>
 
-        <ProductControls
-          v-else
-          :product="orderProduct"
-          :quantity="orderProduct.order_item.quantity"
-          @store="updateOrderItems('post', product.id)"
-          @update="updateOrderItems('patch', product.id)"
-        />
-
-        {{ orderProduct?.order_item.quantity }}
-
+          <ProductControls
+            v-else
+            :quantity="orderProduct.order_item.quantity"
+            @store="updateOrderItems('post', product.id)"
+            @update="updateOrderItems('patch', product.id)"
+          />
+        </v-fade-transition>
 
         <div class="d-flex flex-nowrap align-center">
           {{ product.price }}
@@ -114,15 +112,14 @@ import { useOrder } from '@/Composables/useOrder'
 import { usePage } from '@inertiajs/vue3'
 
 defineComponent({ ProductControls })
+const { product } = defineProps({ product: Object })
 
-const { product } = defineProps({ 
-  product: Object,
-})
 const page = usePage()
+const { updateOrderItems, loading } = useOrder(page.props.order)
 const hover = ref(false)
-const loading = ref(false)
-const { updateOrderItems } = useOrder(page.props.order)
-const orderProduct = computed(() => page.props.order.products.find(item => item.id == product.id))
+const orderProduct = computed(() => {
+  return page.props.order.products.find(item => item.id == product.id)
+})
 </script>
 
 <style scoped>

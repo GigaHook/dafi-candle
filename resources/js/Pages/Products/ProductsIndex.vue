@@ -64,7 +64,7 @@
                 :key="i"
                 :title="sort.title"
                 :value="sort"
-                @click="setSort(sort)"
+                @click="selectedSort = sort"
               />
             </v-list>
           </ToolbarDropdown>
@@ -76,33 +76,23 @@
     <template v-if="$page.props.order">
       <BtnPrimary
         variant="elevated"
-        @click="$inertia.get(route('orders.show', $page.props.order.id))"
+        @click="$inertia.post(route('orders.edit.finish'))"
       >
-        Вернуться к заказу
+        Завершить редактирование
       </BtnPrimary>
     </template>
 
   </v-toolbar>
 
+  <!--PRODUCTS-->
   <v-container fluid>  
     <v-row>
-      <!--PRODUCTS-->
       <template v-if="!loading">
-        <template v-if="$page.props.order">
-          <ProductCardOrderEdit
+        <ProductCard
           v-for="product in products.data"
           :key="product.id"
           :product="product"
-          />
-        </template>
-
-        <template v-else>
-          <ProductCard
-            v-for="product in products.data"
-            :key="product.id"
-            :product="product"
-          />
-        </template>
+        />
       </template>
 
       <v-col v-else cols="12" class="d-flex justify-center align-center">
@@ -137,8 +127,8 @@ import ProductCard from '@/Components/ProductCard.vue'
 import ProductCardOrderEdit from '@/Components/ProductCardOrderEdit.vue'
 import ToolbarDropdown from '@/Components/ToolbarDropdown.vue'
 
-import { ref, watch, onBeforeUnmount, defineComponent } from 'vue'
-import { router, usePage } from '@inertiajs/vue3'
+import { ref, watch, defineComponent } from 'vue'
+import { router } from '@inertiajs/vue3'
 
 defineOptions({ layout: AppLayout })
 defineComponent({ ProductCard, ProductCardOrderEdit, ToolbarDropdown })
@@ -167,17 +157,10 @@ const sorts = [
   }
 ]
 
-const page = usePage()
 const loading = ref(false)
 const selectedTypes = ref(types.map(type => type.id))
 const selectedSort = ref(sorts[1]) 
 const searchText = ref()
-
-watch(selectedTypes, (oldTypes) => {
-  if (oldTypes.length == 0) {
-    selectedTypes.value[0] = types[0].id
-  }
-})
 
 const requestOptions = {
   preserveState: true,
@@ -194,26 +177,19 @@ function requestData() {
   }
 }
 
-function routeData() {
-  return page.props.order ? 'orders.edit' : 'products.index'
-}
-
 function update() {
-  router.get(route(routeData()), requestData(), requestOptions)
+  router.get(route('products.index'), requestData(), requestOptions)
 }
 
 function toPage(pageNumber) {
-  router.get(route(routeData()), {...requestData(), page: pageNumber}, requestOptions)
+  router.get(route('products.index'), {...requestData(), page: pageNumber}, requestOptions)
 }
 
-function setSort(sort) {
-  selectedSort.value = sort
-  update()
-}
+watch(selectedTypes, (oldTypes) => {
+  if (oldTypes.length == 0) {
+    selectedTypes.value[0] = types[0].id
+  }
+})
 
-//if (page.props.order) {
-//  onBeforeUnmount(() => {
-//    router.post(route('orders.edit.finish'))
-//  })
-//}
+watch(selectedSort, () => update())
 </script>

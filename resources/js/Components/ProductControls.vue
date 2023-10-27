@@ -29,10 +29,7 @@
 </template>
 
 <script setup>
-defineProps({
-  product: Object,
-  quantity: Number,
-})
+defineProps({ quantity: Number })
 </script>
 
 

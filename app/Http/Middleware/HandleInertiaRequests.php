@@ -40,7 +40,7 @@ class HandleInertiaRequests extends Middleware
             'toast'  => session('toast'),
             'badges' => session('badges'),
             'cart'   => cartService()->getCart(),
-            'order'  => Order::find(session('editingOrder'))->load('products') ?? null,
+            'order'  => Order::find(session('editingOrder'))?->load('products'),
             'ziggy'  => function() use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
                     'location' => $request->url(),
