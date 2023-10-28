@@ -47,7 +47,7 @@
       <div class="px-4 py-1 position-relative" style="min-height: 68px !important;">
         <v-slide-x-reverse-transition class="position-absolute right-0 ma-2">
           <v-icon
-            v-if="productInstance"
+            v-if="storedProduct"
             :icon="icon"
             size="32"
             class="position-absolute"
@@ -77,7 +77,7 @@
       >
         <v-fade-transition group leave-absolute hide-on-leave>
           <v-btn
-            v-if="!productInstance"
+            v-if="!storedProduct"
             @click="store"
             :loading="loading"
             variant="text"
@@ -89,7 +89,7 @@
 
           <ProductControls
             v-else
-            :quantity="$page.props.order ? productInstance.order_item.quantity : productInstance.quantity"
+            :quantity="quantity"
             @store="store"
             @update="update"
           />
@@ -108,8 +108,9 @@
 <script setup>
 import ProductControls from './ProductControls.vue'
 import useProduct from '@/Composables/useProduct'
-import { ref, defineComponent } from 'vue'
+import { ref, computed, defineComponent } from 'vue'
 import { usePage } from '@inertiajs/vue3'
+import { useOrder } from '@/Composables/useOrder'
 
 defineComponent({ ProductControls })
 
@@ -117,14 +118,43 @@ const { product } = defineProps({ product: Object })
 const page = usePage()
 const hover = ref(false)
 
-const { 
-  productInstance, 
-  loading, 
-  store, 
-  update, 
-  buttonText, 
-  icon,
-} = useProduct(product, page.props.order)
+/*Каталог или редактирование заказов*/
+
+let storedProduct
+let store
+let update
+let loading
+let buttonText
+let icon
+let quantity
+
+if (!page.props.order) {
+  ({
+    storedProduct,
+    loading,
+    store,
+    update,
+    quantity,
+  } = useProduct(product))
+
+  buttonText = 'Купить'
+  icon = 'mdi-cart-check'
+} else {
+  const { 
+    updateOrderItems,
+    loading: orderLoading
+  } = useOrder(page.props.order)
+
+  loading = orderLoading
+  const getStoredProduct = () => page.props.order.products.find(item => item.id == product.id)
+  storedProduct = computed(getStoredProduct)
+  quantity = computed(() => getStoredProduct().order_item.quantity)
+  store = () => updateOrderItems('post', product.id)
+  update = () => updateOrderItems('patch', product.id)
+  buttonText = 'Добавить'
+  icon = 'mdi-notebook-check-outlined'
+}
+
 
 </script>
 

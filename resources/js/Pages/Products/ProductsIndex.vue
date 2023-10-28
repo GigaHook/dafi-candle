@@ -85,7 +85,7 @@
   </v-toolbar>
 
   <!--PRODUCTS-->
-  <v-container fluid>  
+  <v-container fluid> 
     <v-row>
       <template v-if="!loading">
         <ProductCard
@@ -129,6 +129,7 @@ import ToolbarDropdown from '@/Components/ToolbarDropdown.vue'
 
 import { ref, watch, defineComponent } from 'vue'
 import { router } from '@inertiajs/vue3'
+import { useDisplay } from 'vuetify/lib/framework.mjs'
 
 defineOptions({ layout: AppLayout })
 defineComponent({ ProductCard, ProductCardOrderEdit, ToolbarDropdown })
