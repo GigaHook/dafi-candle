@@ -2,7 +2,7 @@
   <Head title="Оформление заказа"/>
   <v-container>
     <v-row class="justify-center align-center" style="min-height: 90vh;">
-      <v-col xs="12" sm="8" md="7" lg="6" xl="4">
+      <v-col cols="12" sm="12" md="9" lg="6" xl="4">
         <v-card class="px-4 pt-2 pb-4" elevation="3">
 
           <h1 class="text-h5 mb-2">Оформление заказа</h1>
@@ -194,7 +194,7 @@
                 @confirm="tab == 0 ? cdekSubmit() : postSubmit()"
                 :confirm-text="'Оформить'"
               />
-              <!--я тут нагадил-->
+              <!--TODO тут не робит-->
             </BtnPrimary>
             
             <BtnSecondary @click="$router.get(route('cart.index'))" :disabled="loading">
