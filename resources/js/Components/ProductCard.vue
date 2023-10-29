@@ -140,7 +140,7 @@ if (!page.props.order) {
   buttonText = 'Купить'
   icon = 'mdi-cart-check'
 } else {
-  const { 
+  const {
     updateOrderItems,
     loading: orderLoading
   } = useOrder(page.props.order)
@@ -154,8 +154,6 @@ if (!page.props.order) {
   buttonText = 'Добавить'
   icon = 'mdi-notebook-check-outlined'
 }
-
-
 </script>
 
 <style scoped>

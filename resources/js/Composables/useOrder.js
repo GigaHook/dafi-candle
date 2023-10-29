@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { router } from '@inertiajs/vue3'
 
 export function useOrder(order) {
@@ -6,11 +6,6 @@ export function useOrder(order) {
   const creationDate = createdAt[0]
   const fullTime = createdAt[1].split('.')[0].split(':')
   const creationTime = `${fullTime[0]}:${fullTime[1]}`
-  const statusColors = {
-    'В работе': 'blue-lighten-1',
-    'Отправлен': 'success',
-    'Отменён': 'grey-darken-3',
-  }
 
   const status = ref(order.status)
   const loading = ref(false)
@@ -40,7 +35,6 @@ export function useOrder(order) {
   return {
     creationDate,
     creationTime,
-    statusColors,
     status,
     loading,
     updateStatus,

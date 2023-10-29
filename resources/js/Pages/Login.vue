@@ -42,7 +42,7 @@
               <BtnPrimary type="submit">
                 Войти
               </BtnPrimary>
-              <BtnSecondary @click="$router.get(route('user.create'))">
+              <BtnSecondary @click="$inertia.get(route('user.create'))">
                 Нет аккаунта?
               </BtnSecondary>
             </div>
@@ -69,14 +69,14 @@ export default {
   methods: {
     submit() {
       if (this.tab == 'tel') {
-        this.$router.post(route('user.auth'), {
+        this.$inertia.post(route('user.auth'), {
           tel: this.tel,
           password: this.password,
         })
         return
       }
       if (this.tab == 'email') {
-        this.$router.post(route('user.auth'), {
+        this.$inertia.post(route('user.auth'), {
           email: this.email,
           password: this.password,
         })
@@ -91,13 +91,13 @@ export default {
 </style>
 
 
-  <!--<v-btn @click="$router.get('/')">
+  <!--<v-btn @click="$inertia.get('/')">
     назад
   </v-btn><br>
   <v-btn class="" color="primary">
     Войти
   </v-btn><br>
   Нет аккаунта?<br>
-  <v-btn class="" color="primary" variant="outlined" @click="$router.get('/register')">
+  <v-btn class="" color="primary" variant="outlined" @click="$inertia.get('/register')">
     Зарегистрироваться
   </v-btn>-->

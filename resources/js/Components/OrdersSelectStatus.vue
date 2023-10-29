@@ -28,5 +28,11 @@
 import { useOrder } from '@/Composables/useOrder'
 
 const { order } = defineProps({ order: Object })
-const { statusColors, updateStatus, loading, status } = useOrder(order)
+const { updateStatus, loading, status } = useOrder(order)
+const statusColors = 
+{
+  'В работе': 'blue-lighten-1',
+  'Отправлен': 'success',
+  'Отменён': 'grey-darken-3',
+}
 </script>

@@ -28,16 +28,11 @@ export default function useProduct(product) {
     })
   }
 
-  function destroy() {
-
-  }
-
   return {
     storedProduct,
     loading,
     store,
     update,
-    destroy,
     quantity,
   }
 }

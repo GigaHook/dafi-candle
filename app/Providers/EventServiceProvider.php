@@ -35,9 +35,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {   
-        /**
-         * Сохранение товаров в корзине при регистрации
-         */
         Event::listen(Registered::class, function (Registered $event) {
             (new GuestCartService)->transferItems($event->user);
         });

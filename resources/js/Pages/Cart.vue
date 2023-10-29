@@ -56,7 +56,7 @@
                 :min-height="display.sm.value && '150px'"
               >
                 Чтобы оформить заказ, нужно зарегистрироваться или войти в аккаунт.<br>
-                <BtnPrimary @click="$inertia.get(route('login'))" class="mt-2">
+                <BtnPrimary @click="$inertia.get(route('orders.create'))" class="mt-2">
                   Войти
                 </BtnPrimary>
               </v-alert>

@@ -34,6 +34,7 @@ class RegisteredUserController extends Controller
         $user = User::create($request->validated());
         event(new Registered($user));
         Auth::login($user);
-        return redirect()->route('home');
+        $url = session()->pull('intended_url');
+        return $url ? redirect($url) : redirect()->route('home');
     }
 }
