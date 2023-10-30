@@ -188,16 +188,23 @@
           </v-window>
 
           <div class="d-flex justify-space-between align-center pt-1">
-            <BtnPrimary :loading="loading">
+            <BtnPrimary
+              @click="checkValidation"
+              :loading="loading"
+            >
               Оформить заказ
               <Modal 
-                @confirm="tab == 0 ? cdekSubmit() : postSubmit()"
-                :confirm-text="'Оформить'"
+                confirm-text="Оформить"
+                v-model="modal"
+                @confirm="submit"
               />
               <!--TODO тут не робит-->
             </BtnPrimary>
             
-            <BtnSecondary @click="$router.get(route('cart.index'))" :disabled="loading">
+            <BtnSecondary
+              @click="$inertia.get(route('cart.index'))"
+              :disabled="loading"
+            >
               Отмена
             </BtnSecondary>
           </div>
@@ -209,22 +216,18 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useForm, usePage } from '@inertiajs/vue3'
 import Modal from '@/Components/Modal.vue'
+import AppLayout from '@/Layouts/AppLayout.vue'
 
-defineComponent({
-  Modal: Modal,
-})
+defineOptions({ layout: AppLayout })
 
-const cart = defineProps({
-  cart: Object
-})
-
-const tab = ref('cdek')
+const tab = ref(0)
 const loading = ref(false)
 const cdekVForm = ref()
 const postVForm = ref()
+const modal = ref(false)
 const page = usePage()
 const user = computed(() => page.props.user)
 
@@ -260,26 +263,30 @@ const postFormData = useForm({
   tel:          null,
 })
 
-async function cdekSubmit() {
-  if (await cdekVForm.value.validate()) {
-    cdekFormData.post(route('orders.store'), {
-      preserveScroll: true,
-      preserveState: true,
-      onStart: () => loading.value = true,
-      onFinish: () => loading.value = false
+function getFormVariant() {
+  return tab.value
+    ? reactive({
+      formData: cdekFormData,
+      vform: cdekVForm,
     })
-  }
+    : reactive({
+      formData: postFormData,
+      vform: postVForm,
+    })
 }
 
-async function postSubmit() {
-  if (await postVForm.value.validate()) {
-    postFormData.post(route('orders.store'), {
-      preserveScroll: true,
-      preserveState: true,
-      onStart: () => loading.value = true,
-      onFinish: () => loading.value = false
-    })
-  }
+async function checkValidation() {
+  const isValid = await getFormVariant().vform.validate()
+  if (isValid) modal.value = true
+}
+
+function submit() {
+  getFormVariant().formData.post(route('orders.store'), {
+    preserveScroll: true,
+    preserveState: true,
+    onStart: () => loading.value = true,
+    onFinish: () => loading.value = false
+  })
 }
 
 onMounted(() => {
@@ -289,15 +296,6 @@ onMounted(() => {
   postFormData.tel = user?.value.tel
 })
 
-</script>
-
-<script>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import { defineComponent } from 'vue';
-
-export default {
-  layout: AppLayout
-}
 </script>
 
 <style scoped>

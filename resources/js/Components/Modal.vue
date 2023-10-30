@@ -47,10 +47,6 @@
 <script setup>
 import { ref } from 'vue'
 
-const dialog = ref(false)
-
-const emit = defineEmits('confirm', 'deny')
-
 const props = defineProps({
   noDeny: {
     type: Boolean,
@@ -77,6 +73,9 @@ const props = defineProps({
     required: false,
   },
 })
+
+const dialog = ref(false)
+const emit = defineEmits('confirm', 'deny')
 
 function handle(option) {
   emit(option)
