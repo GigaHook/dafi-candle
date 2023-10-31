@@ -193,10 +193,13 @@
               :loading="loading"
             >
               Оформить заказ
-              <Modal 
+              <Modal
+                activator
                 confirm-text="Оформить"
                 v-model="modal"
                 @confirm="submit"
+                @deny="modal = false"
+                @close="modal = false"
               />
               <!--TODO тут не робит-->
             </BtnPrimary>
@@ -216,7 +219,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useForm, usePage } from '@inertiajs/vue3'
 import Modal from '@/Components/Modal.vue'
 import AppLayout from '@/Layouts/AppLayout.vue'
@@ -264,20 +267,21 @@ const postFormData = useForm({
 })
 
 function getFormVariant() {
-  return tab.value
-    ? reactive({
+  return tab.value == 0
+    ? {
       formData: cdekFormData,
-      vform: cdekVForm,
-    })
-    : reactive({
+      vform: cdekVForm.value,
+    }
+    : {
       formData: postFormData,
-      vform: postVForm,
-    })
+      vform: postVForm.value,
+    }
 }
 
 async function checkValidation() {
-  const isValid = await getFormVariant().vform.validate()
-  if (isValid) modal.value = true
+  getFormVariant().vform.validate().then(() => {
+    if (getFormVariant().vform.isValid) modal.value = true
+  })
 }
 
 function submit() {

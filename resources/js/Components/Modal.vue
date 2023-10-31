@@ -8,7 +8,7 @@
       <v-col cols="10" sm="8" md="6" lg="4" xl="3">
         <v-card class="position-relative pb-3 px-1" style="overflow: visible;">
           <v-btn
-            @click="dialog = false"
+            @click="handle('close')"
             icon="mdi-close"
             class="position-absolute right-0 me-n10"
             size="36"
@@ -75,13 +75,12 @@ const props = defineProps({
 })
 
 const dialog = ref(false)
-const emit = defineEmits('confirm', 'deny')
+const emit = defineEmits('confirm', 'deny', 'close')
 
 function handle(option) {
   emit(option)
   dialog.value = false
 }
-
 </script>
 
 <style scoped>
