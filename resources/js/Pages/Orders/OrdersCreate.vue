@@ -8,8 +8,8 @@
           <h1 class="text-h5 mb-2">Оформление заказа</h1>
 
           <v-tabs v-model="tab" fixed-tabs>
-            <v-tab name="cdek">Доставка по СДЭК</v-tab>
-            <v-tab name="post">Доставка по Почте РФ</v-tab>
+            <v-tab value="cdek">Доставка по СДЭК</v-tab>
+            <v-tab value="post">Доставка по Почте РФ</v-tab>
           </v-tabs>
           
           <v-window v-model="tab">
@@ -201,7 +201,6 @@
                 @deny="modal = false"
                 @close="modal = false"
               />
-              <!--TODO тут не робит-->
             </BtnPrimary>
             
             <BtnSecondary
@@ -226,7 +225,7 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 
 defineOptions({ layout: AppLayout })
 
-const tab = ref(0)
+const tab = ref('cdek')
 const loading = ref(false)
 const cdekVForm = ref()
 const postVForm = ref()
@@ -267,7 +266,7 @@ const postFormData = useForm({
 })
 
 function getFormVariant() {
-  return tab.value == 0
+  return tab.value == 'cdek'
     ? {
       formData: cdekFormData,
       vform: cdekVForm.value,
@@ -299,9 +298,4 @@ onMounted(() => {
   cdekFormData.tel = user?.value.tel
   postFormData.tel = user?.value.tel
 })
-
 </script>
-
-<style scoped>
-
-</style>

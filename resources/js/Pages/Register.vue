@@ -36,8 +36,6 @@
               label="Пароль"
               type="password"
               hint="От 6 до 20 символов"
-              min="6"
-              max="20"
               :rules="[rules.required, rules.length]"
             />
             <div class="d-flex justify-space-between">

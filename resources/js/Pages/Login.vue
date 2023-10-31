@@ -3,7 +3,12 @@
     <v-row class="justify-center align-center" style="min-height: 90vh;">
       <v-col xs="12" sm="8" md="7" lg="6" xl="4">
         <v-card class="px-5 pb-5 pt-3">
-          <v-form @submit.prevent="submit">
+          <v-form
+            @submit.prevent="submit"
+            ref="vform"
+            validate-on="submit"
+            :disabled="loading"
+          >
             <h1 class="text-h4 mb-4">Войти в аккаунт</h1>
             <v-tabs
               v-model="tab"
@@ -12,6 +17,7 @@
               <v-tab value="email">По почте</v-tab>
               <v-tab value="tel">По телефону</v-tab>
             </v-tabs>
+
             <v-window v-model="tab">
               <v-window-item value="email">
                 <FormInput
@@ -21,11 +27,13 @@
                   class="mt-4"
                 />
               </v-window-item>
+
               <v-window-item value="tel">
                 <FormInput
                   v-model="tel"
                   label="Телефон"
                   type="tel"
+                  v-mask="'+7 (###) ###-##-##'"
                   class="mt-4"
                 />
               </v-window-item>
@@ -35,11 +43,10 @@
               label="Пароль"
               type="password"
               hint="От 6 до 20 символов"
-              min="6"
-              max="20"
+              :rules="[rules.required, rules.password]"
             />
             <div class="d-flex justify-space-between">
-              <BtnPrimary type="submit">
+              <BtnPrimary type="submit" :loading="loading">
                 Войти
               </BtnPrimary>
               <BtnSecondary @click="$inertia.get(route('user.create'))">
@@ -53,51 +60,37 @@
   </v-container>
 </template>
 
-<script>
+<script setup>
 import AppLayout from '../Layouts/AppLayout.vue'
+import { ref } from 'vue'
+import { router } from '@inertiajs/vue3'
 
-export default {
-  layout: AppLayout,
-  data() {
-    return {
-      tab: null,
-      email: null,
-      tel: null,
-      password: null,
+defineOptions({ layout: AppLayout })
+
+const rules = {
+  required: v => !!v || 'Введите пароль',
+  password: v => (v?.length >= 6 && v?.length <= 20) || 'От 6 до 20 символов',
+}
+
+const tab = ref('tel')
+const loading = ref(false)
+const email = ref()
+const tel = ref()
+const password = ref()
+
+function submit() {
+  const formVariant = tab.value == 'tel' 
+    ? {
+      tel: tel.value,
+      password: password.value,
     }
-  },
-  methods: {
-    submit() {
-      if (this.tab == 'tel') {
-        this.$inertia.post(route('user.auth'), {
-          tel: this.tel,
-          password: this.password,
-        })
-        return
-      }
-      if (this.tab == 'email') {
-        this.$inertia.post(route('user.auth'), {
-          email: this.email,
-          password: this.password,
-        })
-      }
+    : {
+      email: email.value,
+      password: password.value,
     }
-  }
+  router.post(route('user.auth'), formVariant, {
+    onStart: () => loading.value = true,
+    onFinish: () => loading.value = false,
+  })
 }
 </script>
-
-<style scoped>
-
-</style>
-
-
-  <!--<v-btn @click="$inertia.get('/')">
-    назад
-  </v-btn><br>
-  <v-btn class="" color="primary">
-    Войти
-  </v-btn><br>
-  Нет аккаунта?<br>
-  <v-btn class="" color="primary" variant="outlined" @click="$inertia.get('/register')">
-    Зарегистрироваться
-  </v-btn>-->

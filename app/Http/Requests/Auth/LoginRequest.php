@@ -93,4 +93,10 @@ class LoginRequest extends FormRequest
     {
         return Str::transliterate(Str::lower($this->input($this->tel ? 'tel' : 'email')).'|'.$this->ip());
     }
+
+    public function messages(): array {
+        return [
+            ''
+        ];
+    }
 }
