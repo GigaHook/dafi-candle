@@ -20,9 +20,6 @@ import VueTheMask from 'vue-the-mask'
 import Toast, { POSITION } from "vue-toastification"
 import "vue-toastification/dist/index.css"
 
-//mixins or something idk
-import { router } from '@inertiajs/vue3'
-
 //compoents 
 import BtnPrimary from './Components/BtnPrimary.vue'
 import BtnSecondary from './Components/BtnSecondary.vue'
@@ -67,11 +64,8 @@ createInertiaApp({
         .component('BtnSecondary', BtnSecondary)
         .component('FormInput', FormInput)
         .component('Modal', Modal)
-
-        app.config.globalProperties.$router = router
         
         app.mount(el)
-        console.log(app.config.globalProperties)
 
         return app
     },

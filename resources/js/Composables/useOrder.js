@@ -1,12 +1,11 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { router } from '@inertiajs/vue3'
 
 export function useOrder(order) {
   const createdAt = order.created_at.split('T')
-  const creationDate = createdAt[0]
-  const fullTime = createdAt[1].split('.')[0].split(':')
-  const creationTime = `${fullTime[0]}:${fullTime[1]}`
-
+  const creationDate = computed(() => createdAt[0])
+  const fullTime = computed(() => createdAt[1].split('.')[0].split(':'))
+  const creationTime = computed(() => `${fullTime.value[0]}:${fullTime.value[1]}`)
   const status = ref(order.status)
   const loading = ref(false)
 

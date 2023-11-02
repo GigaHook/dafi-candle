@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use App\Models\Order;
-use App\Models\Type;
 use App\Services\BadgeService;
 use App\Services\OrderService;
 use App\Services\ProductService;
@@ -24,7 +23,7 @@ class OrderController extends Controller
         $this->middleware('badges.orders')->only(['index']);
     }
 
-    public function index(): \Inertia\Response 
+    public function index(): \Inertia\Response
     {   
         $this->badgeService->removeOrdersBadges();
         return Inertia::render('Orders/OrdersIndex', [
@@ -57,7 +56,7 @@ class OrderController extends Controller
     
     public function finishEdit(): RedirectResponse
     {
-        return redirect()->route('orders.show', session()->pull('editingOrder'));;
+        return redirect()->route('orders.show', session()->pull('editingOrder'));
     }
 
     public function update(OrderUpdateRequest $request, Order $order): void 
@@ -74,4 +73,5 @@ class OrderController extends Controller
     {
         $this->orderService->deleteOrder($order);
     }
+
 }
