@@ -19,7 +19,7 @@
           </v-card-title>
 
           <v-card-text class="text-body-1">
-            {{ text }}
+            <slot>{{ text }}</slot>
           </v-card-text>
 
           <div class="d-flex">

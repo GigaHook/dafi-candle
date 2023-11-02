@@ -200,7 +200,10 @@
                 @confirm="submit"
                 @deny="modal = false"
                 @close="modal = false"
-              />
+              >
+                Оформение заказа на стоимость {{ $page.props.cart.totalPrice }}
+                <v-icon icon="mdi-currency-rub" size="18" class="pb-1 ms-n1"/>.
+              </Modal>
             </BtnPrimary>
             
             <BtnSecondary
@@ -218,10 +221,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useForm, usePage } from '@inertiajs/vue3'
-import Modal from '@/Components/Modal.vue'
 import AppLayout from '@/Layouts/AppLayout.vue'
+import { ref, computed, onMounted } from 'vue'
+import { router, useForm, usePage } from '@inertiajs/vue3'
 
 defineOptions({ layout: AppLayout })
 
@@ -287,8 +289,12 @@ function submit() {
   getFormVariant().formData.post(route('orders.store'), {
     preserveScroll: true,
     preserveState: true,
-    onStart: () => loading.value = true,
-    onFinish: () => loading.value = false
+    onStart: () => {
+      loading.value = true
+      modal.value = false
+    },
+    onSuccess: () => setTimeout(() => router.get(route('orders.after')), 3000),
+    onFinish: () => loading.value = false,
   })
 }
 

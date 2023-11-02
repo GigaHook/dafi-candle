@@ -32,13 +32,15 @@ Route::middleware('guest')->group(function() {
 
 Route::middleware('auth')->group(function() {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-    Route::inertia('profile', 'Profile')->name('profile');
+    Route::inertia('profile', 'Profile')->name('profile'); 
     //Route::inertia('about', 'about');
 
     //заказы
     Route::resource('orders', OrderController::class); //+ещё мидлвары в контроллере
     Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
     Route::post('orders/finish_edit', [OrderController::class,'finishEdit'])->name('orders.edit.finish');
+    //Route::inertia('orders/created', 'Orders/')->name('orders.created');
+    
 });
 
 //изменение содержания заказа

@@ -42,25 +42,16 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $auth = Auth::attempt($this->only('tel', 'password'))
-             || Auth::attempt($this->only('email', 'password'));
+        $auth = Auth::attempt($this->all());
 
         if (!$auth) {
             RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([
-                $this->tel ? 'tel' : 'email' => trans('auth.failed'),
+                'auth' => 'Неверный лоигн или пароль'
             ]);
         }
         
         RateLimiter::clear($this->throttleKey());
-
-        //было так
-        //if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-        //    RateLimiter::hit($this->throttleKey());
-        //    throw ValidationException::withMessages([
-        //        'email' => trans('auth.failed'),
-        //    ]);
-        //}
     }
 
     /**
@@ -70,7 +61,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 7)) {
             return;
         }
 
@@ -79,10 +70,11 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
+            'throttle' => 'Слишко много попыток входа в аккаунт. Повторите попытку позже.'
+            //'email' => trans('auth.throttle', [
+            //    'seconds' => $seconds,
+            //    'minutes' => ceil($seconds / 60),
+            //]),
         ]);
     }
 
@@ -92,11 +84,5 @@ class LoginRequest extends FormRequest
     public function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->input($this->tel ? 'tel' : 'email')).'|'.$this->ip());
-    }
-
-    public function messages(): array {
-        return [
-            ''
-        ];
     }
 }

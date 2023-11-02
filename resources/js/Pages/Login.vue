@@ -1,13 +1,13 @@
 <template>
   <v-container>
     <v-row class="justify-center align-center" style="min-height: 90vh;">
-      <v-col xs="12" sm="8" md="7" lg="6" xl="4">
+      <v-col xs="12" sm="8" md="7" lg="5" xl="4">
         <v-card class="px-5 pb-5 pt-3">
           <v-form
             @submit.prevent="submit"
-            ref="vform"
-            validate-on="submit"
-            :disabled="loading"
+            ref="form"
+            validate-on="blur"
+            :readonly="loading"
           >
             <h1 class="text-h4 mb-4">Войти в аккаунт</h1>
             <v-tabs
@@ -24,6 +24,7 @@
                   v-model="email"
                   label="E-mail"
                   type="email"
+                  prepend-inner-icon="mdi-email"
                   class="mt-4"
                 />
               </v-window-item>
@@ -33,6 +34,7 @@
                   v-model="tel"
                   label="Телефон"
                   type="tel"
+                  prepend-inner-icon="mdi-phone"
                   v-mask="'+7 (###) ###-##-##'"
                   class="mt-4"
                 />
@@ -42,8 +44,10 @@
               v-model="password"
               label="Пароль"
               type="password"
+              prepend-inner-icon="mdi-key"
               hint="От 6 до 20 символов"
               :rules="[rules.required, rules.password]"
+              :error-messages="$page.props.errors.auth"
             />
             <div class="d-flex justify-space-between">
               <BtnPrimary type="submit" :loading="loading">
@@ -72,25 +76,30 @@ const rules = {
   password: v => (v?.length >= 6 && v?.length <= 20) || 'От 6 до 20 символов',
 }
 
-const tab = ref('tel')
 const loading = ref(false)
+const form = ref()
+const tab = ref('email')
 const email = ref()
 const tel = ref()
 const password = ref()
 
-function submit() {
-  const formVariant = tab.value == 'tel' 
-    ? {
-      tel: tel.value,
-      password: password.value,
+async function submit() {
+  form.value.validate().then(() => {
+    if (form.value.isValid) {
+      const formVariant = tab.value == 'tel' 
+        ? {
+          tel: tel.value,
+          password: password.value,
+        }
+        : {
+          email: email.value,
+          password: password.value,
+        }
+      router.post(route('user.auth'), formVariant, {
+        onStart: () => loading.value = true,
+        onFinish: () => loading.value = false,
+      })
     }
-    : {
-      email: email.value,
-      password: password.value,
-    }
-  router.post(route('user.auth'), formVariant, {
-    onStart: () => loading.value = true,
-    onFinish: () => loading.value = false,
   })
 }
 </script>
