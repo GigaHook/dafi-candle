@@ -48,6 +48,7 @@
               hint="От 6 до 20 символов"
               :rules="[rules.required, rules.password]"
               :error-messages="$page.props.errors.auth"
+              @update:model-value="errorMessages = ''"
             />
             <div class="d-flex justify-space-between">
               <BtnPrimary type="submit" :loading="loading">

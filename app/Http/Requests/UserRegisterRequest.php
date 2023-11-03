@@ -22,10 +22,18 @@ class UserRegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:50'],
-            'tel' => ['required', 'string', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'unique:App\Models\User,tel', 'min:10', 'max:30'],
+            'name' => ['required', 'string', 'max:100'],
+            'tel' => ['required', 'string', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'unique:App\Models\User,tel'],
             'password' => ['required', 'string', 'max:20', 'min:6'],
-            'email' => ['required', 'string', 'email', 'unique:App\Models\User,email', 'max:50'],
+            'email' => ['required', 'string', 'email', 'unique:App\Models\User,email', 'max:100'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'tel.unique'=> 'Этот номер уже занят',
+            'email.unique'=> 'Эта почта уже занята',
         ];
     }
 }

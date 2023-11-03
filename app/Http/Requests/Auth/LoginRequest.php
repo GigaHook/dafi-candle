@@ -47,7 +47,9 @@ class LoginRequest extends FormRequest
         if (!$auth) {
             RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([
-                'auth' => 'Неверный лоигн или пароль'
+                'auth' => $this->tel 
+                    ? 'Неверный телефон или пароль' 
+                    : 'Неверная почта или пароль',
             ]);
         }
         
@@ -70,7 +72,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'throttle' => 'Слишко много попыток входа в аккаунт. Повторите попытку позже.'
+            'throttle' => 'Слишко много попыток входа. Повторите попытку позже.'
             //'email' => trans('auth.throttle', [
             //    'seconds' => $seconds,
             //    'minutes' => ceil($seconds / 60),
