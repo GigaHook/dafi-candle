@@ -37,7 +37,7 @@
 
       <div class="nav-divider"></div> 
 
-      <NavItemDesktop @click="$router.get(route('products.index'))" icon>
+      <NavItemDesktop @click="$inertia.get(route('products.index'))" icon>
         <v-icon icon="mdi-shopping"/>
         <v-tooltip
           activator="parent"
@@ -48,7 +48,7 @@
         </v-tooltip>
       </NavItemDesktop>
 
-      <NavItemDesktop icon>
+      <NavItemDesktop @click="$inertia.get(route('cart.index'))" icon>
         <v-icon icon="mdi-cart"/>
         <v-tooltip
           activator="parent"
@@ -61,7 +61,7 @@
 
       <NavItemDesktop
         v-if="!!$page.props.user"
-        @click="$router.get('/profile')"
+        @click="$inertia.get('/profile')"
         icon
       >
         <v-icon icon="mdi-account"/>
@@ -76,7 +76,7 @@
 
       <NavItemDesktop
         v-else
-        @click="$router.get('/login')"
+        @click="$inertia.get('/login')"
         icon
       >
       <v-icon icon="mdi-account"/>

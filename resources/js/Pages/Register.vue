@@ -25,7 +25,8 @@
               label="E-mail"
               type="email"
               prepend-inner-icon="mdi-email"
-              :rules="[rules.required, rules.length]"
+              :rules="[rules.required, rules.length, rules.email]"
+              :error-messages="formData.errors.email"
             />
             <FormInput
               name="tel"
@@ -34,7 +35,8 @@
               type="tel"
               prepend-inner-icon="mdi-phone"
               v-mask="'+7 (###) ###-##-##'"
-              :rules="[rules.required]"
+              :rules="[rules.required, rules.tel]"
+              :error-messages="formData.errors.tel"
             />
             <FormInput
               name="password"
@@ -63,14 +65,13 @@
 <script setup>
 import AppLayout from '../Layouts/AppLayout.vue'
 import FormInput from '../Components/FormInput.vue'
-import { ref, watch, computed } from 'vue'
-import { useForm, usePage } from '@inertiajs/vue3'
+import { ref, watch } from 'vue'
+import { useForm } from '@inertiajs/vue3'
 
 defineOptions({ layout: AppLayout })
 
 const loading = ref(false)
 const form = ref()
-const page = usePage()
 const formData = useForm({
   name:     null,
   email:    null,
@@ -78,42 +79,32 @@ const formData = useForm({
   password: null,
 })
 
-const telValue = ref(formData.tel)
-const emailValue = ref(formData.email)
-
-const telInput = () => form.value.items.find(item => item.id == 'tel')
-const emailInput = () => form.value.items.find(item => item.id == 'email')
-
 const rules = {
   required: text => !!text || 'Это поле нужно заполнить',
   password: text => (text?.length >= 6 && text?.length <= 20) || 'От 6 до 20 символов',
+  tel:      text => text?.length == 18 || 'Введите номер полностью',
+  email:    text => (text?.includes('@') && text?.includes('.')) || 'Введите почту полностью',
   length:   text => text?.length <= 100 || 'Слишком длинное значение',
 }
 
-watch(telValue, () => {
-  if (telInput().errorMessages) {
-    telInput().errorMessages = null
-    telInput().isValid = true
+watch(() => formData.tel, () => {
+  if (formData.errors.tel) {
+    formData.clearErrors('tel')
   }
 })
 
-/*
-после субмита если есть ошибки в props.errors
-установить для каждого input поля ошибки
-проверять model-value у tel и email на изменения
-при изменении убирать ошибки и ревалидировать поле
-*/
+watch(() => formData.email, () => {
+  if (formData.errors.email) {
+    formData.clearErrors('email')
+  }
+})
 
 function submit() {
   form.value.validate().then(() => {
     if (form.value.isValid) {
       formData.post(route('user.store'), {
         onStart: () => loading.value = true, 
-        onFinish: () => {
-          loading.value = false
-          telInput().errorMessages = page.props.errors.tel ?? null
-          emailInput.errorMessages = page.props.errors.email ?? null
-        },
+        onFinish: () => loading.value = false,
       })
     }
   })

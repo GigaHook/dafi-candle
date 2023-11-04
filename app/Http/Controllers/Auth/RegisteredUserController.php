@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRegisterRequest;
 use App\Models\User;
+use App\Notifications\RegistrationEmail;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -34,6 +35,7 @@ class RegisteredUserController extends Controller
         $user = User::create($request->validated());
         event(new Registered($user));
         Auth::login($user);
+        $user->notify(new RegistrationEmail());
         $url = session()->pull('intended_url');
         return $url ? redirect($url) : redirect()->route('home');
     }

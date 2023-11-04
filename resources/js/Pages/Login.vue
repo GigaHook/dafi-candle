@@ -21,34 +21,37 @@
             <v-window v-model="tab">
               <v-window-item value="email">
                 <FormInput
-                  v-model="email"
+                  v-model="formData.email"
                   label="E-mail"
                   type="email"
                   prepend-inner-icon="mdi-email"
                   class="mt-4"
+                  :rules="[rules.requiredOne, rules.email, rules.length]"
+                  :error-messages="formData.errors.email"
                 />
               </v-window-item>
 
               <v-window-item value="tel">
                 <FormInput
-                  v-model="tel"
+                  v-model="formData.tel"
                   label="Телефон"
                   type="tel"
                   prepend-inner-icon="mdi-phone"
                   v-mask="'+7 (###) ###-##-##'"
                   class="mt-4"
+                  :rules="[rules.requiredOne, rules.tel]"
+                  :error-messages="formData.errors.tel"
                 />
               </v-window-item>
             </v-window>
             <FormInput
-              v-model="password"
+              v-model="formData.password"
               label="Пароль"
               type="password"
               prepend-inner-icon="mdi-key"
               hint="От 6 до 20 символов"
               :rules="[rules.required, rules.password]"
-              :error-messages="$page.props.errors.auth"
-              @update:model-value="errorMessages = ''"
+              :error-messages="formData.errors.password"
             />
             <div class="d-flex justify-space-between">
               <BtnPrimary type="submit" :loading="loading">
@@ -67,36 +70,52 @@
 
 <script setup>
 import AppLayout from '../Layouts/AppLayout.vue'
-import { ref } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { ref, watch } from 'vue'
+import { useForm } from '@inertiajs/vue3'
 
 defineOptions({ layout: AppLayout })
-
-const rules = {
-  required: v => !!v || 'Введите пароль',
-  password: v => (v?.length >= 6 && v?.length <= 20) || 'От 6 до 20 символов',
-}
 
 const loading = ref(false)
 const form = ref()
 const tab = ref('email')
-const email = ref()
-const tel = ref()
-const password = ref()
+const formData = useForm({
+  email: null,
+  tel: null,
+  password: null,
+})
 
-async function submit() {
+const rules = {
+  requiredOne:  () => !!(formData.email?.length || formData.tel?.length) || 'Заполните это поле',
+  required:   text => !!text || 'Заполните это поле',
+  password:   text => (text?.length >= 6 && text?.length <= 20) || 'От 6 до 20 символов',
+  tel:        text => (tab.value != 'tel' || text?.length == 18) || 'Введите номер полностью',
+  email:      text => (tab.value != 'email' || text?.includes('@') && text?.includes('.')) || 'Введите почту полностью',
+  length:     text => text?.length <= 100 || 'Слишком длинное значение',
+}
+
+watch(() => formData.tel, () => {
+  if (formData.errors.tel) {
+    formData.clearErrors('tel')
+  }
+})
+
+watch(() => formData.email, () => {
+  if (formData.errors.email) {
+    formData.clearErrors('email')
+  }
+})
+
+watch([() => formData.password, tab], () => {
+  if (formData.errors.password) {
+    formData.clearErrors('password')
+  }
+})
+
+function submit() {
   form.value.validate().then(() => {
     if (form.value.isValid) {
-      const formVariant = tab.value == 'tel' 
-        ? {
-          tel: tel.value,
-          password: password.value,
-        }
-        : {
-          email: email.value,
-          password: password.value,
-        }
-      router.post(route('user.auth'), formVariant, {
+      tab.value == 'email' ? formData.tel = '' : formData.email = ''
+      formData.post(route('user.auth'), {
         onStart: () => loading.value = true,
         onFinish: () => loading.value = false,
       })

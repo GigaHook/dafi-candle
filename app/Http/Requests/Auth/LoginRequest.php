@@ -27,8 +27,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required_without:tel', 'string', 'email'],
-            'tel' => ['required_without:email', 'string', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10', 'max:30'],
+            'email'    => ['nullable', 'required_without:tel', 'string', 'email'],
+            'tel'      => ['nullable', 'required_without:email', 'string', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:18', 'max:18'],
             'password' => ['required', 'string', 'max:20', 'min:6'],
         ];
     }
@@ -42,12 +42,15 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $auth = Auth::attempt($this->all());
+        $auth = Auth::attempt($this->only([
+            $this->tel ? 'tel' : 'email',
+            'password',
+        ]));
 
         if (!$auth) {
             RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([
-                'auth' => $this->tel 
+                'password' => $this->tel 
                     ? 'Неверный телефон или пароль' 
                     : 'Неверная почта или пароль',
             ]);
@@ -72,7 +75,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'throttle' => 'Слишко много попыток входа. Повторите попытку позже.'
+            'password' => 'Слишко много попыток входа. Повторите попытку позже.'
             //'email' => trans('auth.throttle', [
             //    'seconds' => $seconds,
             //    'minutes' => ceil($seconds / 60),
