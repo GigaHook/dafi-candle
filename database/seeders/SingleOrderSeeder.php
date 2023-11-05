@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Events\OrderPlaced;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;

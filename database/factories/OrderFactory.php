@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +20,7 @@ class OrderFactory extends Factory
         return [
             'user_id' => 1,
             'adress_id' => 7,
-            'price' => 420,
+            'price' => Product::first()->price,
             'status' => 'В работе',
             'viewed_admin' => false,
             'viewed_user' => false,

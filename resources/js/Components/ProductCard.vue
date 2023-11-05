@@ -118,7 +118,7 @@ const { product } = defineProps({ product: Object })
 const page = usePage()
 const hover = ref(false)
 
-/*Каталог или редактирование заказов*/
+//Каталог или редактирование заказов
 
 let storedProduct
 let store
@@ -152,7 +152,7 @@ if (!page.props.order) {
   store = () => updateOrderItems('post', product.id)
   update = () => updateOrderItems('patch', product.id)
   buttonText = 'Добавить'
-  icon = 'mdi-notebook-check-outlined'
+  icon = 'mdi-notebook-check-outline'
 }
 </script>
 

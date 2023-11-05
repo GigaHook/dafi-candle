@@ -46,7 +46,7 @@
         <Modal
           @confirm="$inertia.delete(route('orders.destroy', order.id))"
           title="Подтверждение"
-          text="Удалить заказ?"
+          :text="`Удалить заказ №${order.id}?`"
         />
       </v-btn>
     </td>

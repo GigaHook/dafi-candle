@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BadgeController;
@@ -32,7 +33,7 @@ Route::middleware('guest')->group(function() {
 
 Route::middleware('auth')->group(function() {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-    Route::inertia('profile', 'Profile')->name('profile'); 
+    Route::get('profile', [ProfileController::class, 'index'])->name('profile'); 
     //Route::inertia('about', 'about');
 
     //заказы

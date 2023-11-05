@@ -5,16 +5,8 @@
 <script setup>
 import AppLayout from "../Layouts/AppLayout.vue"
 
+defineOptions({ layout: AppLayout })
 
-</script>
-
-<script>
-export default {
-  layout: AppLayout,
-  created() {
-    this.$root.colorVariant = '#fff'
-  },
-}
 </script>
 
 <style scoped>

@@ -15,25 +15,26 @@ class HandleOrderPlacement
      */
     public function handle(object $event): void
     {
-        toast('Заказ оформлен', 'SUCCESS');
+        toast('Заказ оформлен');
         (new AuthCartService)->clearCart();
         $message = $this->generateMessage($event->order, $event->adress);
-        //Telegraph::message($message)->send();
+        Telegraph::message($message)->send();
     }
 
     private function generateMessage($order, $adress): string
     {
-        /*$message = "Новый заказ от "
-                  ."<b>".$adress->name." "
-                  .$adress->lastname."<//b>/n/n"
-                  ."Содержание:/n";
-
-        foreach ($order->products as $product) {
-            $message .= $product->name." x".$product->orderItem->quantity."/n";
-        }*/
+        $message = "Новый заказ от <b>{$adress->name} {$adress->lastname} {$adress->patronymic}</b> \n\nСодержание:\n";
         
-        //return $message;
-        return 'asdzxc';
+        foreach ($order->products as $product) {
+            $quantity = $product->orderItem->quantity;
+            $total = $product->price * $quantity;
+
+            $message .= "<i>{$product->name}</i> за {$product->price}р х$quantity = {$total}р\n";
+        }
+
+        $message .= "\n<b>Итого: {$order->price}р</b>";
+
+        return $message;
     } 
 
 }

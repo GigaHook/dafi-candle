@@ -9,9 +9,9 @@ export function useOrder(order) {
   const status = ref(order.status)
   const loading = ref(false)
 
-  function updateStatus() {
+  function updateStatus(argStatus=null) {
     router.post(route('orders.status', { id: order.id }), {
-      status: status.value
+      status: argStatus ?? status.value
     }, {
       preserveState: true,
       preserveScroll: true,
