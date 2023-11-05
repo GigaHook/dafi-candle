@@ -18,7 +18,7 @@ class Product extends Model
         'price',
         'image',
         'type_id',
-        'available'
+        'available',
     ];
 
     public function type(): BelongsTo {

@@ -21,22 +21,30 @@
               <v-list-item prepend-icon="mdi-email" subtitle="Почта">
                 {{ $page.props.user.email }}
               </v-list-item>
+
+              <v-list-item v-if="$page.props.user.is_admin">
+                Вы являетесь администратором сайта
+              </v-list-item>
             </v-list>
 
             <v-btn
-              @click="$inertia.post('/logout')"
               color="red"
               variant="tonal"
               class="mt-2"
             >
               Выйти
+              <Modal
+                @confirm="$inertia.post('/logout')"
+                title="Подтверждение"
+                text="Вы действительно хотите выйти из аккаунта?"
+              />
             </v-btn>
           </div>
 
           <v-divider class="mt-2 mb-4"/>
 
           <h2 class="text-h6">Мои заказы</h2>
-          <v-table density="compact" v-if="orders">
+          <v-table density="compact" v-if="orders.length">
             <thead>
               <tr>
                 <th>Дата</th>
@@ -55,20 +63,12 @@
               />
             </tbody>
           </v-table>
+
+          <div v-else class="text-center text-grey my-2">
+            Вы ещё не сделали ни один заказ
+          </div>
         </v-card>
       </v-col>
-
-      <!--<v-col cols="8">
-
-      </v-col>
-      <v-col cols="4">
-        Имя: {{ $page.props.user.name }} <br>
-        Почта: {{ $page.props.user.email }} <br>
-        Телефон: {{ $page.props.user.tel }} <br>
-        <BtnPrimary @click="$inertia.post('/logout')">
-          Выйти
-        </BtnPrimary>
-      </v-col>-->
     </v-row>
   </v-container>
 </template>
