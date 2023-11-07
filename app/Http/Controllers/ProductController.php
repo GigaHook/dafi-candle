@@ -25,7 +25,13 @@ class ProductController extends Controller
     public function index(Request $request): \Inertia\Response 
     {
         return Inertia::render('Products/ProductsIndex', [
-            'products' => $this->productService->processProducts($request->all()),
+            'products' => $this->productService->processProducts($request->only([
+            'selectedTypes',
+            'searchText',
+            'sortBy',
+            'sortOrder',
+            'page',
+            ])),
             'types' => Type::all(),
         ]);
     }

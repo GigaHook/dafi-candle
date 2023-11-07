@@ -32,13 +32,13 @@
             <v-file-input
               name="image"
               label="Изображение"
-              v-model="formData.image"
+              v-model="image"
               :rules="[rules.required]"
               variant="outlined"
               color="yellow"
               density="compact"
               class="mb-3"
-              accept="image/*"
+              accept="image/png, image/jpeg, image/jpg"
               prepend-icon
               :error-messages="formData.errors.image"
             >
@@ -51,9 +51,11 @@
             <v-select
               name="type"
               label="Тип"
-              v-model="formData.type"
+              v-model="formData.type_id"
               :rules="[rules.required]"
               :items="types"
+              item-title="name"
+              item-value="id"
               variant="outlined"
               color="yellow"
               density="compact"
@@ -83,7 +85,11 @@
                   class="w-50 me-4" 
                   :rules="[rules.required]"
                 />
-                <FormInput v-model="tag.value" label="Значение" class="w-50 me-4"/>
+                <FormInput
+                  v-model="tag.value"
+                  label="Значение"
+                  class="w-50 me-4"
+                />
                 <FormIconBtn @click="removeTag(index)" color="red">
                   <v-icon icon="mdi-close"/>
                 </FormIconBtn>
@@ -128,11 +134,12 @@ const rules = {
 
 const loading = ref(false)
 const form = ref()
+const image = ref()
 const formData = useForm({
   name: null,
   description: null,
   image: null,
-  type: null,
+  type_id: null,
   price: null,
   tags: [],
 })
@@ -144,6 +151,7 @@ watch(() => formData.image, () => {
 function submit() {
   form.value.validate().then(() => {
     if (form.value.isValid) {
+      formData.image = image.value[0]
       formData.post(route('products.store'), {
         forceFormData: true,
         preserveScroll: true,
@@ -161,9 +169,15 @@ function cancel() {
 }
 
 function addTag() {
-
+  formData.tags.push({
+    name: null,
+    value: null,
+  })
 }
 
+function removeTag(index) {
+  formData.tags.splice(index, 1)
+}
 
 </script>
 
@@ -171,71 +185,71 @@ function addTag() {
 export default {
   data() {
     return {
-      name: null,
-      description: null,
-      image: null,
-      type: null,
-      price: null,
-      tags: [],
+      //name: null,
+      //description: null,
+      //image: null,
+      //type: null,
+      //price: null,
+      //tags: [],
     }
   },
   methods: {
-    submit() {
-      this.$refs.form.validate()
-      if (this.$refs.form.isValid) 
-      this.$router.post(route('products.store'), {
-        name: this.name,
-        description: this.description,
-        image: this.image[0],
-        type_id: this.preparedType,
-        price: this.price,
-        tags: this.preparedTags
-      }, {
-        forceFormData: true,
-        preserveScroll: true,
-        onStart: this.loadingStart,
-        onSuccess: this.formReset,
-        onFinish: this.loadingEnd,
-      })
-    },
-    loadingStart() {
-      this.loading = true
-    },
-    loadingEnd() {
-      this.loading = false
-    },
-    formReset() {
-      this.$refs.form.reset()
-    },
-    cancel() {
-      this.formReset()
-      this.loadingEnd()
-      this.$router.get(route('products.index'))
-    },
-    addTag() {
-      this.tags.push({
-        name: null,
-        value: null,
-      })
-    },
-    removeTag(index) {
-      this.tags.splice(index, 1)
-    },
+    //submit() {
+    //  this.$refs.form.validate()
+    //  if (this.$refs.form.isValid) 
+    //  this.$router.post(route('products.store'), {
+    //    name: this.name,
+    //    description: this.description,
+    //    image: this.image[0],
+    //    type_id: this.preparedType,
+    //    price: this.price,
+    //    tags: this.preparedTags
+    //  }, {
+    //    forceFormData: true,
+    //    preserveScroll: true,
+    //    onStart: this.loadingStart,
+    //    onSuccess: this.formReset,
+    //    onFinish: this.loadingEnd,
+    //  })
+    //},
+    //loadingStart() {
+    //  this.loading = true
+    //},
+    //loadingEnd() {
+    //  this.loading = false
+    //},
+    //formReset() {
+    //  this.$refs.form.reset()
+    //},
+    //cancel() {
+    //  this.formReset()
+    //  this.loadingEnd()
+    //  this.$router.get(route('products.index'))
+    //},
+    //addTag() {
+    //  this.tags.push({
+    //    name: null,
+    //    value: null,
+    //  })
+    //},
+    //removeTag(index) {
+    //  this.tags.splice(index, 1)
+    //},
   },
   computed: {
-    types() {
-      return this.$page.props.types.map(elem => elem.name)
-    },
-    preparedType() {
-      return this.$page.props.types.find(elem => elem.name == this.type).id
-    },
-    preparedTags() {
-      return this.tags.filter(elem => elem.name)
-    },
+    //types() {
+    //  return this.$page.props.types.map(elem => elem.name)
+    //},
+    //preparedType() {
+    //  return this.$page.props.types.find(elem => elem.name == this.type).id
+    //},
+    //preparedTags() {
+    //  return this.tags.filter(elem => elem.name)
+    //},
   },
-  mounted() {
-    this.type = this.types[0] ?? 'Обычный'
-  }
+  //mounted() {
+  //  this.type = this.types[0] ?? 'Обычный'
+  //}
 }
 </script>
 
