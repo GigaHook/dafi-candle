@@ -30,7 +30,10 @@
     </th>
 
     <th>
-      <BtnSecondary class="text-button">
+      <BtnSecondary
+        v-if="order.status == 'В работе'"
+        class="text-button"
+      >
         <Modal
           @confirm="updateStatus('Отменён')"
           title="Подтверждение"

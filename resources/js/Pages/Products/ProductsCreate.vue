@@ -8,29 +8,31 @@
             @submit.prevent="submit" 
             ref="form" 
             validate-on="blur" 
-            :disabled="loading"
+            :readonly="loading"
           >
             <h1 class="text-h4 mb-4">Добавить товар</h1>
             <FormInput
               name="name"
               type="text"
               label="Название"
-              v-model="name"
+              v-model="formData.name"
               :rules="[rules.required, rules.name]"
             />
+
             <v-textarea
               name="description"
               label="Описание"
-              v-model="description"
+              v-model="formData.description"
               :rules="[rules.required, rules.description]"
               variant="outlined"
               color="yellow"
               class="mb-3"
             />
+
             <v-file-input
               name="image"
               label="Изображение"
-              v-model="image"
+              v-model="formData.image"
               :rules="[rules.required]"
               variant="outlined"
               color="yellow"
@@ -38,18 +40,18 @@
               class="mb-3"
               accept="image/*"
               prepend-icon
-              :error-messages="errors.image"
-              @update:model-value="errors = {}"
+              :error-messages="formData.errors.image"
             >
               <template #append-inner>
                 <v-divider vertical class="me-3"/>
                 <v-icon icon="mdi-image-outline"/>
               </template>
             </v-file-input>
+
             <v-select
               name="type"
               label="Тип"
-              v-model="type"
+              v-model="formData.type"
               :rules="[rules.required]"
               :items="types"
               variant="outlined"
@@ -58,18 +60,23 @@
               class="mb-3"
               menu-icon="mdi-chevron-down"
             />
+
             <FormInput
               name="price"
               type="text"
               label="Цена"
-              v-model="price"
+              v-model="formData.price"
               :rules="[rules.required]"
               v-mask="'##############'"
             />
             
             <h2 class="text-h5 mb-4">Характеристики</h2>
             <v-slide-x-transition group>
-              <div v-for="(tag, index) of tags" :key="index" class="d-flex">
+              <div
+                v-for="(tag, index) of formData.tags"
+                :key="index"
+                class="d-flex"
+              >
                 <FormInput
                   v-model="tag.name" 
                   label="Название" 
@@ -92,7 +99,7 @@
               <BtnPrimary type="submit" :loading="loading">
                 Добавить
               </BtnPrimary>
-              <BtnSecondary @click="cancel">
+              <BtnSecondary @click="cancel" :disabled="loading">
                 Назад
               </BtnSecondary>
             </div>
@@ -103,17 +110,65 @@
   </v-container>
 </template>
 
-<script>
+<script setup>
 import AppLayout from '../../Layouts/AppLayout.vue'
-import FormIconBtn from '../../Components/FormIconBtn.vue'
+import FormIconBtn from '@/Components/FormIconBtn.vue'
+import { ref, watch, defineComponent } from 'vue'
+import { router, useForm } from '@inertiajs/vue3'
+
+defineOptions({ layout: AppLayout })
+defineComponent({ FormIconBtn })
+const { types } = defineProps({ types: Array })
+
+const rules = {
+  required: v => !!v || 'Это поле нужно заполнить',
+  name: v => (v.length >= 4 && v.length <= 50) || 'От 4 до 50 символов',
+  description: v => v?.length <= 700 || 'До 700 символов',
+}
+
+const loading = ref(false)
+const form = ref()
+const formData = useForm({
+  name: null,
+  description: null,
+  image: null,
+  type: null,
+  price: null,
+  tags: [],
+})
+
+watch(() => formData.image, () => {
+  formData.clearErrors('image')
+})
+
+function submit() {
+  form.value.validate().then(() => {
+    if (form.value.isValid) {
+      formData.post(route('products.store'), {
+        forceFormData: true,
+        preserveScroll: true,
+        onStart: () => loading.value = true, 
+        onFinish: () => loading.value = false,
+        onSuccess: () => form.value.reset(),
+      })
+    }
+  })
+}
+
+function cancel() {
+  form.value.reset()
+  router.get(route('products.index'))
+}
+
+function addTag() {
+
+}
+
+
+</script>
+
+<script>
 export default {
-  layout: AppLayout,
-  components: {
-    FormIconBtn: FormIconBtn,
-  },
-  props: {
-    errors: Object,
-  },
   data() {
     return {
       name: null,
@@ -122,12 +177,6 @@ export default {
       type: null,
       price: null,
       tags: [],
-      rules: {
-        required: v => !!v || 'Это поле нужно заполнить',
-        name: v => (v.length >= 4 && v.length <= 50) || 'От 4 до 50 символов',
-        description: v => v?.length <= 700 || 'До 700 символов',
-      },
-      loading: false,
     }
   },
   methods: {

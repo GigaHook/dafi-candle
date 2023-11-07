@@ -64,7 +64,6 @@
 
 <script setup>
 import AppLayout from '../Layouts/AppLayout.vue'
-import FormInput from '../Components/FormInput.vue'
 import { ref, watch } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 

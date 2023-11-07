@@ -2,10 +2,9 @@ import { ref, computed } from 'vue'
 import { router } from '@inertiajs/vue3'
 
 export function useOrder(order) {
-  const createdAt = order.created_at.split('T')
-  const creationDate = computed(() => createdAt[0])
-  const fullTime = computed(() => createdAt[1].split('.')[0].split(':'))
-  const creationTime = computed(() => `${fullTime.value[0]}:${fullTime.value[1]}`)
+  const createdAt = computed(() => (new Date(order.created_at)).toLocaleString("ru-RU").split(', '))
+  const creationDate = createdAt.value[0]
+  const creationTime = createdAt.value[1]
   const status = ref(order.status)
   const loading = ref(false)
 

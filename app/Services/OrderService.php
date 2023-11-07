@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+use App\Events\OrderCancelled;
 use App\Events\OrderPlaced;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -62,6 +63,7 @@ class OrderService
     public function updateStatus(Order $order, string $status): void 
     {
         $order->status = $status;
+        (!auth()->user()->is_admin) && event(new OrderCancelled($order));
         $order->save();
     }
 

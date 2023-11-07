@@ -18,20 +18,19 @@ class ProductService
     /**
      * качает изображение, создаёт продукт и теги если они есть и связывает их
      */
-    public function createProduct(array $data): void {
+    public function createProduct(array $data): void 
+    {
         $this->fileService->uploadImage($data['image']);
-        $this->tagService->createTags(
-            Product::create($data),
-            $data['tags']
-        );
+        $this->tagService->createTags(Product::create($data), $data['tags']);
         toast('Товар добавлен');
     }
 
     /**
-     * загрузка нового изрображения и ядаление старого,
+     * загрузка нового изрображения и удаление старого,
      * обновление продукта и его тегов, создание новых, удаление неиспольующихся
      */
-    public function updateProduct(array $data, Product $product): void {
+    public function updateProduct(array $data, Product $product): void 
+    {
         if (isset($data['image'])) {
             $this->fileService->uploadImage($data['image']);
             $this->fileService->deleteImage($product->image);
@@ -45,9 +44,10 @@ class ProductService
     }
 
     /**
-     * Удаление продукта, картинки, отвязка тегов и удаление неиспольующихся
+     * Удаление продукта, картинки, отвязка и удаление неиспольующихся тегов
      */
-    public function deleteProduct(Product $product): void {
+    public function deleteProduct(Product $product): void 
+    {
         $tagIds = $product->tags()->pluck('tags.id');
         $product->delete();
 
@@ -61,7 +61,8 @@ class ProductService
     /**
      * фильтры, поиск, сортировка, пагинация
      */
-    public function processProducts(array $data): LengthAwarePaginator {
+    public function processProducts(array $data): LengthAwarePaginator 
+    {
         $query = Product::query();
 
         isset($data['selectedTypes']) && $query->whereIn('type_id', $data['selectedTypes']);

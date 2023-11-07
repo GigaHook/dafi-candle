@@ -22,16 +22,18 @@ class ProductStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:50',
+            'name'        => 'required|string|max:50',
             'description' => 'required|string|max:700',
-            'image' => 'required|mimes:png,jpg,jpeg',
-            'type_id' => 'required|numeric',
-            'price' => 'required|numeric',
-            'tags' => 'array',
+            'image'       => 'required|mimes:png,jpg,jpeg',
+            'type_id'     => 'required|numeric',
+            'price'       => 'required|numeric',
+            'tags'        => 'array',
+            'available'   => 'required|numeric|min:1',
         ];
     }
 
-    public function messages(): array {
+    public function messages(): array 
+    {
         return [
             'image.mimes' => 'Неверный формат изображения. Допустимые форматы: .png, .jpg, .jpeg'
         ];

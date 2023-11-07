@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\OrderCancelled;
 use App\Events\OrderContentsUpdated;
 use App\Events\OrderPlaced;
+use App\Listeners\HandleOrderCancellation;
 use App\Listeners\HandleOrderPlacement;
 use App\Listeners\SetBadgesAfterAuth;
 use App\Services\Cart\GuestCartService;
@@ -24,6 +26,10 @@ class EventServiceProvider extends ServiceProvider
         OrderPlaced::class => [
             HandleOrderPlacement::class,
         ],
+        
+        OrderCancelled::class => [
+            HandleOrderCancellation::class,
+        ],
 
         Login::class => [
             SetBadgesAfterAuth::class,
@@ -41,7 +47,7 @@ class EventServiceProvider extends ServiceProvider
 
         Event::listen(OrderContentsUpdated::class, function(OrderContentsUpdated $event) {
             (new OrderService)->recalculatePrice($event->order);
-        }); 
+        });
     }
 
     /**
