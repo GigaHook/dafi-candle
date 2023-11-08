@@ -80,7 +80,7 @@
 
         <BtnSecondary
           v-if="display.mdAndUp.value"
-          @click="$inertia.get(route('orders.index'))"
+          @click="$page.props.user?.is_admin ? $inertia.get(route('orders.index')) : $inertia.get(route('profile'))"
           class="mt-2 mb-n3"
         >
           Назад
@@ -113,7 +113,7 @@
         
         <BtnSecondary
           v-if="display.smAndDown.value"
-          @click="$inertia.get(route('orders.index'))"
+          @click="$page.props.user?.is_admin ? $inertia.get(route('orders.index')) : $inertia.get(route('profile'))"
           class="mt-2 mb-n3"
         >
           Назад

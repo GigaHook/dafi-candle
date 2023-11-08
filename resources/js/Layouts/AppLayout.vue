@@ -49,7 +49,7 @@ onMounted(() => {
     checkForNewOrders()
     setInterval(() => {
       checkForNewOrders()
-    }, 6000)
+    }, 60000)
   }
 })
 

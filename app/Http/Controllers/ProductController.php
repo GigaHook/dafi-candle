@@ -26,11 +26,11 @@ class ProductController extends Controller
     {
         return Inertia::render('Products/ProductsIndex', [
             'products' => $this->productService->processProducts($request->only([
-            'selectedTypes',
-            'searchText',
-            'sortBy',
-            'sortOrder',
-            'page',
+                'selectedTypes',
+                'searchText',
+                'sortBy',
+                'sortOrder',
+                'page',
             ])),
             'types' => Type::all(),
         ]);

@@ -71,6 +71,6 @@ class ProductService
             ? $query->orderBy($data['sortBy'], $data['sortOrder'])
             : $query->orderBy('created_at', 'desc');
 
-        return $query->with('type')->paginate(12);
+        return $query->with('type')->paginate(24);
     }
 }

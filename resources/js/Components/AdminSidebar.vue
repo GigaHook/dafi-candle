@@ -17,7 +17,7 @@
 
     <v-divider/>
 
-    <v-list nav density="compact">
+    <v-list nav>
       <AdminSidebarItem
         icon="mdi-plus-box"
         title="Добавить товар"

@@ -71,6 +71,14 @@
               :rules="[rules.required]"
               v-mask="'##############'"
             />
+
+            <FormInput
+              name="available"
+              label="Сколько в наличии"
+              v-model="formData.available"
+              :rules="[rules.required]"
+              v-mask="'####'"
+            />
             
             <h2 class="text-h5 mb-4">Характеристики</h2>
             <v-slide-x-transition group>
@@ -121,6 +129,7 @@ import AppLayout from '../../Layouts/AppLayout.vue'
 import FormIconBtn from '@/Components/FormIconBtn.vue'
 import { ref, watch, defineComponent } from 'vue'
 import { router, useForm } from '@inertiajs/vue3'
+import FormInput from '@/Components/FormInput.vue'
 
 defineOptions({ layout: AppLayout })
 defineComponent({ FormIconBtn })
@@ -141,6 +150,7 @@ const formData = useForm({
   image: null,
   type_id: null,
   price: null,
+  available: null,
   tags: [],
 })
 
@@ -152,6 +162,7 @@ function submit() {
   form.value.validate().then(() => {
     if (form.value.isValid) {
       formData.image = image.value[0]
+      console.log(image.value)
       formData.post(route('products.store'), {
         forceFormData: true,
         preserveScroll: true,

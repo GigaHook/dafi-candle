@@ -85,7 +85,7 @@
   </v-toolbar>
 
   <!--PRODUCTS-->
-  <v-container fluid> 
+  <v-container :fluid="display.mdAndDown.value"> 
     <v-row>
       <template v-if="!loading">
         <ProductCard
@@ -114,7 +114,7 @@
           v-model="products.current_page"
           @next="update(products.next_page_url)"
           @prev="update(products.prev_page_url)"
-          @update:modelValue="toPage"
+          @update:model-value="page => toPage(page)"
         />
       </v-col>
 
@@ -128,6 +128,7 @@ import ToolbarDropdown from '@/Components/ToolbarDropdown.vue'
 
 import { ref, watch, defineComponent } from 'vue'
 import { router } from '@inertiajs/vue3'
+import { useDisplay } from 'vuetify/lib/framework.mjs'
 
 defineOptions({ layout: AppLayout })
 defineComponent({ ProductCard, ToolbarDropdown })
@@ -136,6 +137,8 @@ const { products, types } = defineProps({
   products: Object, 
   types: Object,
 })
+
+console.log(products);
 
 const sorts = [
   {
@@ -156,6 +159,7 @@ const sorts = [
   }
 ]
 
+const display = useDisplay()
 const loading = ref(false)
 const selectedTypes = ref(types.map(type => type.id))
 const selectedSort = ref(sorts[1]) 
