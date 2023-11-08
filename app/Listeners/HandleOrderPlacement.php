@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\OrderPlaced;
 use App\Services\Cart\AuthCartService;
+use App\Services\ProductService;
 use DefStudio\Telegraph\Facades\Telegraph;
 
 class HandleOrderPlacement
@@ -15,6 +16,7 @@ class HandleOrderPlacement
     {
         toast('Заказ оформлен');
         (new AuthCartService)->clearCart();
+        (new ProductService)->decreaseAvailable($event->order->products);
         $message = $this->generateMessage($event->order, $event->adress);
         Telegraph::message($message)->send();
     }

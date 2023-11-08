@@ -3,85 +3,105 @@
   <v-toolbar
     color="surface"
     elevation="3"
-    class="py-1 pe-1"
+    class="py-1"
   >
-    <v-text-field
-      variant="outlined"
-      color="primary"
-      density="compact"
-      class="mt-6 ms-4 "
-      style="max-width: 550px;"
-      label="Поиск"
-      append-inner-icon="mdi-magnify"
-      clearable
-      v-model="searchText"
-      @click:append-inner="update"
-      @click:clear="update"
-      @keyup.enter="update"
-    > 
-      <template #append>
-        <div class="ms-n4">
-          <ToolbarDropdown icon="mdi-format-list-bulleted-type">
-            <v-list>            
-              <v-list-subheader>
-                ТИПЫ
-              </v-list-subheader>
-              <v-divider/>
-
-              <v-list-item
-                v-for="productType in types"
-                :key="productType.id"
-              >
-                <v-switch
-                  :value="productType.id"
-                  v-model="selectedTypes"
-                  @update:model-value="update"
-                  density="compact"
-                  class="ms-2"
-                  color="primary"
-                  hide-details
-                  multiple
-                >
-                  <template #label>
-                    <span class="ps-2">
-                      {{ productType.name }}
-                    </span>
-                  </template>
-                </v-switch>
-              </v-list-item>
-            </v-list>
-          </ToolbarDropdown>
-
-          <ToolbarDropdown icon="mdi-sort">
-            <v-list :selected="[selectedSort]" color="primary">
-              <v-list-subheader>
-                СОРТИРОВКА
-              </v-list-subheader>
-              <v-divider/>
-
-              <v-list-item
-                v-for="(sort, i) in sorts"
-                :key="i"
-                :title="sort.title"
-                :value="sort"
-                @click="selectedSort = sort"
-              />
-            </v-list>
-          </ToolbarDropdown>
-        </div>
-      </template>
-    </v-text-field>
-    <v-spacer/>
-
-    <template v-if="$page.props.order">
-      <BtnPrimary
-        variant="elevated"
-        @click="$inertia.post(route('orders.edit.finish'))"
+    <v-container :fluid="display.mdAndDown.value">
+      <v-text-field
+        variant="outlined"
+        color="primary"
+        density="compact"
+        class="mt-6"
+        style="max-width: 550px;"
+        label="Поиск"
+        append-inner-icon="mdi-magnify"
+        clearable
+        v-model="searchText"
+        @click:append-inner="update"
+        @click:clear="update"
+        @keyup.enter="update"
       >
-        Завершить редактирование
-      </BtnPrimary>
-    </template>
+        <template #append>
+          <div class="ms-n4">
+            <ToolbarDropdown icon="mdi-format-list-bulleted-type">
+              <v-list>
+                <v-list-subheader>
+                  ТИПЫ
+                </v-list-subheader>
+                <v-divider/>
+                <v-list-item
+                  v-for="productType in types"
+                  :key="productType.id"
+                >
+                  <v-switch
+                    :value="productType.id"
+                    v-model="selectedTypes"
+                    density="compact"
+                    class="ms-2"
+                    color="primary"
+                    hide-details
+                    multiple
+                  >
+                    <template #label>
+                      <span class="ps-2">
+                        {{ productType.name }}
+                      </span>
+                    </template>
+                  </v-switch>
+                </v-list-item>
+              </v-list>
+            </ToolbarDropdown>
 
+            <ToolbarDropdown icon="mdi-sort">
+              <v-list :selected="[selectedSort]" color="primary">
+                <v-list-subheader>
+                  СОРТИРОВКА
+                </v-list-subheader>
+                <v-divider/>
+                <v-list-item
+                  v-for="(sort, i) in sorts"
+                  :key="i"
+                  :title="sort.title"
+                  :value="sort"
+                  @click="selectedSort = sort"
+                />
+              </v-list>
+            </ToolbarDropdown>
+
+            <v-btn
+              icon
+              color="grey"
+              variant="outlined"
+              class="ms-2"
+              rounded
+              @click="showUnavailable = !showUnavailable"
+              :active="showUnavailable"
+            >
+              <v-icon
+                color="grey-lighten-1"
+                :icon="showUnavailable ? 'mdi-archive-remove' : 'mdi-archive-remove-outline'"
+              />
+              <v-tooltip
+                activator="parent"
+                open-delay="300"
+                location="bottom"
+              >
+                Показать недоступные товары
+              </v-tooltip>
+            </v-btn>
+          </div>
+        </template>
+      </v-text-field>
+      <v-spacer/>
+
+      <template v-if="$page.props.order">
+        <BtnPrimary
+          variant="elevated"
+          @click="$inertia.post(route('orders.edit.finish'))"
+        >
+          Завершить редактирование
+        </BtnPrimary>
+      </template>
+    </v-container>
   </v-toolbar>
 
   <!--PRODUCTS-->
@@ -109,13 +129,16 @@
         class="pt-4"
       >
         <v-pagination
+          v-if="products.data.length"
           color="primary"
           :length="products.last_page"
           v-model="products.current_page"
-          @next="update(products.next_page_url)"
-          @prev="update(products.prev_page_url)"
           @update:model-value="page => toPage(page)"
         />
+
+        <div v-else class="text-h6 text-grey text-center">
+          Ничего не найдено
+        </div>
       </v-col>
 
     </v-row>
@@ -137,8 +160,6 @@ const { products, types } = defineProps({
   products: Object, 
   types: Object,
 })
-
-console.log(products);
 
 const sorts = [
   {
@@ -164,6 +185,7 @@ const loading = ref(false)
 const selectedTypes = ref(types.map(type => type.id))
 const selectedSort = ref(sorts[1]) 
 const searchText = ref()
+const showUnavailable = ref(false)
 
 const requestOptions = {
   preserveState: true,
@@ -177,6 +199,7 @@ function requestData() {
     sortOrder: selectedSort.value.options.sortOrder,
     selectedTypes: selectedTypes.value,
     searchText: searchText.value,
+    showUnavailable: showUnavailable.value
   }
 }
 
@@ -194,5 +217,5 @@ watch(selectedTypes, (oldTypes) => {
   }
 })
 
-watch(selectedSort, () => update())
+watch([selectedTypes, selectedSort, showUnavailable], () => update())
 </script>

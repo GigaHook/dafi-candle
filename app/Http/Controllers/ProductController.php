@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductIndexRequest;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
@@ -22,16 +23,10 @@ class ProductController extends Controller
         $this->middleware('admin')->except(['index', 'show']);
     }
 
-    public function index(Request $request): \Inertia\Response 
+    public function index(ProductIndexRequest $request): \Inertia\Response 
     {
         return Inertia::render('Products/ProductsIndex', [
-            'products' => $this->productService->processProducts($request->only([
-                'selectedTypes',
-                'searchText',
-                'sortBy',
-                'sortOrder',
-                'page',
-            ])),
+            'products' => $this->productService->processProducts($request->validated()),
             'types' => Type::all(),
         ]);
     }

@@ -22,14 +22,23 @@
       rounded="lg"
       color="primary"
       @click="$emit('store')"
+      :disabled="unavailable"
     >
       <v-icon icon="mdi-plus"/>
+      <v-tooltip
+        v-if="unavailable"
+        activator="parent"
+        open-delay="300"
+        location="bottom"
+      >
+        Товара нет в наличии
+      </v-tooltip>
     </v-btn>
   </div>
 </template>
 
 <script setup>
-defineProps({ quantity: Number })
+defineProps({ quantity: Number, unavailable: Boolean })
 </script>
 
 

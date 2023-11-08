@@ -38,12 +38,17 @@
                 </v-btn>
               </div>
 
+              <!--TODO: добавить поле в корзину на беке, которое обозначает наличие отсутствующих товаров в корзине-->
               <BtnPrimary
-                @click="$inertia.get(route('orders.create'))"
                 :disabled="!$page.props.user"
                 class="w-100 mt-2"
               >
                 Заказать
+                <Modal 
+                  @confirm="$inertia.get(route('orders.create'))"
+                  title="Внимание"
+                  text="В корзине имеются товары, которых на данный момент нет в наличии. Они не будут включены в заказ."
+                />
               </BtnPrimary>
             </v-col>
 

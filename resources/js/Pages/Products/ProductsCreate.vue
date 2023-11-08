@@ -74,7 +74,7 @@
 
             <FormInput
               name="available"
-              label="Сколько в наличии"
+              label="Кол-во в наличии"
               v-model="formData.available"
               :rules="[rules.required]"
               v-mask="'####'"

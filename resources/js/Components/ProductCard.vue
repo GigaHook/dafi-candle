@@ -14,6 +14,15 @@
         v-ripple
       >
         <div class="d-flex justify-end">
+          <v-chip
+            v-if="!product.available"
+            variant="flat"
+            color="grey-darken-4"
+            class="me-auto ma-1 text-red"
+          >
+            Нет в наличии
+          </v-chip>
+
           <v-btn
             v-if="$page.props.user?.is_admin"
             icon="mdi-pencil"
@@ -83,6 +92,7 @@
             variant="text"
             color="primary"
             max-width="fit-content"
+            :disabled="!product.available"
           >
             {{ buttonText }}
           </v-btn>
@@ -92,6 +102,7 @@
             :quantity="quantity"
             @store="store"
             @update="update"
+            :unavailable="!product.available"
           />
         </v-fade-transition>
 

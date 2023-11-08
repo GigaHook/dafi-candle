@@ -19,6 +19,15 @@
         >
           Подробнее
         </v-overlay>
+
+        <v-chip
+          v-if="!product.available"
+          variant="flat"
+          color="grey-darken-4"
+          class="ma-1 text-red"
+        >
+          Нет в наличии
+        </v-chip>
       </v-img>
     </v-col>
     
@@ -54,6 +63,7 @@
     >
       <ProductControls
         :quantity="product.quantity"
+        :unavailable="!product.available"
         @store="store"
         @update="update"
       />
@@ -69,6 +79,7 @@
         {{ product.price * product.quantity }}
         <v-icon icon="mdi-currency-rub" size="16" class="ms-n1 mb-1"/>
       </div>
+
       <v-btn
         variant="plain"
         icon="mdi-delete-outline"
@@ -81,7 +92,6 @@
     <v-col v-if="!last" cols="12">
       <v-divider class="my-2"/>
     </v-col>
-
   </v-row>
 </template>
 

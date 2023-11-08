@@ -1,12 +1,12 @@
 <template>
   <v-btn
     icon
-    color="grey-darken-1"
+    color="grey"
     variant="outlined"
     class="ms-2"
     rounded
   >
-    <v-icon :icon="icon" color="grey"/>
+    <v-icon :icon="icon" color="grey-lighten-1"/>
     <v-menu
       activator="parent"
       transition="slide-y-transition"
