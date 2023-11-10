@@ -12,6 +12,7 @@ class AuthCartService implements CartService
             'items' => [],
             'totalQuantity' => 0,
             'totalPrice' => 0,
+            'unavailable' => [],
         ];
 
         foreach (auth()->user()->products as $product) {

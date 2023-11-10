@@ -55,5 +55,4 @@ const statusColors =
   'Отправлен': 'success',
   'Отменён': 'grey-darken-3',
 }
-//TODO сделать event order cancelled в беке + телеграм сообщение
 </script>

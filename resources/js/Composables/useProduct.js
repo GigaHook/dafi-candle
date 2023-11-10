@@ -6,7 +6,8 @@ export default function useProduct(product) {
   const loading = ref(false)
   const getStoredProduct = () => page.props.cart.items.find(item => item.id == product.id)
   const storedProduct = computed(getStoredProduct)
-  const quantity = computed(() => getStoredProduct().quantity)
+  const quantity = computed(() => storedProduct.value.quantity)
+  const isAvailable = computed(() => quantity.value < product.available && product.available)
 
   function store() {
     router.post(route('cart.store'), {
@@ -34,5 +35,6 @@ export default function useProduct(product) {
     store,
     update,
     quantity,
+    isAvailable,
   }
 }

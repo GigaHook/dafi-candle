@@ -1,6 +1,6 @@
 <template>
   <Head :title="`Заказ №${order.id}`"/>
-  <v-container :fluid="display.md.value || display.lg.value">
+  <v-container :fluid="display.mdAndDown.value">
     <v-row justify="center">
       <v-col cols="12" md="6" xl="5">
         <v-card class="px-4 pt-2 pb-3" elevation="3">
@@ -70,21 +70,23 @@
           >
             <template #right>
               <OrdersSelectStatus
+                v-if="$page.props.user.is_admin"
                 :order="order"
                 style="min-width:180px !important"
                 class="ms-n2 mt-n1"
               />
+              <StatusChip
+                v-else
+                :status="order.status"
+                style="min-width:fit-content !important"
+              />
             </template>
           </ListRow>  
-        </v-card>
 
-        <BtnSecondary
-          v-if="display.mdAndUp.value"
-          @click="$page.props.user?.is_admin ? $inertia.get(route('orders.index')) : $inertia.get(route('profile'))"
-          class="mt-2 mb-n3"
-        >
-          Назад
-        </BtnSecondary>
+          <BtnBack v-if="display.mdAndUp.value">
+            Назад
+          </BtnBack>
+        </v-card>
       </v-col>
 
       <v-col cols="12" md="6" xl="5">
@@ -98,28 +100,40 @@
             :key="product.id"
             :product="product"
             :order="order"
-            :editable="true"
+            :editable="!!$page.props.user.is_admin"
             :last="product.id == order.products.at(-1).id"
           />
           
           <BtnPrimary
+            v-if="$page.props.user.is_admin"
             class="mt-2"
             @click="$inertia.get(route('orders.edit', order.id))"
           >
             Добавить
           </BtnPrimary>
 
+          <BtnSecondary
+            v-if="!$page.props.user.is_admin"
+            :disabled="order.status != 'В работе'"
+            :style="order.status != 'В работе' ? 'opacity: .5' : ''"
+            class="mt-2"
+          >
+            Отменить заказ
+            <Modal
+              @confirm="updateStatus('Отменён')"
+              title="Подтверждение"
+              text="Вы действительно хотите отменить заказ?"
+            />
+          </BtnSecondary>
+
+          <BtnBack
+            v-if="display.smAndDown.value"
+            class="mt-2"
+          >
+            Назад
+          </BtnBack>
         </v-card>
-        
-        <BtnSecondary
-          v-if="display.smAndDown.value"
-          @click="$page.props.user?.is_admin ? $inertia.get(route('orders.index')) : $inertia.get(route('profile'))"
-          class="mt-2 mb-n3"
-        >
-          Назад
-        </BtnSecondary>
       </v-col>
-      
     </v-row>
   </v-container>
 </template>
@@ -129,6 +143,7 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import OrdersSelectStatus from '@/Components/OrdersSelectStatus.vue'
 import ListRow from '@/Components/ListRow.vue'
 import OrderItemCard from '@/Components/OrderItemCard.vue'
+import StatusChip from '@/Components/StatusChip.vue'
 
 import { defineComponent } from 'vue'
 import { useOrder } from '@/Composables/useOrder'
@@ -138,10 +153,11 @@ defineOptions({ layout: AppLayout })
 defineComponent({
   OrdersSelectStatus,
   ListRow,
-  OrderItemCard 
+  OrderItemCard,
+  StatusChip,
 })
 
 const { order } = defineProps({ order: Object })
-const { creationDate, creationTime } = useOrder(order)
+const { creationDate, creationTime, updateStatus } = useOrder(order)
 const display = useDisplay()
 </script>

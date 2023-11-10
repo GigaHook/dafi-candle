@@ -2,7 +2,6 @@
   <Head :title="product.name"/>
   <v-container>
     <v-row class="justify-center">
-      
       <v-col
         cols="12"
         offset-xl="4"
@@ -20,14 +19,40 @@
           cover
         />
 
-        <div class="d-flex justify-space-between w-100">
-          <BtnPrimary @click="$inertia.post(route('cart.store'), { id: product.id })">
-            Купить
-          </BtnPrimary>
+        <div class="d-flex w-100">
+          <v-fade-transition group leave-absolute hide-on-leave>
+            <v-btn
+              v-if="!storedProduct"
+              @click="store"
+              :loading="loading"
+              variant="text"
+              color="primary"
+              max-width="fit-content"
+              :disabled="!product.available"
+            >
+              {{ buttonText }}
+            </v-btn>
 
-          <BtnSecondary @click="$inertia.back()">
-            Назад
-          </BtnSecondary>
+            <ProductControls
+              v-else
+              :quantity="quantity"
+              @store="store"
+              @update="update"
+              :unavailable="!isAvailable"
+            />
+          </v-fade-transition>
+
+          <v-fade-transition class="ms-4 mt-2">
+            <v-icon
+              v-if="storedProduct"
+              :icon="icon"
+              size="32"
+            />
+          </v-fade-transition>
+
+          <v-spacer/>
+
+          <BtnBack/>
         </div>
       </v-col>
       
@@ -42,6 +67,14 @@
             :left="tag.name"
             :right="tag.value"
           />
+
+          <template v-if="product.available">
+            В наличии {{ product.available }} шт
+          </template>
+
+          <template v-else>
+            На данный момент нет в наличии
+          </template>
         </v-card>
       </v-col>
 
@@ -52,9 +85,56 @@
 <script setup>
 import AppLayout from '../../Layouts/AppLayout.vue'
 import ListRow from '@/Components/ListRow.vue'
-import { defineComponent } from 'vue'
+import useProduct from '@/Composables/useProduct'
+import ProductControls from '@/Components/ProductControls.vue'
+
+import { defineComponent, computed } from 'vue'
+import { usePage } from '@inertiajs/vue3'
+import { useOrder } from '@/Composables/useOrder'
 
 defineOptions({ layout: AppLayout })
-defineProps({ product: Object, tags: Array })
-defineComponent({ ListRow })
+const { product } = defineProps({ product: Object, tags: Array, })
+defineComponent({ ListRow, ProductControls })
+
+const page = usePage()
+
+let storedProduct
+let store
+let update
+let loading
+let buttonText
+let quantity
+let isAvailable
+let icon
+
+if (!page.props.order) {
+  ({
+    storedProduct,
+    loading,
+    store,
+    update,
+    quantity,
+    isAvailable,
+  } = useProduct(product))
+
+  buttonText = 'Купить'
+  icon = 'mdi-cart-check'
+} else {
+  const {
+    updateOrderItems,
+    loading: orderLoading
+  } = useOrder(page.props.order)
+
+  loading = orderLoading
+  const getStoredProduct = () => page.props.order.products.find(item => item.id == product.id)
+  storedProduct = computed(getStoredProduct)
+  quantity = computed(() => getStoredProduct().order_item.quantity)
+  store = () => updateOrderItems('post', product.id)
+  update = () => updateOrderItems('patch', product.id)
+  buttonText = 'Добавить'
+  icon = 'mdi-notebook-check-outline'
+  isAvailable = true
+}
+
+
 </script>

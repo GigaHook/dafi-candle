@@ -10,7 +10,6 @@ use App\Models\Type;
 use App\Services\OrderService;
 use App\Services\ProductService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProductController extends Controller

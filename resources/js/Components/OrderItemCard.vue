@@ -50,7 +50,6 @@
     </v-col>
 
     <v-col
-      v-if="editable"
       cols="4"
       class="text-right d-flex flex-column justify-space-between"
     >
@@ -59,7 +58,7 @@
         <v-icon icon="mdi-currency-rub" size="16" class="ms-n1 mb-1"/><br>
       </div>
 
-      <div>
+      <div v-if="editable">
         <v-btn
           icon
           variant="plain"

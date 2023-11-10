@@ -25,6 +25,7 @@ import BtnPrimary from './Components/BtnPrimary.vue'
 import BtnSecondary from './Components/BtnSecondary.vue'
 import FormInput from './Components/FormInput.vue'
 import Modal from './Components/Modal.vue'
+import BtnBack from './Components/BtnBack.vue'
 
 const mainTheme = {
     dark: false,
@@ -64,6 +65,7 @@ createInertiaApp({
         .component('BtnSecondary', BtnSecondary)
         .component('FormInput', FormInput)
         .component('Modal', Modal)
+        .component('BtnBack', BtnBack)
         
         app.mount(el)
 

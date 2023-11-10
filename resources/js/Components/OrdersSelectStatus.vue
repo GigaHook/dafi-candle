@@ -5,7 +5,7 @@
     density="compact"
     hide-details="auto"
     flat
-    :items="Object.keys(statusColors)"
+    :items="statuses"
     v-model="status"
     style="width:180px !important"
     @update:model-value="updateStatus"
@@ -13,26 +13,18 @@
     menu-icon="mdi-chevron-down"
   >
     <template #chip="{ item }">
-      <v-chip
-        class="text-body-1 pa-4 rounded"
-        :color="statusColors[item.raw]"
-        variant="elevated"
-      >
-        {{ item.raw }}
-      </v-chip>
+      <StatusChip :status="item.raw"/>
     </template>
   </v-select>
 </template>
 
 <script setup>
+import StatusChip from '@/Components/StatusChip.vue'
 import { useOrder } from '@/Composables/useOrder'
+import { defineComponent } from 'vue'
 
+defineComponent({ StatusChip })
 const { order } = defineProps({ order: Object })
 const { updateStatus, loading, status } = useOrder(order)
-const statusColors = 
-{
-  'В работе': 'blue-lighten-1',
-  'Отправлен': 'success',
-  'Отменён': 'grey-darken-3',
-}
+const statuses = ['В работе', 'Отправлен', 'Отменён']
 </script>

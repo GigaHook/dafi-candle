@@ -102,7 +102,7 @@
             :quantity="quantity"
             @store="store"
             @update="update"
-            :unavailable="!product.available"
+            :unavailable="!isAvailable"
           />
         </v-fade-transition>
 
@@ -138,6 +138,7 @@ let loading
 let buttonText
 let icon
 let quantity
+let isAvailable
 
 if (!page.props.order) {
   ({
@@ -146,6 +147,7 @@ if (!page.props.order) {
     store,
     update,
     quantity,
+    isAvailable,
   } = useProduct(product))
 
   buttonText = 'Купить'
@@ -164,6 +166,7 @@ if (!page.props.order) {
   update = () => updateOrderItems('patch', product.id)
   buttonText = 'Добавить'
   icon = 'mdi-notebook-check-outline'
+  isAvailable = true
 }
 </script>
 

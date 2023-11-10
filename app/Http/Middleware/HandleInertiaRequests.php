@@ -41,6 +41,7 @@ class HandleInertiaRequests extends Middleware
             'badges' => session('badges'),
             'cart'   => cartService()->getCart(),
             'order'  => Order::find(session('editingOrder'))?->load('products'),
+            'back'   => getBackUrl(),
             'ziggy'  => function() use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
                     'location' => $request->url(),

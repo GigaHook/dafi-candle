@@ -16,3 +16,23 @@ if (!function_exists('cartService')) {
         return auth()->check() ? new AuthCartService : new GuestCartService;
     }
 }
+
+if (!function_exists('getBackUrl')) {
+    function getBackUrl(): string {
+        $from = request()->header('referer');
+        $to = request()->fullUrl();
+        $back = session()->has('back') ? session('back') : route('products.index');
+
+        if ($from == $to) {
+            return $back;
+        } 
+
+        if (str_contains($to, 'cart')) {
+            return $back;
+        }
+
+        session()->put('back', $from);
+
+        return $from ?? route('products.index');
+    }
+}
