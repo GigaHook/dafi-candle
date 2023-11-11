@@ -35,7 +35,17 @@ class GuestCartService implements CartService
         
         foreach ($this->cartItems as $item) {
             $product = Product::find($item['product_id']);
-            $product->quantity = $item['quantity'];
+
+
+            //TODO сделать как в authcartservice
+            if ($item['quantity'] > $product->available) {
+                $quantity = $product->available;
+                $item['quantity'] = $quantity;
+            } else {
+                $quantity = $item['quantity'];
+            }
+
+            $product->quantity = $quantity;
             $product->viewed = $item['viewed'];
             $cart['items'][] = $product;
             $cart['totalQuantity'] += $product->quantity;

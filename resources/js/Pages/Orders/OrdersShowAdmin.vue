@@ -115,7 +115,7 @@
           <BtnSecondary
             v-if="!$page.props.user.is_admin"
             :disabled="order.status != 'В работе'"
-            :style="order.status != 'В работе' ? 'opacity: .5' : ''"
+            :style="order.status != 'В работе' && 'opacity: .5'"
             class="mt-2"
           >
             Отменить заказ

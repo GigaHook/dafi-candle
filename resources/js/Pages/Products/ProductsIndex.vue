@@ -11,7 +11,7 @@
         color="primary"
         density="compact"
         class="mt-6"
-        style="max-width: 550px;"
+        style="width: 800px;"
         label="Поиск"
         append-inner-icon="mdi-magnify"
         clearable
@@ -88,25 +88,24 @@
                 Показать недоступные товары
               </v-tooltip>
             </v-btn>
+
+            <BtnPrimary
+              v-if="$page.props.order"
+              @click="$inertia.post(route('orders.edit.finish'))"
+              variant="elevated"
+              class="ms-2"
+            >
+              Завершить редактирование
+            </BtnPrimary>
           </div>
         </template>
       </v-text-field>
-      
-
-      <template v-if="$page.props.order">
-        <BtnPrimary
-          variant="elevated"
-          @click="$inertia.post(route('orders.edit.finish'))"
-        >
-          Завершить редактирование
-        </BtnPrimary>
-      </template>
     </v-container>
   </v-toolbar>
 
-  <!--PRODUCTS-->
   <v-container :fluid="display.mdAndDown.value"> 
     <v-row>
+      <!--PRODUCTS-->
       <template v-if="!loading">
         <ProductCard
           v-for="product in products.data"
@@ -114,7 +113,7 @@
           :product="product"
         />
       </template>
-
+      <!--LOADING-->
       <v-col v-else cols="12" class="d-flex justify-center align-center">
         <v-progress-circular
           indeterminate
@@ -122,7 +121,6 @@
           size="100"
         />
       </v-col>
-
       <!--PAGINATION-->
       <v-col
         cols="12"
@@ -140,7 +138,6 @@
           Ничего не найдено
         </div>
       </v-col>
-
     </v-row>
   </v-container>
 </template>

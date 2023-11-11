@@ -7,7 +7,8 @@ use App\Models\CartItem;
 
 class AuthCartService implements CartService
 {
-    public function getCart(): array {
+    public function getCart(): array 
+    {
         $cart = [
             'items' => [],
             'totalQuantity' => 0,
@@ -16,7 +17,16 @@ class AuthCartService implements CartService
         ];
 
         foreach (auth()->user()->products as $product) {
-            $quantity = $product->cartItem->quantity;
+            if ($product->cartItem->quantity > $product->available) {
+                $quantity = $product->available;
+                CartItem::firstWhere([
+                    'product_id' => $product->id,
+                    'user_id' => auth()->id(),
+                ])->update(['quantity'=> $quantity]);
+            } else {
+                $quantity = $product->cartItem->quantity;
+            }
+
             $product->quantity = $quantity;
             $cart['items'][] = $product;
             $cart['totalQuantity'] += $quantity;
@@ -26,7 +36,8 @@ class AuthCartService implements CartService
         return $cart;
     }
 
-    public function addItem(int $id): void {
+    public function addItem(int $id): void 
+    {
         $item = CartItem::firstWhere([
             'product_id' => $id,
             'user_id' => auth()->id(),
@@ -45,7 +56,8 @@ class AuthCartService implements CartService
         }
     }
 
-    public function removeItem(int $id): void {
+    public function removeItem(int $id): void 
+    {
         $item = CartItem::firstWhere([
             'product_id' => $id,
             'user_id' => auth()->id(),
@@ -60,7 +72,8 @@ class AuthCartService implements CartService
         }
     }
 
-    public function deleteItem(int $id): void {
+    public function deleteItem(int $id): void 
+    {
         CartItem::where([
             'product_id' => $id,
             'user_id' => auth()->id(),
@@ -68,7 +81,8 @@ class AuthCartService implements CartService
         toast('Товар удалён из корзины');
     }
 
-    public function clearCart(): void {
+    public function clearCart(): void 
+    {
         CartItem::where(['user_id' => auth()->id()])->delete();
     }
 }

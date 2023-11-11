@@ -36,23 +36,22 @@
             <ProductControls
               v-else
               :quantity="quantity"
+              :unavailable="!isAvailable"
               @store="store"
               @update="update"
-              :unavailable="!isAvailable"
             />
-          </v-fade-transition>
 
-          <v-fade-transition class="ms-4 mt-2">
-            <v-icon
-              v-if="storedProduct"
-              :icon="icon"
-              size="32"
-            />
+            <div v-if="storedProduct" class="ms-4 mt-3">
+              <v-icon :icon="icon"/>
+              {{ statusText }}
+            </div>
+
+
           </v-fade-transition>
 
           <v-spacer/>
 
-          <BtnBack/>
+          <BtnBack class="mt-1"/>
         </div>
       </v-col>
       
@@ -106,6 +105,7 @@ let buttonText
 let quantity
 let isAvailable
 let icon
+let statusText
 
 if (!page.props.order) {
   ({
@@ -119,6 +119,7 @@ if (!page.props.order) {
 
   buttonText = 'Купить'
   icon = 'mdi-cart-check'
+  statusText = 'В корзине'
 } else {
   const {
     updateOrderItems,
@@ -133,8 +134,8 @@ if (!page.props.order) {
   update = () => updateOrderItems('patch', product.id)
   buttonText = 'Добавить'
   icon = 'mdi-notebook-check-outline'
+  statusText = 'В заказе'
   isAvailable = true
 }
-
 
 </script>

@@ -24,19 +24,6 @@ class OrderService
             : Order::where('user_id', auth()->id())->latest()->get()->load('adress'); //для юзера
     }
 
-    public function getFormattedOrder(?int $id): ?Order
-    {
-        if (!$id) return null;
-
-        $order = Order::find($id)->load('products');
-
-        foreach ($order->products as $product) {
-            $product->quantity = $product->orderItem->quantity;
-        }
-        
-        return $order;
-    }
-
     public function createOrder(array $data): void
     {
         DB::transaction(function() use($data) {
@@ -63,7 +50,7 @@ class OrderService
     public function updateStatus(Order $order, string $status): void 
     {
         $order->status = $status;
-        (!auth()->user()->is_admin) && event(new OrderCancelled($order));
+        !auth()->user()->is_admin && event(new OrderCancelled($order));
         $order->save();
     }
 

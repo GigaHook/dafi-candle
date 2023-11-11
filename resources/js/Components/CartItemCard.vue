@@ -63,7 +63,7 @@
     >
       <ProductControls
         :quantity="product.quantity"
-        :unavailable="!product.available"
+        :unavailable="!isAvailable"
         @store="store"
         @update="update"
       />
@@ -104,7 +104,7 @@ import { useDisplay } from 'vuetify'
 defineComponent({ ProductControls})
 
 const { product } = defineProps({ product: Object, last: Boolean })
-const { store, update } = useProduct(product)
+const { store, update, isAvailable } = useProduct(product)
 const display = useDisplay()
 const hover = ref(false)
 </script>

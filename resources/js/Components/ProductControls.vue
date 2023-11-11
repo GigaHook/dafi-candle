@@ -22,16 +22,18 @@
       rounded="lg"
       color="primary"
       @click="$emit('store')"
-      :disabled="unavailable"
+      :readonly="unavailable"
+      :style="unavailable && 'opacity: 0.5'"
     >
       <v-icon icon="mdi-plus"/>
       <v-tooltip
         v-if="unavailable"
-        activator="parent"
         open-delay="300"
         location="bottom"
+        activator="parent"
+        open-on-hover
       >
-        Товара нет в наличии
+        Больше нет в наличии
       </v-tooltip>
     </v-btn>
   </div>
