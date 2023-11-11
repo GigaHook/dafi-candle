@@ -180,7 +180,7 @@ const sorts = [
 const display = useDisplay()
 const loading = ref(false)
 const selectedTypes = ref(types.map(type => type.id))
-const selectedSort = ref(sorts[1]) 
+const selectedSort = ref(sorts[0]) 
 const searchText = ref()
 const showUnavailable = ref(false)
 
@@ -214,5 +214,5 @@ watch(selectedTypes, (oldTypes) => {
   }
 })
 
-watch([selectedTypes, selectedSort, showUnavailable], () => update())
+watch([selectedTypes, selectedSort, showUnavailable], update)
 </script>

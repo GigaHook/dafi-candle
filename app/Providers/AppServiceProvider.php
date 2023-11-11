@@ -24,12 +24,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        TelegraphBot::firstOrCreate([
-            'token' => env('TELEGRAM_BOT_TOKEN'),
-            'name' => env('TELEGRAM_BOT_NAME'),
-        ])->chats()->firstOrCreate([
-            'chat_id' => env('TELEGRAM_CHAT_ID'),
-            'name' => env('TELEGRAM_CHAT_NAME'),
-        ]);
+        
     }
 }
