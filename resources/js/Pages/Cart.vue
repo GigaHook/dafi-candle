@@ -6,11 +6,26 @@
       <v-col cols="12" sm="12" md="8" lg="8" order="2" order-md="1">
         <v-card class="pa-4" elevation="3">
           <CartItemCard
-            v-for="product in $page.props.cart.items"
+            v-for="product in products.available"
             :key="product.id"
             :product="product"
-            :last="product.id == $page.props.cart.items.at(-1).id"
+            :last="product.id == products.available.at(-1).id"
           />
+
+          <template v-if="products.unavailable.length > 0">
+            <v-divider class="my-4"/>
+  
+            <h3 class="text-h6 mb-2">
+              Недоступные
+            </h3>
+  
+            <CartItemCard
+              v-for="product in products.unavailable"
+              :key="product.id"
+              :product="product"
+              :last="product.id == products.unavailable.at(-1).id"
+            />
+          </template>
         </v-card>
       </v-col>
 
@@ -38,8 +53,17 @@
                 </v-btn>
               </div>
 
-              <!--TODO: добавить поле в корзину на беке, которое обозначает наличие отсутствующих товаров в корзине-->
               <BtnPrimary
+                v-if="products.unavailable.length == 0"
+                :disabled="!$page.props.user"
+                class="w-100 mt-2"
+                @click="$inertia.get(route('orders.create'))"
+              >
+                Заказать
+              </BtnPrimary>
+
+              <BtnPrimary
+                v-else
                 :disabled="!$page.props.user"
                 class="w-100 mt-2"
               >
@@ -93,10 +117,28 @@
 import AppLayout from '../Layouts/AppLayout.vue'
 import CartItemCard from '../Components/CartItemCard.vue'
 
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 import { useDisplay } from 'vuetify'
 
 const display = useDisplay()
+const page = usePage()
+
+const products = computed(() => {
+  const available = []
+  const unavailable = []
+  page.props.cart.items.forEach(item => {
+    if (item.available > 0) {
+      available.push(item)
+    } else {
+      unavailable.push(item)
+    }
+  })
+
+  return {
+    available, unavailable
+  }
+})
 
 defineOptions({ layout: AppLayout })
 defineComponent({ CartItemCard })

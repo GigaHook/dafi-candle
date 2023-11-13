@@ -20,14 +20,7 @@
           Подробнее
         </v-overlay>
 
-        <v-chip
-          v-if="!product.available"
-          variant="flat"
-          color="grey-darken-4"
-          class="ma-1 text-red"
-        >
-          Нет в наличии
-        </v-chip>
+        <UnavailableChip v-if="!product.available"/>
       </v-img>
     </v-col>
     
@@ -97,11 +90,13 @@
 
 <script setup>
 import ProductControls from './ProductControls.vue'
+import UnavailableChip from './UnavailableChip.vue'
 import useProduct from '@/Composables/useProduct'
+
 import { ref, defineComponent } from 'vue'
 import { useDisplay } from 'vuetify'
 
-defineComponent({ ProductControls})
+defineComponent({ ProductControls, UnavailableChip })
 
 const { product } = defineProps({ product: Object, last: Boolean })
 const { store, update, isAvailable } = useProduct(product)

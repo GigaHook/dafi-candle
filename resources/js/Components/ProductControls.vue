@@ -21,8 +21,7 @@
       variant="tonal"
       rounded="lg"
       color="primary"
-      @click="$emit('store')"
-      :readonly="unavailable"
+      @click="!unavailable && $emit('store')"
       :style="unavailable && 'opacity: 0.5'"
     >
       <v-icon icon="mdi-plus"/>

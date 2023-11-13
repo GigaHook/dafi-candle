@@ -17,7 +17,9 @@
           style="aspect-ratio: 3 / 4;"
           class="mb-4 rounded"
           cover
-        />
+        >
+          <UnavailableChip v-if="!product.available"/>
+        </v-img>
 
         <div class="d-flex w-100">
           <v-fade-transition group leave-absolute hide-on-leave>
@@ -86,6 +88,7 @@ import AppLayout from '../../Layouts/AppLayout.vue'
 import ListRow from '@/Components/ListRow.vue'
 import useProduct from '@/Composables/useProduct'
 import ProductControls from '@/Components/ProductControls.vue'
+import UnavailableChip from '@/Components/UnavailableChip.vue'
 
 import { defineComponent, computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
@@ -93,7 +96,7 @@ import { useOrder } from '@/Composables/useOrder'
 
 defineOptions({ layout: AppLayout })
 const { product } = defineProps({ product: Object, tags: Array, })
-defineComponent({ ListRow, ProductControls })
+defineComponent({ ListRow, ProductControls, UnavailableChip })
 
 const page = usePage()
 

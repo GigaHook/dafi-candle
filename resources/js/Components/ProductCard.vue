@@ -14,14 +14,7 @@
         v-ripple
       >
         <div class="d-flex justify-end">
-          <v-chip
-            v-if="!product.available"
-            variant="flat"
-            color="grey-darken-4"
-            class="me-auto ma-1 text-red"
-          >
-            Нет в наличии
-          </v-chip>
+          <UnavailableChip v-if="!product.available" class="me-auto"/>
 
           <v-btn
             v-if="$page.props.user?.is_admin"
@@ -118,12 +111,14 @@
 
 <script setup>
 import ProductControls from './ProductControls.vue'
+import UnavailableChip from './UnavailableChip.vue'
 import useProduct from '@/Composables/useProduct'
+
 import { ref, computed, defineComponent } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import { useOrder } from '@/Composables/useOrder'
 
-defineComponent({ ProductControls })
+defineComponent({ ProductControls, UnavailableChip })
 
 const { product } = defineProps({ product: Object })
 const page = usePage()
