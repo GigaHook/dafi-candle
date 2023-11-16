@@ -55,10 +55,7 @@
 
 <script setup>
 import OrdersSelectStatus from './OrdersSelectStatus.vue'
-import { defineComponent } from 'vue'
 import { useOrder } from '@/Composables/useOrder'
-
-defineComponent({ OrdersSelectStatus })
 
 const { order } = defineProps({ order: Object })
 const { creationDate, creationTime } = useOrder(order)

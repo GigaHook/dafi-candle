@@ -117,7 +117,7 @@
 import AppLayout from '../Layouts/AppLayout.vue'
 import CartItemCard from '../Components/CartItemCard.vue'
 
-import { computed, defineComponent } from 'vue'
+import { computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import { useDisplay } from 'vuetify'
 
@@ -141,5 +141,4 @@ const products = computed(() => {
 })
 
 defineOptions({ layout: AppLayout })
-defineComponent({ CartItemCard })
 </script>

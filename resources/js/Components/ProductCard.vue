@@ -27,12 +27,18 @@
   
           <v-btn
             v-if="$page.props.user?.is_admin"
-            icon="mdi-delete"
+            icon
             class="ma-1"
             style="z-index: 4000;"
-            @click="$inertia.delete(route('products.destroy', product.id))"
             size="40"
-          />
+          >
+            <v-icon icon="mdi-delete"/>
+            <Modal 
+              confirm-text="Да"
+              :text="`Вы действительно хотите удалить товар ${product.name}?`"
+              @confirm="$inertia.delete(route('products.destroy', product.id))"
+            />
+          </v-btn>
         </div>
 
         <v-overlay
@@ -114,11 +120,9 @@ import ProductControls from './ProductControls.vue'
 import UnavailableChip from './UnavailableChip.vue'
 import useProduct from '@/Composables/useProduct'
 
-import { ref, computed, defineComponent } from 'vue'
+import { ref, computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import { useOrder } from '@/Composables/useOrder'
-
-defineComponent({ ProductControls, UnavailableChip })
 
 const { product } = defineProps({ product: Object })
 const page = usePage()

@@ -21,9 +21,7 @@
 <script setup>
 import StatusChip from '@/Components/StatusChip.vue'
 import { useOrder } from '@/Composables/useOrder'
-import { defineComponent } from 'vue'
 
-defineComponent({ StatusChip })
 const { order } = defineProps({ order: Object })
 const { updateStatus, loading, status } = useOrder(order)
 const statuses = ['В работе', 'Отправлен', 'Отменён']

@@ -51,10 +51,7 @@
 
 <script setup>
 import NavItemDesktop from './NavItemDesktop.vue'
-import { defineComponent } from 'vue'
 import { usePage } from '@inertiajs/vue3'
-
-defineComponent({ NavItemDesktop })
 
 const page = usePage()
 

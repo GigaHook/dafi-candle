@@ -36,8 +36,6 @@
 
 <script setup>
 import AdminSidebarItem from '@/Components/AdminSidebarItem.vue'
-import { defineComponent } from 'vue'
 import { useDisplay } from 'vuetify/lib/framework.mjs'
 
-defineComponent({ AdminSidebarItem })
 </script>

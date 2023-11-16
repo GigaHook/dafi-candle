@@ -93,10 +93,8 @@ import ProductControls from './ProductControls.vue'
 import UnavailableChip from './UnavailableChip.vue'
 import useProduct from '@/Composables/useProduct'
 
-import { ref, defineComponent } from 'vue'
+import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
-
-defineComponent({ ProductControls, UnavailableChip })
 
 const { product } = defineProps({ product: Object, last: Boolean })
 const { store, update, isAvailable } = useProduct(product)

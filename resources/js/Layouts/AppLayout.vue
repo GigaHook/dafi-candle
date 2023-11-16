@@ -22,16 +22,10 @@ import AdminSidebar from '@/Components/AdminSidebar.vue'
 import NavBarDesktop from '@/Components/NavBarDesktop.vue'
 import NavBarMobile from '@/Components/NavBarMobile.vue'
 
-import { defineComponent, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
 import { useToast, TYPE } from 'vue-toastification'
 import { useDisplay } from 'vuetify'
-
-defineComponent({
-  NavBarDesktop,
-  NavBarMobile,
-  AdminSidebar,
-})
 
 const page = usePage()
 const toast = useToast()

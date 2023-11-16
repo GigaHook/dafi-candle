@@ -8,25 +8,27 @@
             @submit.prevent="submit" 
             ref="form" 
             validate-on="blur" 
-            :disabled="loading"
+            :readonly="loading"
           >
-            <h1 class="text-h4 mb-4">Изменить товар</h1>
+            <h1 class="text-h4 mb-4">Добавить товар</h1>
             <FormInput
               name="name"
               type="text"
               label="Название"
-              v-model="name"
+              v-model="formData.name"
               :rules="[rules.required, rules.name]"
             />
+
             <v-textarea
               name="description"
               label="Описание"
-              v-model="description"
+              v-model="formData.description"
               :rules="[rules.required, rules.description]"
               variant="outlined"
               color="yellow"
               class="mb-3"
             />
+
             <v-file-input
               name="image"
               label="Изображение"
@@ -35,42 +37,66 @@
               color="yellow"
               density="compact"
               class="mb-3"
-              accept="image/*"
+              accept="image/png, image/jpeg, image/jpg"
               prepend-icon
-              :error-messages="errors.image"
-              @update:model-value="errors = {}"
-            />
+              :error-messages="formData.errors.image"
+            >
+              <template #append-inner>
+                <v-divider vertical class="me-3"/>
+                <v-icon icon="mdi-image-outline"/>
+              </template>
+            </v-file-input>
+
             <v-select
               name="type"
               label="Тип"
-              v-model="type"
+              v-model="formData.type_id"
               :rules="[rules.required]"
               :items="types"
+              item-title="name"
+              item-value="id"
               variant="outlined"
               color="yellow"
               density="compact"
               class="mb-3"
               menu-icon="mdi-chevron-down"
             />
+
             <FormInput
               name="price"
               type="text"
               label="Цена"
-              v-model="price"
+              v-model="formData.price"
               :rules="[rules.required]"
               v-mask="'##############'"
+            />
+
+            <FormInput
+              name="available"
+              label="Кол-во в наличии"
+              v-model="formData.available"
+              :rules="[rules.required]"
+              v-mask="'####'"
             />
             
             <h2 class="text-h5 mb-4">Характеристики</h2>
             <v-slide-x-transition group>
-              <div v-for="(tag, index) of tags" :key="index" class="d-flex">
+              <div
+                v-for="(tag, index) of formData.tags"
+                :key="index"
+                class="d-flex"
+              >
                 <FormInput
                   v-model="tag.name" 
                   label="Название" 
                   class="w-50 me-4" 
                   :rules="[rules.required]"
                 />
-                <FormInput v-model="tag.value" label="Значение" class="w-50 me-4"/>
+                <FormInput
+                  v-model="tag.value"
+                  label="Значение"
+                  class="w-50 me-4"
+                />
                 <FormIconBtn @click="removeTag(index)" color="red">
                   <v-icon icon="mdi-close"/>
                 </FormIconBtn>
@@ -86,7 +112,7 @@
               <BtnPrimary type="submit" :loading="loading">
                 Добавить
               </BtnPrimary>
-              <BtnSecondary @click="cancel">
+              <BtnSecondary @click="cancel" :disabled="loading">
                 Назад
               </BtnSecondary>
             </div>
@@ -97,88 +123,77 @@
   </v-container>
 </template>
 
-<script>
-import AppLayout from '../../Layouts/AppLayout.vue'
-import FormIconBtn from '../../Components/FormIconBtn.vue'
-export default {
-  layout: AppLayout,
-  components: {
-    FormIconBtn: FormIconBtn,
-  },
-  props: {
-    errors: Object,
-    product: Object,
-  },
-  data() {
-    return {
-      name: null,
-      description: null,
-      image: null,
-      type: null,
-      price: null,
-      tags: [],
-      rules: {
-        required: text => !!text || 'Это поле нужно заполнить',
-        name: text => (text.length >= 4 && text.length <= 50) || 'От 4 до 50 символов',
-        description: text => text?.length <= 700 || 'До 700 символов',
-      },
-      loading: false,
-    }
-  },
-  methods: {
-    submit() {
-      this.$refs.form.validate()
-      if (this.$refs.form.isValid) 
-      this.$router.post(route('products.update', this.product.id), {
-        _method: 'patch',
-        name: this.name,
-        description: this.description,
-        image: this.image && 0 in this.image ? this.image[0] : '',
-        type_id: this.preparedType,
-        price: this.price,
-        tags: this.preparedTags
-      }, {
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue'
+import FormIconBtn from '@/Components/FormIconBtn.vue'
+import { ref, watch } from 'vue'
+import { router, useForm } from '@inertiajs/vue3'
+
+defineOptions({ layout: AppLayout })
+
+const { types, product } = defineProps({ types: Array, product: Object })
+
+const rules = {
+  required: v => !!v || 'Это поле нужно заполнить',
+  name: v => (v.length >= 4 && v.length <= 50) || 'От 4 до 50 символов',
+  description: v => v?.length <= 700 || 'До 700 символов',
+}
+
+const loading = ref(false)
+const form = ref()
+const image = ref()
+const formData = useForm({
+  name: product.name,
+  description: product.description,
+  image: null,
+  type_id: product.type.id,
+  price: product.price,
+  available: product.available,
+  tags: [],
+})
+
+//TODO теги доделать
+
+watch(() => formData.image, () => {
+  formData.clearErrors('image')
+})
+
+function submit() {
+  form.value.validate().then(() => {
+    if (form.value.isValid) {
+      if (image.value[0]) {
+        formData.image = image.value[0]
+      }
+      formData.post(route('products.update'), {
         forceFormData: true,
         preserveScroll: true,
-        onStart: this.loadingStart,
-        onFinish: this.loadingEnd,
+        onStart: () => loading.value = true, 
+        onFinish: () => loading.value = false,
+        onSuccess: () => form.value.reset(),
       })
-    },
-    loadingStart() {
-      this.loading = true
-    },
-    loadingEnd() {
-      this.loading = false
-    },
-    cancel() {
-      this.loadingEnd()
-      this.$router.get(route('products.index'))
-    },
-    addTag() {
-      this.tags.push({
-        name: null,
-        value: null,
-      })
-    },
-    removeTag(index) {
-      this.tags.splice(index, 1)
-    },
-    resetErrors() {
-      this.form
-
     }
-  },
-  computed: {
-    types() {
-      return this.$page.props.types.map(elem => elem.name)
-    },
-    preparedType() {
-      return this.$page.props.types.find(elem => elem.name == this.type).id
-    },
-    preparedTags() {
-      return this.tags.filter(elem => elem.name)
-    },
-  },
+  })
+}
+
+function cancel() {
+  form.value.reset()
+  router.get(route('products.index'))
+}
+
+function addTag() {
+  formData.tags.push({
+    name: null,
+    value: null,
+  })
+}
+
+function removeTag(index) {
+  formData.tags.splice(index, 1)
+}
+</script>
+
+<script>
+export default {
   mounted() {
     this.type = this.types[0] ?? 'Обычный'
     this.name = this.product?.name

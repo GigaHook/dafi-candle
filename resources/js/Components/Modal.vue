@@ -18,7 +18,7 @@
             {{ title }}
           </v-card-title>
 
-          <v-card-text class="text-body-1">
+          <v-card-text class="text-body-1 my-2">
             <slot>{{ text }}</slot>
           </v-card-text>
 

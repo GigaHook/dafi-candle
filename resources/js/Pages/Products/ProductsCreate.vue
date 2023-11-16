@@ -125,14 +125,13 @@
 </template>
 
 <script setup>
-import AppLayout from '../../Layouts/AppLayout.vue'
+import AppLayout from '@/Layouts/AppLayout.vue'
 import FormIconBtn from '@/Components/FormIconBtn.vue'
-import { ref, watch, defineComponent } from 'vue'
+import { ref, watch } from 'vue'
 import { router, useForm } from '@inertiajs/vue3'
-import FormInput from '@/Components/FormInput.vue'
 
 defineOptions({ layout: AppLayout })
-defineComponent({ FormIconBtn })
+
 const { types } = defineProps({ types: Array })
 
 const rules = {
@@ -148,7 +147,7 @@ const formData = useForm({
   name: null,
   description: null,
   image: null,
-  type_id: null,
+  type_id: types[0].id,
   price: null,
   available: null,
   tags: [],
@@ -162,7 +161,6 @@ function submit() {
   form.value.validate().then(() => {
     if (form.value.isValid) {
       formData.image = image.value[0]
-      console.log(image.value)
       formData.post(route('products.store'), {
         forceFormData: true,
         preserveScroll: true,
@@ -189,7 +187,6 @@ function addTag() {
 function removeTag(index) {
   formData.tags.splice(index, 1)
 }
-
 </script>
 
 <script>

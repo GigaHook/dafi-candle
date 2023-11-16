@@ -74,11 +74,9 @@
 </template>
 
 <script setup>
-import { defineComponent } from 'vue';
 import AppLayout from '../Layouts/AppLayout.vue'
 import ProfileOrderTableRow from '@/Components/ProfileOrderTableRow.vue'
 
-defineComponent({ ProfileOrderTableRow })
 defineOptions({ layout: AppLayout})
 defineProps({ orders: Array })
 </script>

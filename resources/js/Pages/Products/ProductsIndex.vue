@@ -146,12 +146,11 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import ProductCard from '@/Components/ProductCard.vue'
 import ToolbarDropdown from '@/Components/ToolbarDropdown.vue'
 
-import { ref, watch, defineComponent } from 'vue'
+import { ref, watch } from 'vue'
 import { router } from '@inertiajs/vue3'
 import { useDisplay } from 'vuetify/lib/framework.mjs'
 
 defineOptions({ layout: AppLayout })
-defineComponent({ ProductCard, ToolbarDropdown })
 
 const { products, types } = defineProps({ 
   products: Object, 

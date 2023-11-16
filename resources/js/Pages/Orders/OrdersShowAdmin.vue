@@ -145,17 +145,10 @@ import ListRow from '@/Components/ListRow.vue'
 import OrderItemCard from '@/Components/OrderItemCard.vue'
 import StatusChip from '@/Components/StatusChip.vue'
 
-import { defineComponent } from 'vue'
 import { useOrder } from '@/Composables/useOrder'
 import { useDisplay } from 'vuetify'
 
 defineOptions({ layout: AppLayout })
-defineComponent({
-  OrdersSelectStatus,
-  ListRow,
-  OrderItemCard,
-  StatusChip,
-})
 
 const { order } = defineProps({ order: Object })
 const { creationDate, creationTime, updateStatus } = useOrder(order)
